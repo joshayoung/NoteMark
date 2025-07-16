@@ -11,6 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.joshayoung.notemark.presentation.GettingStartedScreen
+import com.joshayoung.notemark.presentation.create_account.CreateAccountScreen
+import com.joshayoung.notemark.presentation.log_in.LoginScreen
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +25,38 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NoteMarkTheme {
+                val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    NavHost(
+                        navController = navController,
+                        startDestination = "getting_started",
+                        Modifier.padding(innerPadding)
+                    ) {
+                        composable("getting_started") {
+                            GettingStartedScreen(
+                                onCreateAccountClick = {
+                                    navController.navigate("create_account")
+                                }
+                            )
+                        }
+
+                        composable("create_account") {
+                            CreateAccountScreen()
+                        }
+
+                        composable("login") {
+                            LoginScreen()
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     NoteMarkTheme {
-        Greeting("Android")
     }
 }
