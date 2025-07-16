@@ -13,9 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val LightColorScheme = lightColorScheme(
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-
 //    background = Color(0xFFFFFBFE),
 //    onSecondary = Color.White,
 //    onTertiary = Color.White,
@@ -23,6 +20,9 @@ private val LightColorScheme = lightColorScheme(
 
     surface = Color(0xFFEFEFF2),
     onSurface = Color(0xFF1B1B1C),
+    surfaceVariant = Color(0xFF535364),
+    tertiary =  Color(0x1B1B1C1F),
+    onTertiary =  Color(0xFF1B1B1C).copy(alpha = 0.5f),
     primary = Color(0xFF5977F7),
     onPrimary = Color(0xFFFFFFFF),
     error = Color(0xFFE1294B),
