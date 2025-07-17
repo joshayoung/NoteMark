@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
@@ -27,49 +23,36 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var isSplashVisible by remember { mutableStateOf(true) }
-
-            if (isSplashVisible) {
-                SplashScreen {
-                    isSplashVisible = false // Hide splash screen after timeout
-                }
-            } else {
-                MainScreen() // Show main content
-            }
-        }
-    }
-}
-
-@Composable
-fun MainScreen() {
-
-    NoteMarkTheme {
-        val navController = rememberNavController()
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = "getting_started",
-                Modifier.padding(innerPadding)
-            ) {
-                composable("getting_started") {
-                    GettingStartedScreen(
-                        onCreateAccountClick = {
-                            navController.navigate("create_account")
+            NoteMarkTheme {
+                val navController = rememberNavController()
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    NavHost(
+                        navController = navController,
+                        startDestination = "getting_started",
+                        Modifier.padding(innerPadding)
+                    ) {
+                        composable("getting_started") {
+                            GettingStartedScreen(
+                                onCreateAccountClick = {
+                                    navController.navigate("create_account")
+                                }
+                            )
                         }
-                    )
-                }
 
-                composable("create_account") {
-                    RegistrationScreenRoot()
-                }
+                        composable("create_account") {
+                            RegistrationScreenRoot()
+                        }
 
-                composable("login") {
-                    LoginScreen()
+                        composable("login") {
+                            LoginScreen()
+                        }
+                    }
                 }
             }
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {

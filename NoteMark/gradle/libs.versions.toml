@@ -1,6 +1,5 @@
 [versions]
 agp = "8.11.1"
-coreSplashscreen = "1.0.1"
 koinAndroid = "4.1.0"
 koinAndroidxCompose = "4.1.0"
 kotlin = "2.0.21"
@@ -15,7 +14,6 @@ navigationCompose = "2.9.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
