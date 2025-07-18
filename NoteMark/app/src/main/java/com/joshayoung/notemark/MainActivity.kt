@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity() {
         var keepSplash = true
 
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { keepSplash }
 
@@ -58,7 +59,11 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("create_account") {
-                            RegistrationScreenRoot()
+                            RegistrationScreenRoot(
+                                onRegistrationSuccess = {
+                                    navController.navigate("login")
+                                }
+                            )
                         }
 
                         composable("login") {

@@ -1,7 +1,15 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("plugin.serialization")
+}
+
+val localProperties = Properties().apply {
+    load(File(rootProject.projectDir, "local.properties").inputStream())
 }
 
 android {
@@ -26,6 +34,23 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            buildConfigField(
+                "String",
+                "CAMPUS_SUBSCRIPTION_EMAIL",
+                localProperties.getProperty("CAMPUS_SUBSCRIPTION_EMAIL")
+            )
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                localProperties.getProperty("BASE_URL")
+            )
+            buildConfigField(
+                "String",
+                "REGISTER_PATH",
+                localProperties.getProperty("REGISTER_PATH")
+            )
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -36,11 +61,11 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -60,4 +85,12 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation("androidx.core:core-splashscreen:1.0.0")
+
+    implementation("io.ktor:ktor-client-core:3.2.2")
+    implementation("io.ktor:ktor-client-cio:3.2.2")
+    implementation("io.ktor:ktor-client-auth:3.2.2")
+    implementation("io.ktor:ktor-client-content-negotiation:3.2.2")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.2.2")
+    implementation("io.ktor:ktor-client-logging:3.2.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 }
