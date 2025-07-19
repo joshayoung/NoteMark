@@ -94,12 +94,22 @@ fun RegistrationScreen(
 
         DisplayErrorList(errorMessage)
 
+        if (state.usernameError != "") {
+            Text(text = state.usernameError, color = MaterialTheme.colorScheme.error)
+        }
         NoteMarkTextField(state = state.username, label = "Username", hint = "John.doe")
         Text("Use between 3 and 20 characters for your username",
             modifier = Modifier,
             style = MaterialTheme.typography.bodySmall
         )
+        if (state.emailError != "") {
+            Text(text = state.emailError, color = MaterialTheme.colorScheme.error)
+        }
         NoteMarkTextField(state = state.email, label = "Email", hint = "john.doe@example.com")
+        if (state.passwordError != "") {
+            Text(text = state.passwordError, color = MaterialTheme.colorScheme.error)
+        }
+
         NoteMarkTextField(state = state.password, label = "Password", icon = EyeIcon, hint = "Password", type = TextFieldType.Password)
         NoteMarkTextField(state = state.repeatedPassword, label = "Repeat Password", icon = EyeIcon, hint = "Password", type = TextFieldType.Password)
         Text("Use 8+ characters with a number or symbol for better security",
