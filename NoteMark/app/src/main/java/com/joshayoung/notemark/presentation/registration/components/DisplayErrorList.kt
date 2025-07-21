@@ -16,8 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun DisplayErrorList(errorMessage: List<String?>?) {
-    LazyColumn {
+fun DisplayErrorList(
+    modifier: Modifier,
+    errorMessage: List<String?>?) {
+    LazyColumn(modifier = modifier) {
         errorMessage?.let { nonNullItems ->
             items(nonNullItems) { item ->
                 if (item != null)
@@ -40,7 +42,9 @@ fun DisplayErrorList(errorMessage: List<String?>?) {
 @Composable
 @Preview(showBackground = true)
 fun DisplayErrorListPreview() {
-    DisplayErrorList(errorMessage = listOf(
+    DisplayErrorList(
+        modifier = Modifier,
+        errorMessage = listOf(
         "The email format was invalid",
         null,
         "The password was too long. Please make it shorter and try again.",

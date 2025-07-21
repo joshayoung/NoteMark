@@ -4,12 +4,16 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -75,30 +79,38 @@ fun RegistrationScreen(
 ) {
     Column(
         Modifier
-            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .fillMaxWidth()
             .padding(vertical = 10.dp, horizontal = 10.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Create Account", modifier = Modifier
-            .fillMaxWidth(),
+        Text(
+            "Create Account", modifier = Modifier
+                .fillMaxWidth(),
             style = MaterialTheme.typography.headlineLarge,
             textAlign = TextAlign.Center
 
         )
-        Text("Capture your thoughts and ideas.",
+        Text(
+            "Capture your thoughts and ideas.",
             modifier = Modifier
                 .fillMaxWidth(),
             textAlign = TextAlign.Center
 
-            )
+        )
 
-        DisplayErrorList(errorMessage)
+        DisplayErrorList(
+            modifier = Modifier
+                .weight(1f),
+            errorMessage
+        )
 
         if (state.usernameError != "") {
             Text(text = state.usernameError, color = MaterialTheme.colorScheme.error)
         }
         NoteMarkTextField(state = state.username, label = "Username", hint = "John.doe")
-        Text("Use between 3 and 20 characters for your username",
+        Text(
+            "Use between 3 and 20 characters for your username",
             modifier = Modifier,
             style = MaterialTheme.typography.bodySmall
         )
@@ -110,20 +122,34 @@ fun RegistrationScreen(
             Text(text = state.passwordError, color = MaterialTheme.colorScheme.error)
         }
 
-        NoteMarkTextField(state = state.password, label = "Password", icon = EyeIcon, hint = "Password", type = TextFieldType.Password)
-        NoteMarkTextField(state = state.repeatedPassword, label = "Repeat Password", icon = EyeIcon, hint = "Password", type = TextFieldType.Password)
-        Text("Use 8+ characters with a number or symbol for better security",
+        NoteMarkTextField(
+            state = state.password,
+            label = "Password",
+            icon = EyeIcon,
+            hint = "Password",
+            type = TextFieldType.Password
+        )
+        NoteMarkTextField(
+            state = state.repeatedPassword,
+            label = "Repeat Password",
+            icon = EyeIcon,
+            hint = "Password",
+            type = TextFieldType.Password
+        )
+        Text(
+            "Use 8+ characters with a number or symbol for better security",
             modifier = Modifier,
             style = MaterialTheme.typography.bodySmall
         )
-        NoteMarkButton(text = "Create Account",
+        NoteMarkButton(
+            text = "Create Account",
             isEnabled = !state.isRegistering && state.canRegister
         ) {
             onnAction(RegistrationAction.OnRegisterClick)
         }
-        Text("Already have an account?", modifier = Modifier
-            .fillMaxWidth()
-            , textAlign = TextAlign.Center
+        Text(
+            "Already have an account?", modifier = Modifier
+                .fillMaxWidth(), textAlign = TextAlign.Center
         )
     }
 }
