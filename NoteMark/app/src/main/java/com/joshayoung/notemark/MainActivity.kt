@@ -23,6 +23,8 @@ import androidx.navigation.compose.rememberNavController
 import com.joshayoung.notemark.presentation.GettingStartedScreen
 import com.joshayoung.notemark.presentation.registration.RegistrationScreenRoot
 import com.joshayoung.notemark.presentation.log_in.LoginScreen
+import com.joshayoung.notemark.presentation.log_in.LoginScreenRoot
+import com.joshayoung.notemark.presentation.note_landing.NoteLandingScreenRoot
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -54,6 +56,9 @@ class MainActivity : ComponentActivity() {
                             GettingStartedScreen(
                                 onCreateAccountClick = {
                                     navController.navigate("create_account")
+                                },
+                                onLoginClick = {
+                                    navController.navigate("login")
                                 }
                             )
                         }
@@ -67,7 +72,15 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("login") {
-                            LoginScreen()
+                            LoginScreenRoot(
+                                onLoginSuccess = {
+                                    navController.navigate("note_landing")
+                                }
+                            )
+                        }
+
+                        composable("note_landing") {
+                            NoteLandingScreenRoot()
                         }
                     }
                 }
@@ -79,6 +92,5 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    NoteMarkTheme {
-    }
+    NoteMarkTheme { }
 }

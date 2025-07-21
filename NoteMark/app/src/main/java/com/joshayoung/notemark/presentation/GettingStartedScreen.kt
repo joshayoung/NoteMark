@@ -27,7 +27,8 @@ import com.joshayoung.notemark.ui.theme.NoteMarkTheme
 
 @Composable
 fun GettingStartedScreen(
-    onCreateAccountClick: () -> Unit
+    onCreateAccountClick: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
     Column(modifier = Modifier
     ) {
@@ -81,6 +82,7 @@ fun GettingStartedScreen(
                         .fillMaxWidth()
                     ,
                     onClick = {
+                        onLoginClick()
                     }
                 ) {
                     Text("Log in")
@@ -94,6 +96,9 @@ fun GettingStartedScreen(
 @Composable
 private fun GettingStartedScreenPreview() {
     NoteMarkTheme {
-        GettingStartedScreen(onCreateAccountClick = {})
+        GettingStartedScreen(
+            onCreateAccountClick = {},
+            onLoginClick = {}
+        )
     }
 }

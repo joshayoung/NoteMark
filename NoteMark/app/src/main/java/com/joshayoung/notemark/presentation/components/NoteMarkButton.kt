@@ -37,10 +37,10 @@ fun NoteMarkButton(
         ),
         shape = RoundedCornerShape(12f),
         modifier =
-        Modifier
+        modifier
             .fillMaxWidth()
     ) {
-        Text("Create Account")
+        Text(text)
     }
 }
 
@@ -57,7 +57,7 @@ fun NoteMarkButtonPreview() {
                 isEnabled = true
             )
             NoteMarkButton(
-                text = "Create Account",
+                text = "Login In",
                 onClick = {}
             )
         }

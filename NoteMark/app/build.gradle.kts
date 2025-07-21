@@ -50,6 +50,11 @@ android {
                 "REGISTER_PATH",
                 localProperties.getProperty("REGISTER_PATH")
             )
+            buildConfigField(
+                "String",
+                "LOGIN_PATH",
+                localProperties.getProperty("LOGIN_PATH")
+            )
         }
     }
     compileOptions {

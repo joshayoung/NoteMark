@@ -1,6 +1,8 @@
 package com.joshayoung.notemark.data
 
 import com.joshayoung.notemark.BuildConfig
+import com.joshayoung.notemark.domain.Login
+import com.joshayoung.notemark.domain.LoginResponse
 import com.joshayoung.notemark.domain.NoteMarkRepository
 import com.joshayoung.notemark.domain.Registration
 import io.ktor.client.HttpClient
@@ -32,6 +34,30 @@ class NoteMarkRepositoryImpl (
                 val responseText = response.bodyAsText()
                 val jsonObject = Json.decodeFromString<Error>(responseText)
                 // TODO: Make this more robust:
+                Result(success = false, error = jsonObject)
+            }
+        }
+    }
+
+    override suspend fun login(
+        email: String,
+        password: String
+    ): com.joshayoung.notemark.domain.Result {
+        val response : HttpResponse = client.post {
+            url(BuildConfig.BASE_URL + BuildConfig.LOGIN_PATH)
+            setBody(Login(email = email, password = password))
+        }
+        return when (response.status) {
+            HttpStatusCode.OK -> {
+                val responseText = response.bodyAsText()
+                // TODO: Use this:
+                val jsonObject = Json.decodeFromString<LoginResponse>(responseText)
+                Result(success = true)
+            }
+
+            else -> {
+                val responseText = response.bodyAsText()
+                val jsonObject = Json.decodeFromString<Error>(responseText)
                 Result(success = false, error = jsonObject)
             }
         }
