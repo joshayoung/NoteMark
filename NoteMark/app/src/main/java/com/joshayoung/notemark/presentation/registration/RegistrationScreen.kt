@@ -1,8 +1,11 @@
 package com.joshayoung.notemark.presentation.registration
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +25,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
@@ -77,28 +82,41 @@ fun RegistrationScreen(
     errorMessage: List<String?>?,
     onnAction: (RegistrationAction) -> Unit
 ) {
+    val configuration = LocalConfiguration.current
+    val isPortrait = configuration.orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT
+
+    if (!isPortrait) {
+        Row(modifier = Modifier
+            .fillMaxSize()
+        ) {
+            Header(modifier = Modifier.weight(1f))
+            Form(
+                errorMessage, state, onnAction,
+                        modifier = Modifier.weight(1f),
+            )
+        }
+    } else {
+        Column {
+            Header()
+            Form(errorMessage, state, onnAction)
+        }
+    }
+}
+
+@Composable
+private fun Form(
+    errorMessage: List<String?>?,
+    state: RegistrationState,
+    onnAction: (RegistrationAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
-        Modifier
+        modifier
             .verticalScroll(rememberScrollState())
             .fillMaxWidth()
             .padding(vertical = 10.dp, horizontal = 10.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            "Create Account", modifier = Modifier
-                .fillMaxWidth(),
-            style = MaterialTheme.typography.headlineLarge,
-            textAlign = TextAlign.Center
-
-        )
-        Text(
-            "Capture your thoughts and ideas.",
-            modifier = Modifier
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center
-
-        )
-
         DisplayErrorList(
             modifier = Modifier
                 .weight(1f),
@@ -150,6 +168,28 @@ fun RegistrationScreen(
         Text(
             "Already have an account?", modifier = Modifier
                 .fillMaxWidth(), textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+private fun Header(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            "Create Account", modifier = Modifier
+                .fillMaxWidth(),
+            style = MaterialTheme.typography.headlineLarge,
+            textAlign = TextAlign.Center
+
+        )
+        Text(
+            "Capture your thoughts and ideas.",
+            modifier = Modifier
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center
+
         )
     }
 }
