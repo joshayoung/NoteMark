@@ -1,5 +1,6 @@
 package com.joshayoung.notemark.presentation.log_in
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,16 +17,15 @@ import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.presentation.components.NoteMarkButton
 import com.joshayoung.notemark.presentation.components.NoteMarkTextField
 import com.joshayoung.notemark.presentation.components.TextFieldType
-import com.joshayoung.notemark.presentation.registration.RegistrationAction
 import com.joshayoung.notemark.ui.theme.EyeIcon
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
 import org.koin.androidx.compose.koinViewModel
-import java.nio.file.WatchEvent
 
 @Composable
 fun LoginScreenRoot(
     viewModel: LoginViewModel = koinViewModel(),
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    onDontHaveAccount: () -> Unit
 ) {
 
     ObserveAsEvents(viewModel.events) { event ->
@@ -38,6 +38,7 @@ fun LoginScreenRoot(
 
     LoginScreen(
         state = viewModel.state,
+        onDontHaveAccount = onDontHaveAccount,
         onAction = { action ->
             viewModel.onAction(action)
         }
@@ -47,6 +48,7 @@ fun LoginScreenRoot(
 @Composable
 fun LoginScreen(
     state: LoginState,
+    onDontHaveAccount: () -> Unit,
     onAction: (LoginAction) -> Unit
 ) {
     Column(
@@ -75,6 +77,9 @@ fun LoginScreen(
         }
         Text("Don't have an account?", modifier = Modifier
             .fillMaxWidth()
+            .clickable {
+                onDontHaveAccount()
+            }
             , textAlign = TextAlign.Center
         )
     }
@@ -84,6 +89,8 @@ fun LoginScreen(
 @Preview(showBackground = true)
 fun LoginScreenPreview() {
     NoteMarkTheme {
-        LoginScreen(state = LoginState(), onAction = {})
+        LoginScreen(state = LoginState(),
+            onDontHaveAccount = {},
+            onAction = {})
     }
 }

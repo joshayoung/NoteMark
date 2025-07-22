@@ -83,16 +83,20 @@ private fun PortraitOrientation(onCreateAccountClick: () -> Unit, onLoginClick: 
     Column(
         modifier = Modifier
             .background( Color(0xFFE0EAFF))
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Bottom
+//            .fillMaxSize(),
+        ,verticalArrangement = Arrangement.Bottom
     ) {
-        Image(
-            painterResource(id = R.drawable.greeting),
-            contentDescription = null,
-            contentScale = ContentScale.FillWidth,
-            modifier = Modifier
-                .fillMaxWidth()
-        )
+        Box(modifier = Modifier
+            .weight(1f)
+        ) {
+            Image(
+                painterResource(id = R.drawable.greeting),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
         NoteIntroCard(onCreateAccountClick,
             onLoginClick,
             modifier = Modifier
@@ -149,8 +153,9 @@ private fun NoteIntroCard(
     }
 }
 
-@Preview(widthDp = 640, heightDp = 360)
-@Preview(widthDp = 840, heightDp = 360)
+//@Preview(widthDp = 640, heightDp = 360)
+//@Preview(widthDp = 840, heightDp = 360)
+@Preview(widthDp = 260, heightDp = 560)
 //@Preview
 @Composable
 private fun GettingStartedScreenPreview() {

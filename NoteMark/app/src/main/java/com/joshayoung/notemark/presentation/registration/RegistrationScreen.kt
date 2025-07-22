@@ -2,6 +2,7 @@ package com.joshayoung.notemark.presentation.registration
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,6 +47,7 @@ import java.nio.file.WatchEvent
 @Composable
 fun RegistrationScreenRoot(
     onRegistrationSuccess: () -> Unit,
+    onAlreadyAccountClick: () -> Unit,
     viewModel: RegistrationViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -69,6 +71,7 @@ fun RegistrationScreenRoot(
 
     RegistrationScreen(
         state = viewModel.state,
+        onAlreadyAccountClick = onAlreadyAccountClick,
         errorMessage = errorMessage,
         onnAction = { action ->
             viewModel.onAction(action)
@@ -79,6 +82,7 @@ fun RegistrationScreenRoot(
 @Composable
 fun RegistrationScreen(
     state: RegistrationState,
+    onAlreadyAccountClick: () -> Unit,
     errorMessage: List<String?>?,
     onnAction: (RegistrationAction) -> Unit
 ) {
@@ -91,14 +95,19 @@ fun RegistrationScreen(
         ) {
             Header(modifier = Modifier.weight(1f))
             Form(
-                errorMessage, state, onnAction,
+                errorMessage,
+                onAlreadyAccountClick = onAlreadyAccountClick,
+                state,
+                onnAction,
                         modifier = Modifier.weight(1f),
             )
         }
     } else {
         Column {
             Header()
-            Form(errorMessage, state, onnAction)
+            Form(errorMessage,
+                onAlreadyAccountClick = onAlreadyAccountClick,
+                state, onnAction)
         }
     }
 }
@@ -106,6 +115,7 @@ fun RegistrationScreen(
 @Composable
 private fun Form(
     errorMessage: List<String?>?,
+    onAlreadyAccountClick: () -> Unit,
     state: RegistrationState,
     onnAction: (RegistrationAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -167,6 +177,9 @@ private fun Form(
         }
         Text(
             "Already have an account?", modifier = Modifier
+                .clickable {
+                    onAlreadyAccountClick()
+                }
                 .fillMaxWidth(), textAlign = TextAlign.Center
         )
     }
@@ -200,6 +213,7 @@ fun RegistrationScreenPreview() {
     NoteMarkTheme {
         RegistrationScreen(
             state = RegistrationState(),
+            onAlreadyAccountClick = {},
             errorMessage = null,
             onnAction = {}
         )

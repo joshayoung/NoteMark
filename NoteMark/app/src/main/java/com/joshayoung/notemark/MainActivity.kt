@@ -8,27 +8,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.joshayoung.notemark.presentation.GettingStartedScreen
 import com.joshayoung.notemark.presentation.registration.RegistrationScreenRoot
-import com.joshayoung.notemark.presentation.log_in.LoginScreen
 import com.joshayoung.notemark.presentation.log_in.LoginScreenRoot
 import com.joshayoung.notemark.presentation.note_landing.NoteLandingScreenRoot
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -43,41 +34,51 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = if (isAuthenticated) "note_landing" else "getting_started",
+            startDestination = if (isAuthenticated) Screen.Landing.route else Screen.Start.route,
             modifier = modifier
         ) {
-            composable("getting_started") {
+            composable(Screen.Start.route) {
                 GettingStartedScreen(
                     onCreateAccountClick = {
-                        navController.navigate("create_account")
+                        navController.navigate(Screen.Register.route)
                     },
                     onLoginClick = {
-                        navController.navigate("login")
+                        navController.navigate(Screen.Login.route)
                     }
                 )
             }
 
-            composable("create_account") {
+            composable(Screen.Register.route) {
                 RegistrationScreenRoot(
                     onRegistrationSuccess = {
-                        navController.navigate("login")
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onAlreadyAccountClick = {
+                        navController.navigate(Screen.Login.route)
                     }
                 )
             }
 
-            composable("login") {
+            composable(Screen.Login.route) {
                 LoginScreenRoot(
                     onLoginSuccess = {
-                        navController.navigate("note_landing")
+                        navController.navigate(Screen.Landing.route) {
+                            popUpTo(Screen.Login.route) {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    onDontHaveAccount = {
+                        navController.navigate(Screen.Register.route)
                     }
                 )
             }
 
-            composable("note_landing") {
+            composable(Screen.Landing.route) {
                 NoteLandingScreenRoot(
                     onLogoutClick = {
-                        navController.navigate("login") {
-                            popUpTo("getting_started") {
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Start.route) {
                                 inclusive = true
                             }
                         }
