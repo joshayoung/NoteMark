@@ -25,7 +25,7 @@ private val LightColorScheme = lightColorScheme(
     onTertiary =  Color(0xFF1B1B1C).copy(alpha = 0.5f),
     primary = Color(0xFF5977F7),
     onPrimary = Color(0xFFFFFFFF),
-    error = Color(0xFFE1294B),
+    error = Color(0xFFE1294B)
 )
 
 @Composable

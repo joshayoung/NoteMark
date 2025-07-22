@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = if (isAuthenticated) "note_landing" else "login",
+            startDestination = if (isAuthenticated) "note_landing" else "getting_started",
             modifier = modifier
         ) {
             composable("getting_started") {
