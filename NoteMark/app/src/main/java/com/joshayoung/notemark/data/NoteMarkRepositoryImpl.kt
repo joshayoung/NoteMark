@@ -5,6 +5,7 @@ import com.joshayoung.notemark.domain.Login
 import com.joshayoung.notemark.domain.LoginResponse
 import com.joshayoung.notemark.domain.NoteMarkRepository
 import com.joshayoung.notemark.domain.Registration
+import com.joshayoung.notemark.domain.SessionStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -18,6 +19,7 @@ typealias Result = com.joshayoung.notemark.domain.Result
 
 class NoteMarkRepositoryImpl (
     private val client: HttpClient,
+    private val sessionStorage: SessionStorage
 ) : NoteMarkRepository {
     override suspend fun register(username: String, email: String, password: String) : Result {
         val response : HttpResponse = client.post {
@@ -52,6 +54,13 @@ class NoteMarkRepositoryImpl (
                 val responseText = response.bodyAsText()
                 // TODO: Use this:
                 val jsonObject = Json.decodeFromString<LoginResponse>(responseText)
+                sessionStorage.set(
+                    LoginResponse(
+                        accessToken = jsonObject.accessToken,
+                        refreshToken = jsonObject.refreshToken,
+                        username = jsonObject.username
+                    )
+                )
                 Result(success = true)
             }
 

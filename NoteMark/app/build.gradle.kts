@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId = "com.joshayoung.notemark"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -49,6 +49,11 @@ android {
                 "String",
                 "REGISTER_PATH",
                 localProperties.getProperty("REGISTER_PATH")
+            )
+            buildConfigField(
+                "String",
+                "REFRESH_PATH",
+                localProperties.getProperty("REFRESH_PATH")
             )
             buildConfigField(
                 "String",
@@ -100,4 +105,5 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.logging)
     implementation(libs.kotlinx.serialization.json)
+    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha03")
 }

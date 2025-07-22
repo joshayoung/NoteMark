@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -28,60 +29,82 @@ import com.joshayoung.notemark.presentation.note_landing.NoteLandingScreenRoot
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        var keepSplash = true
 
+    private val viewModel by viewModel<MainViewModel>()
+
+    @Composable
+    fun MyNavigation(
+        navController: NavHostController,
+        isAuthenticated: Boolean,
+        modifier: Modifier
+    ) {
+        NavHost(
+            navController = navController,
+            startDestination = if (isAuthenticated) "note_landing" else "login",
+            modifier = modifier
+        ) {
+            composable("getting_started") {
+                GettingStartedScreen(
+                    onCreateAccountClick = {
+                        navController.navigate("create_account")
+                    },
+                    onLoginClick = {
+                        navController.navigate("login")
+                    }
+                )
+            }
+
+            composable("create_account") {
+                RegistrationScreenRoot(
+                    onRegistrationSuccess = {
+                        navController.navigate("login")
+                    }
+                )
+            }
+
+            composable("login") {
+                LoginScreenRoot(
+                    onLoginSuccess = {
+                        navController.navigate("note_landing")
+                    }
+                )
+            }
+
+            composable("note_landing") {
+                NoteLandingScreenRoot(
+                    onLogoutClick = {
+                        navController.navigate("login") {
+                            popUpTo("getting_started") {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val splashScreen = installSplashScreen()
-        splashScreen.setKeepOnScreenCondition { keepSplash }
-
-        lifecycleScope.launch {
-            delay(3000) // Wait 3 seconds
-            keepSplash = false // Allow splash screen to be dismissed
-        }
+        splashScreen.setKeepOnScreenCondition { viewModel.state.isCheckingSession }
 
         setContent {
             NoteMarkTheme {
                 val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavHost(
-                        navController = navController,
-                        startDestination = "getting_started",
-                        Modifier.padding(innerPadding)
-                    ) {
-                        composable("getting_started") {
-                            GettingStartedScreen(
-                                onCreateAccountClick = {
-                                    navController.navigate("create_account")
-                                },
-                                onLoginClick = {
-                                    navController.navigate("login")
-                                }
-                            )
-                        }
-
-                        composable("create_account") {
-                            RegistrationScreenRoot(
-                                onRegistrationSuccess = {
-                                    navController.navigate("login")
-                                }
-                            )
-                        }
-
-                        composable("login") {
-                            LoginScreenRoot(
-                                onLoginSuccess = {
-                                    navController.navigate("note_landing")
-                                }
-                            )
-                        }
-
-                        composable("note_landing") {
-                            NoteLandingScreenRoot()
-                        }
+                    // NOTE: There is a flash without this:
+                    if (!viewModel.state.isCheckingSession)
+                    {
+                        MyNavigation(
+                            navController = navController,
+                            isAuthenticated = viewModel.state.isAuthenticated,
+                            modifier = Modifier.padding(innerPadding)
+                        )
                     }
                 }
             }
