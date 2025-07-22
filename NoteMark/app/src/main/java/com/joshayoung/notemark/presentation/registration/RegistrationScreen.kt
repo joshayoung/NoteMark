@@ -30,10 +30,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.joshayoung.notemark.R
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.presentation.components.NoteMarkButton
 import com.joshayoung.notemark.presentation.components.NoteMarkTextField
@@ -133,23 +135,19 @@ private fun Form(
             errorMessage
         )
 
+        NoteMarkTextField(state = state.username, label = "Username", hint = "John.doe")
         if (state.usernameError != "") {
             Text(text = state.usernameError, color = MaterialTheme.colorScheme.error)
         }
-        NoteMarkTextField(state = state.username, label = "Username", hint = "John.doe")
         Text(
             "Use between 3 and 20 characters for your username",
             modifier = Modifier,
             style = MaterialTheme.typography.bodySmall
         )
+        NoteMarkTextField(state = state.email, label = "Email", hint = "john.doe@example.com")
         if (state.emailError != "") {
             Text(text = state.emailError, color = MaterialTheme.colorScheme.error)
         }
-        NoteMarkTextField(state = state.email, label = "Email", hint = "john.doe@example.com")
-        if (state.passwordError != "") {
-            Text(text = state.passwordError, color = MaterialTheme.colorScheme.error)
-        }
-
         NoteMarkTextField(
             state = state.password,
             label = "Password",
@@ -157,6 +155,9 @@ private fun Form(
             hint = "Password",
             type = TextFieldType.Password
         )
+        if (state.passwordError != "") {
+            Text(text = state.passwordError, color = MaterialTheme.colorScheme.error)
+        }
         NoteMarkTextField(
             state = state.repeatedPassword,
             label = "Repeat Password",
@@ -164,6 +165,9 @@ private fun Form(
             hint = "Password",
             type = TextFieldType.Password
         )
+        if (state.passwordEqualityError != "") {
+            Text(text = state.passwordEqualityError, color = MaterialTheme.colorScheme.error)
+        }
         Text(
             "Use 8+ characters with a number or symbol for better security",
             modifier = Modifier,
@@ -176,7 +180,7 @@ private fun Form(
             onnAction(RegistrationAction.OnRegisterClick)
         }
         Text(
-            "Already have an account?", modifier = Modifier
+            stringResource(R.string.have_account), modifier = Modifier
                 .clickable {
                     onAlreadyAccountClick()
                 }

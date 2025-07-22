@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NoteMark</string>
+    <string name="have_account">Already have an account?</string>
 </resources>

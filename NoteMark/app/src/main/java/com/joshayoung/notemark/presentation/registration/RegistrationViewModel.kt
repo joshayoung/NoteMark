@@ -44,40 +44,36 @@ class RegistrationViewModel(
 
     fun TextFieldState.textAsFlow() : Flow<CharSequence> = snapshotFlow { text }
 
-    // TODO: Improve Validation
-//    fun allFieldsEntered() : Boolean {
-//        return !state.username.text.isEmpty() &&
-//        !state.email.text.isEmpty() &&
-//        !state.password.text.isEmpty() &&
-//        !state.repeatedPassword.text.isEmpty()
-//    }
-
     fun onAction(action: RegistrationAction) {
         when(action) {
             RegistrationAction.OnRegisterClick -> {
                 val usernameResult = validateUsername(state.username.text.toString())
                 if (usernameResult.invalidUsername) {
-                    state = state.copy(canRegister = false, usernameError = usernameResult.error)
-
-                    return;
+                    state = state.copy(canRegister = false, usernameError = "Username must be at least 3 characters")
                 }
 
                 val emailResult = validateEmail(state.email.text.toString())
                 if (emailResult.inValidEmail) {
 
-                    state = state.copy(canRegister = false, emailError = emailResult.error)
-
-                    return;
+                    state = state.copy(canRegister = false, emailError = "Invalid email provided")
                 }
 
                 val passwordResult = validatePassword(
                     state.password.text.toString(),
                     state.repeatedPassword.text.toString());
 
+                if (passwordResult.invalidPassword)
+                {
+                    state = state.copy(canRegister = false, passwordError = "Password must be at least 8 characters and include a number or symbol")
+                }
+
                 if (passwordResult.isNotEqual)
                 {
-                    state = state.copy(canRegister = false, passwordError = passwordResult.error)
+                    state = state.copy(canRegister = false, passwordsNotEqual = true, passwordEqualityError = "Passwords do not match")
+                }
 
+                if (usernameResult.invalidUsername || emailResult.inValidEmail || passwordResult.invalidPassword)
+                {
                     return;
                 }
 

@@ -1,5 +1,6 @@
 package com.joshayoung.notemark.domain.use_cases
 
+import androidx.compose.animation.core.infiniteRepeatable
 import com.joshayoung.notemark.domain.PatternValidator
 import com.joshayoung.notemark.domain.ValidationState
 
@@ -7,13 +8,8 @@ class ValidateEmail(
     private val patternValidator: PatternValidator
 ) {
     operator fun invoke(email: String) : ValidationState {
-        if (!patternValidator.matches(email)) {
-            return ValidationState(
-                inValidEmail = true,
-                error = "Your email address is invalid",
-            )
-        }
+        val invalidEmail =  (!patternValidator.matches(email))
 
-        return ValidationState(inValidEmail = false)
+        return ValidationState(inValidEmail = invalidEmail)
     }
 }

@@ -4,5 +4,5 @@ data class ValidationState (
     val isNotEqual: Boolean = false,
     val inValidEmail: Boolean = false,
     val invalidUsername : Boolean = false,
-    val error: String = ""
+    val invalidPassword : Boolean = false,
 )

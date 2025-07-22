@@ -12,5 +12,7 @@ data class RegistrationState(
     val errors: List<String>? = null,
     val usernameError: String = "",
     val emailError: String = "",
-    val passwordError: String = ""
+    val passwordError: String = "",
+    val passwordEqualityError: String = "",
+    val passwordsNotEqual: Boolean = false
 )
