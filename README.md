@@ -11,3 +11,5 @@
 * https://icon.kitchen
 * https://www.youtube.com/watch?v=MiLN2vs2Oe0
 * https://www.youtube.com/watch?v=Z1WoLYF-b14
+* https://www.youtube.com/watch?v=TosPS55y_IY
+  * good architecture video
