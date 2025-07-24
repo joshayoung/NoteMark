@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.domain
+package com.joshayoung.notemark.domain.models
 
 import kotlinx.serialization.Serializable
 

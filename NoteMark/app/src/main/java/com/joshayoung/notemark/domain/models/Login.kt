@@ -1,10 +1,9 @@
-package com.joshayoung.notemark.domain
+package com.joshayoung.notemark.domain.models
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Registration(
-    val username: String,
+data class Login(
     val email: String,
     val password: String
 )

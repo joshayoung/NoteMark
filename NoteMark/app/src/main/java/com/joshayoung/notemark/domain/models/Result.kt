@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.domain
+package com.joshayoung.notemark.domain.models
 
 typealias Error = com.joshayoung.notemark.data.Error
 

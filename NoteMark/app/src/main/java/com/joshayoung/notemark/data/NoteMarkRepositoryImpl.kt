@@ -1,10 +1,10 @@
 package com.joshayoung.notemark.data
 
 import com.joshayoung.notemark.BuildConfig
-import com.joshayoung.notemark.domain.Login
+import com.joshayoung.notemark.domain.models.Login
 import com.joshayoung.notemark.domain.LoginResponse
 import com.joshayoung.notemark.domain.NoteMarkRepository
-import com.joshayoung.notemark.domain.Registration
+import com.joshayoung.notemark.domain.models.Registration
 import com.joshayoung.notemark.domain.SessionStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
@@ -15,7 +15,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.json.Json
 
-typealias Result = com.joshayoung.notemark.domain.Result
+typealias Result = com.joshayoung.notemark.domain.models.Result
 
 class NoteMarkRepositoryImpl (
     private val client: HttpClient,
@@ -43,7 +43,7 @@ class NoteMarkRepositoryImpl (
     override suspend fun login(
         email: String,
         password: String
-    ): com.joshayoung.notemark.domain.Result {
+    ): com.joshayoung.notemark.domain.models.Result {
         try {
             val response : HttpResponse = client.post(BuildConfig.BASE_URL + BuildConfig.LOGIN_PATH) {
                 Login(email = email, password = password)
