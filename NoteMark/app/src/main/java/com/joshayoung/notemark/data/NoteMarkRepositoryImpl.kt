@@ -31,7 +31,6 @@ class NoteMarkRepositoryImpl (
             HttpStatusCode.OK -> {
                 Result(success = true)
             }
-
             else -> {
                 val responseText = response.bodyAsText()
                 val jsonObject = Json.decodeFromString<Error>(responseText)
@@ -45,30 +44,36 @@ class NoteMarkRepositoryImpl (
         email: String,
         password: String
     ): com.joshayoung.notemark.domain.Result {
-        val response : HttpResponse = client.post {
-            url(BuildConfig.BASE_URL + BuildConfig.LOGIN_PATH)
-            setBody(Login(email = email, password = password))
-        }
-        return when (response.status) {
-            HttpStatusCode.OK -> {
-                val responseText = response.bodyAsText()
-                // TODO: Use this:
-                val jsonObject = Json.decodeFromString<LoginResponse>(responseText)
-                sessionStorage.set(
-                    LoginResponse(
-                        accessToken = jsonObject.accessToken,
-                        refreshToken = jsonObject.refreshToken,
-                        username = jsonObject.username
+        try {
+            val response : HttpResponse = client.post(BuildConfig.BASE_URL + BuildConfig.LOGIN_PATH) {
+                Login(email = email, password = password)
+            }
+            when (response.status) {
+                HttpStatusCode.Unauthorized -> {
+                    return Result(success = false)
+                }
+                HttpStatusCode.OK -> {
+                    val responseText = response.bodyAsText()
+                    // TODO: Use this:
+                    val jsonObject = Json.decodeFromString<LoginResponse>(responseText)
+                    sessionStorage.set(
+                        LoginResponse(
+                            accessToken = jsonObject.accessToken,
+                            refreshToken = jsonObject.refreshToken,
+                            username = jsonObject.username
+                        )
                     )
-                )
-                Result(success = true)
-            }
+                    return Result(success = true)
+                }
 
-            else -> {
-                val responseText = response.bodyAsText()
-                val jsonObject = Json.decodeFromString<Error>(responseText)
-                Result(success = false, error = jsonObject)
+                else -> {
+//                    val responseText = response.bodyAsText()
+//                    val jsonObject = Json.decodeFromString<Error>(responseText)
+                    return Result(success = false)//, error = jsonObject)
+                }
             }
+        } catch(e: Exception) {
+            return Result(success = false)
         }
     }
 }

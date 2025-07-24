@@ -83,7 +83,6 @@ private fun PortraitOrientation(onCreateAccountClick: () -> Unit, onLoginClick: 
     Column(
         modifier = Modifier
             .background( Color(0xFFE0EAFF))
-//            .fillMaxSize(),
         ,verticalArrangement = Arrangement.Bottom
     ) {
         Box(modifier = Modifier

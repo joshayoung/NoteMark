@@ -1,5 +1,6 @@
 package com.joshayoung.notemark.presentation.log_in
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,10 +37,21 @@ fun LoginScreenRoot(
     onLoginSuccess: () -> Unit,
     onDontHaveAccount: () -> Unit
 ) {
+    val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     ObserveAsEvents(viewModel.events) { event ->
         when(event) {
             is LoginEvent.Success -> {
                 onLoginSuccess()
+            }
+
+            LoginEvent.Failure -> {
+                keyboardController?.hide()
+                Toast.makeText(
+                    context,
+                    "Invalid Login Credentials",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -149,7 +163,9 @@ fun LoginContent(
         hint = "Password",
         type = TextFieldType.Password
     )
-    NoteMarkButton(text = "Log In", isEnabled = true) {
+    NoteMarkButton(text = "Log In", isEnabled = state.formFilled,
+        isLoading = state.isLoggingIn
+    ) {
         onAction(LoginAction.OnLoginClick)
     }
     Text(

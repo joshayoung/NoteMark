@@ -31,11 +31,16 @@ class HttpClientProvider(
 ) {
     fun provide(): HttpClient {
         return HttpClient(CIO){
-            install(ContentNegotiation){
-                json()
-            }
             install(Logging){
                 level = LogLevel.ALL
+            }
+
+            install(ContentNegotiation){
+                json(
+                    json = Json {
+                        ignoreUnknownKeys = true
+                    }
+                )
             }
 
             install(Auth) {

@@ -148,7 +148,8 @@ private fun PasswordTextField(
                 isFocused = it.isFocused
             }
             .clip(RoundedCornerShape(4.dp))
-            .background(color = MaterialTheme.colorScheme.surface)
+            .background(if (!isFocused) MaterialTheme.colorScheme.surface else Color.White)
+            .border(2.dp, if(isFocused) Color.Blue else Color.Transparent)
     )
 }
 
@@ -202,7 +203,8 @@ private fun RegularTextField(
                 isFocused = it.isFocused
             }
             .clip(RoundedCornerShape(4.dp))
-            .background(color = MaterialTheme.colorScheme.surface)
+            .background(if (!isFocused) MaterialTheme.colorScheme.surface else Color.White)
+            .border(2.dp, if(isFocused) Color.Blue else Color.Transparent)
             .padding(12.dp)
     )
 }

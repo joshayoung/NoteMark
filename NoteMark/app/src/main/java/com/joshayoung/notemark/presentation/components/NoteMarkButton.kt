@@ -6,14 +6,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
 
 
@@ -22,6 +26,7 @@ fun NoteMarkButton(
     text: String,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = false,
+    isLoading: Boolean = false,
     onClick: () -> Unit
 ) {
     Button(
@@ -40,7 +45,17 @@ fun NoteMarkButton(
         modifier
             .fillMaxWidth()
     ) {
-        Text(text)
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(15.dp),
+//                    .alpha(if (isLoading) 1f else 0f),
+                strokeWidth = 1.5.dp,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        } else {
+            Text(text)
+        }
     }
 }
 
@@ -58,6 +73,12 @@ fun NoteMarkButtonPreview() {
             )
             NoteMarkButton(
                 text = "Login In",
+                onClick = {}
+            )
+            NoteMarkButton(
+                text = "Login In",
+                isEnabled = true,
+                isLoading = true,
                 onClick = {}
             )
         }
