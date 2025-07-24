@@ -6,9 +6,9 @@ import androidx.security.crypto.MasterKey
 import com.joshayoung.notemark.MainViewModel
 import com.joshayoung.notemark.data.EmailValidator
 import com.joshayoung.notemark.data.HttpClientProvider
-import com.joshayoung.notemark.data.NoteMarkRepositoryImpl
+import com.joshayoung.notemark.data.repository.NoteMarkRepositoryImpl
 import com.joshayoung.notemark.data.SessionStorageImpl
-import com.joshayoung.notemark.domain.NoteMarkRepository
+import com.joshayoung.notemark.domain.repository.NoteMarkRepository
 import com.joshayoung.notemark.domain.PatternValidator
 import com.joshayoung.notemark.domain.SessionStorage
 import com.joshayoung.notemark.domain.use_cases.ValidateEmail

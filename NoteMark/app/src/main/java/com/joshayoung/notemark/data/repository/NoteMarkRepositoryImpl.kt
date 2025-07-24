@@ -1,9 +1,10 @@
-package com.joshayoung.notemark.data
+package com.joshayoung.notemark.data.repository
 
 import com.joshayoung.notemark.BuildConfig
+import com.joshayoung.notemark.data.Error
 import com.joshayoung.notemark.domain.models.Login
 import com.joshayoung.notemark.domain.LoginResponse
-import com.joshayoung.notemark.domain.NoteMarkRepository
+import com.joshayoung.notemark.domain.repository.NoteMarkRepository
 import com.joshayoung.notemark.domain.models.Registration
 import com.joshayoung.notemark.domain.SessionStorage
 import io.ktor.client.HttpClient

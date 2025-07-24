@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joshayoung.notemark.domain.NoteMarkRepository
+import com.joshayoung.notemark.domain.repository.NoteMarkRepository
 import com.joshayoung.notemark.domain.use_cases.ValidateEmail
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
