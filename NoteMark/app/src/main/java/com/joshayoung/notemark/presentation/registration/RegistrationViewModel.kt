@@ -15,6 +15,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -31,14 +32,59 @@ class RegistrationViewModel(
     val events = eventChannel.receiveAsFlow()
 
     init {
-        // TODO: Find a better way:
-        combine(
-            state.username.textAsFlow(),
-            state.email.textAsFlow(),
-            state.password.textAsFlow(),
-            state.repeatedPassword.textAsFlow()
-        ) {
-            state = state.copy(canRegister = true)
+        state.username.textAsFlow()
+            .onEach { username ->
+                if (username == "")
+                {
+                    return@onEach
+                }
+
+                val usernameResult = validateUsername(state.username.text.toString())
+                state = state.copy(
+                    usernameError = if (usernameResult.invalidUsername) "Username must be at least 3 characters" else "",
+                    invalidUsername = usernameResult.invalidUsername
+                )
+
+                state = state.copy(
+                    canRegister = state.formValid
+                )
+            }
+            .launchIn(viewModelScope)
+
+        state.email.textAsFlow()
+            .onEach { email ->
+                if (email == "")
+                {
+                    return@onEach
+                }
+
+                val emailResult = validateEmail(state.email.text.toString())
+                state = state.copy(
+                    emailError = if (emailResult.inValidEmail) "Invalid email provided" else "",
+                    invalidEmail = emailResult.inValidEmail
+                )
+
+                state = state.copy(
+                    canRegister = state.formValid
+                )
+            }
+            .launchIn(viewModelScope)
+        combine(state.password.textAsFlow(), state.repeatedPassword.textAsFlow()) { password, repeat ->
+            if (password == "")
+            {
+                return@combine
+            }
+
+            val passwordResult = validatePassword(password.toString(), repeat.toString())
+            state = state.copy(
+                passwordError = if (passwordResult.invalidPassword) "Password must be at least 8 characters and include a number or symbol" else "",
+                invalidUsername = passwordResult.invalidPassword,
+                passwordEqualityError = if (passwordResult.isNotEqual) "Passwords do not match" else ""
+            )
+
+            state = state.copy(
+                canRegister = state.formValid
+            )
         }.launchIn(viewModelScope)
     }
 
@@ -47,32 +93,7 @@ class RegistrationViewModel(
     fun onAction(action: RegistrationAction) {
         when(action) {
             RegistrationAction.OnRegisterClick -> {
-                val usernameResult = validateUsername(state.username.text.toString())
-                if (usernameResult.invalidUsername) {
-                    state = state.copy(canRegister = false, usernameError = "Username must be at least 3 characters")
-                }
-
-                val emailResult = validateEmail(state.email.text.toString())
-                if (emailResult.inValidEmail) {
-
-                    state = state.copy(canRegister = false, emailError = "Invalid email provided")
-                }
-
-                val passwordResult = validatePassword(
-                    state.password.text.toString(),
-                    state.repeatedPassword.text.toString());
-
-                if (passwordResult.invalidPassword)
-                {
-                    state = state.copy(canRegister = false, passwordError = "Password must be at least 8 characters and include a number or symbol")
-                }
-
-                if (passwordResult.isNotEqual)
-                {
-                    state = state.copy(canRegister = false, passwordsNotEqual = true, passwordEqualityError = "Passwords do not match")
-                }
-
-                if (usernameResult.invalidUsername || emailResult.inValidEmail || passwordResult.invalidPassword)
+                if (!state.canRegister)
                 {
                     return;
                 }

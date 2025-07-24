@@ -9,14 +9,14 @@ class ValidatePassword {
         val invalidPassword = password.length < 8 || !digitOrSpecialCharacter(password)
 
         return ValidationState(
-            isNotEqual = isNotEqual,
-            invalidPassword = invalidPassword,
+            invalidPassword = invalidPassword || isNotEqual,
+            isNotEqual = isNotEqual
         )
     }
 
     private fun digitOrSpecialCharacter(password: String): Boolean {
-        val regex = Regex("\\d|[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]")
+        val regex = Regex("[0-9!@#\$%^&*(),.?\":{}|<>]")
 
-        return regex.matches(password)
+        return regex.containsMatchIn(password)
     }
 }

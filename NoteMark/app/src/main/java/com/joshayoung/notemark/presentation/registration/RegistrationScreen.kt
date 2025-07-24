@@ -135,15 +135,15 @@ private fun Form(
             errorMessage
         )
 
-        NoteMarkTextField(state = state.username, label = "Username", hint = "John.doe")
+        NoteMarkTextField(
+            state = state.username,
+            label = "Username",
+            hint = "John.doe",
+            helperText = "Use between 3 and 20 characters for your username",
+        )
         if (state.usernameError != "") {
             Text(text = state.usernameError, color = MaterialTheme.colorScheme.error)
         }
-        Text(
-            "Use between 3 and 20 characters for your username",
-            modifier = Modifier,
-            style = MaterialTheme.typography.bodySmall
-        )
         NoteMarkTextField(state = state.email, label = "Email", hint = "john.doe@example.com")
         if (state.emailError != "") {
             Text(text = state.emailError, color = MaterialTheme.colorScheme.error)
@@ -153,6 +153,7 @@ private fun Form(
             label = "Password",
             icon = EyeIcon,
             hint = "Password",
+            helperText = "Use 8+ characters with a number or symbol for better security",
             type = TextFieldType.Password
         )
         if (state.passwordError != "") {
@@ -162,17 +163,12 @@ private fun Form(
             state = state.repeatedPassword,
             label = "Repeat Password",
             icon = EyeIcon,
-            hint = "Password",
+            hint = "Repeat Password",
             type = TextFieldType.Password
         )
         if (state.passwordEqualityError != "") {
             Text(text = state.passwordEqualityError, color = MaterialTheme.colorScheme.error)
         }
-        Text(
-            "Use 8+ characters with a number or symbol for better security",
-            modifier = Modifier,
-            style = MaterialTheme.typography.bodySmall
-        )
         NoteMarkButton(
             text = "Create Account",
             isEnabled = !state.isRegistering && state.canRegister

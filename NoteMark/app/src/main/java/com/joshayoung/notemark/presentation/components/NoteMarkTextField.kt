@@ -1,5 +1,6 @@
 package com.joshayoung.notemark.presentation.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -50,6 +51,7 @@ fun NoteMarkTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     icon: ImageVector? = null,
     hint: String,
+    helperText: String = "",
     label: String,
     type: TextFieldType = TextFieldType.Regular
 ) {
@@ -67,6 +69,7 @@ fun NoteMarkTextField(
                     RegularTextField(
                         state = state,
                         keyboardType = keyboardType,
+                        helperText = helperText,
                         icon = icon,
                         hint = hint
                     )
@@ -74,6 +77,7 @@ fun NoteMarkTextField(
                 TextFieldType.Password ->  {
                     PasswordTextField(
                         state = state,
+                        helperText = helperText,
                         keyboardType = keyboardType,
                         hint = hint
                     )
@@ -87,7 +91,8 @@ fun NoteMarkTextField(
 private fun PasswordTextField(
     state: TextFieldState,
     keyboardType: KeyboardType,
-    hint: String
+    hint: String,
+    helperText: String = "",
 ) {
     var isFocused by remember {
         mutableStateOf(false)
@@ -96,6 +101,7 @@ private fun PasswordTextField(
     var isVisible by remember {
         mutableStateOf(false)
     }
+    Column() {
 
     BasicSecureTextField(
         state = state,
@@ -151,6 +157,14 @@ private fun PasswordTextField(
             .background(if (!isFocused) MaterialTheme.colorScheme.surface else Color.White)
             .border(2.dp, if(isFocused) Color.Blue else Color.Transparent)
     )
+        if (helperText != "") {
+            AnimatedVisibility(
+                visible = isFocused
+            ) {
+                Text(text = helperText)
+            }
+        }
+    }
 }
 
 @Composable
@@ -158,11 +172,13 @@ private fun RegularTextField(
     state: TextFieldState,
     keyboardType: KeyboardType,
     icon: ImageVector? = null,
+    helperText: String = "",
     hint: String
 ) {
     var isFocused by remember {
         mutableStateOf(false)
     }
+    Column() {
     BasicTextField(
         state = state,
         lineLimits = TextFieldLineLimits.SingleLine,
@@ -179,15 +195,15 @@ private fun RegularTextField(
                     modifier = Modifier
                         .weight(1f)
                 ) {
-                    if (state.text.isEmpty() && !isFocused)
-                    {
+                    if (state.text.isEmpty() && !isFocused) {
                         Text(text = hint)
                     }
                     innerBox()
                 }
                 if (icon != null) {
-                    Icon(modifier = Modifier
-                        .padding(start = 10.dp),
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 10.dp),
                         imageVector = icon,
                         contentDescription = null
                     )
@@ -204,9 +220,17 @@ private fun RegularTextField(
             }
             .clip(RoundedCornerShape(4.dp))
             .background(if (!isFocused) MaterialTheme.colorScheme.surface else Color.White)
-            .border(2.dp, if(isFocused) Color.Blue else Color.Transparent)
+            .border(2.dp, if (isFocused) Color.Blue else Color.Transparent)
             .padding(12.dp)
     )
+        if (helperText != "") {
+            AnimatedVisibility(
+                visible = isFocused
+            ) {
+                Text(text = helperText)
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -218,12 +242,14 @@ fun NoteMarkTextFieldPreview() {
                 modifier = Modifier,
                 state = TextFieldState(),
                 label = "Username",
+                helperText = "Enter a valid username",
                 hint = "Enter Username"
             )
             NoteMarkTextField(
                 modifier = Modifier,
                 state = TextFieldState(),
                 label = "Password",
+                helperText = "Enter a valid password",
                 hint = "Enter Password",
                 type = TextFieldType.Password
             )
