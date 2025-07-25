@@ -8,6 +8,7 @@ import com.joshayoung.notemark.domain.repository.NoteMarkRepository
 import com.joshayoung.notemark.domain.models.Registration
 import com.joshayoung.notemark.domain.SessionStorage
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.auth.AuthCircuitBreaker
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -46,8 +47,10 @@ class NoteMarkRepositoryImpl (
         password: String
     ): com.joshayoung.notemark.domain.models.Result {
         try {
-            val response : HttpResponse = client.post(BuildConfig.BASE_URL + BuildConfig.LOGIN_PATH) {
-                Login(email = email, password = password)
+            val response = client.post {
+                url(BuildConfig.BASE_URL + BuildConfig.LOGIN_PATH)
+                setBody(Login(email = email, password = password))
+                attributes.put(AuthCircuitBreaker, Unit)
             }
             when (response.status) {
                 HttpStatusCode.Unauthorized -> {
