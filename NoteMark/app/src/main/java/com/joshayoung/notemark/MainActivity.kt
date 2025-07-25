@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
     fun MyNavigation(
         navController: NavHostController,
         isAuthenticated: Boolean,
-        modifier: Modifier
+        modifier: Modifier = Modifier
     ) {
         NavHost(
             navController = navController,
@@ -101,14 +102,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             NoteMarkTheme {
                 val navController = rememberNavController()
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Surface(modifier = Modifier.fillMaxSize()) {
                     // NOTE: There is a flash without this:
                     if (!viewModel.state.isCheckingSession)
                     {
                         MyNavigation(
                             navController = navController,
-                            isAuthenticated = viewModel.state.isAuthenticated,
-                            modifier = Modifier.padding(innerPadding)
+                            isAuthenticated = viewModel.state.isAuthenticated
                         )
                     }
                 }

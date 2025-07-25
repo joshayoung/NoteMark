@@ -1,13 +1,38 @@
 package com.joshayoung.notemark.presentation.note_landing
 
+import android.R
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
+import com.joshayoung.notemark.ui.theme.PlusIcon
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -31,23 +56,95 @@ fun NoteLandingScreenRoot(
 fun NoteLandingScreen(
     onAction: (NoteLandingAction) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Text("Add a note...")
-        Button(onClick = {
-            onAction(NoteLandingAction.OnLogoutClick)
-        }) {
-            Text("Logout")
+    Scaffold(
+        topBar = {
+            Row(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 20.dp)
+                ,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("NoteMark", modifier = Modifier,
+                    fontWeight = FontWeight.Bold
+                )
+                Box(modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(size = 10.dp))
+                    .background(brush = Brush.radialGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.secondary
+                        )
+                    )),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "pl".uppercase(), modifier = Modifier,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
+        },
+        floatingActionButton = {
+            Box(modifier = Modifier
+                .clip(RoundedCornerShape(size = 26.dp))
+                .size(70.dp)
+                .shadow(10.dp)
+                .background(brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF58A1F8),
+                        Color(0xFF5A4CF7),
+                    ),
+                    startY = 0f,
+                    endY = 200f
+                ))
+                .graphicsLayer {
+                    shadowElevation = 10f
+                    alpha = 0.8f
+                }
+                ,contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = PlusIcon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End
+    ) { innerPadding ->
+
+
+        Column(
+            modifier = Modifier
+                .background(Color.LightGray)
+                .padding(innerPadding)
+                .padding(10.dp)
+                .fillMaxSize()
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = 30.dp)
+                    .padding(top = 60.dp),
+                text = "You've got an empty board, let's place your first note on it!")
+//            Button(
+//                onClick = {
+//                onAction(NoteLandingAction.OnLogoutClick)
+//            }) {
+//                Text("Logout")
+//            }
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun NoteLandingScreenPrieview() {
+fun NoteLandingScreenPreview() {
     NoteMarkTheme {
-        NoteLandingScreen(onAction = {})
+        NoteLandingScreen(
+            onAction = {}
+        )
     }
 }
