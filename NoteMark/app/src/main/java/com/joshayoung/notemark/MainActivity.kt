@@ -54,7 +54,9 @@ class MainActivity : ComponentActivity() {
                         navController.navigate(Screen.Login.route)
                     },
                     onAlreadyAccountClick = {
-                        navController.navigate(Screen.Login.route)
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Start.route)
+                        }
                     }
                 )
             }
@@ -63,13 +65,15 @@ class MainActivity : ComponentActivity() {
                 LoginScreenRoot(
                     onLoginSuccess = {
                         navController.navigate(Screen.Landing.route) {
-                            popUpTo(Screen.Login.route) {
+                            popUpTo(Screen.Start.route) {
                                 inclusive = true
                             }
                         }
                     },
                     onDontHaveAccount = {
-                        navController.navigate(Screen.Register.route)
+                        navController.navigate(Screen.Register.route) {
+                            popUpTo(Screen.Start.route)
+                        }
                     }
                 )
             }
