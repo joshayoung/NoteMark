@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
 import com.joshayoung.notemark.ui.theme.PlusIcon
 import org.koin.androidx.compose.koinViewModel
@@ -60,56 +61,27 @@ fun NoteLandingScreen(
     onAction: (NoteLandingAction) -> Unit,
     onAddNoteClick: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            Row(
-                modifier = Modifier
-                    .background(Color.White)
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp, vertical = 20.dp)
-                ,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("NoteMark", modifier = Modifier,
-                    fontWeight = FontWeight.Bold
-                )
-                Box(modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(size = 10.dp))
-                    .background(brush = Brush.radialGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primary,
-                            MaterialTheme.colorScheme.secondary
-                        )
-                    )),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "pl".uppercase(), modifier = Modifier,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-            }
-        },
+    NoteMarkScaffold(
         floatingActionButton = {
-            Box(modifier = Modifier
-                .clip(RoundedCornerShape(size = 26.dp))
-                .size(70.dp)
-                .clickable(onClick = onAddNoteClick)
-                .shadow(10.dp)
-                .background(brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF58A1F8),
-                        Color(0xFF5A4CF7),
-                    ),
-                    startY = 0f,
-                    endY = 200f
-                ))
-                .graphicsLayer {
-                    shadowElevation = 10f
-                    alpha = 0.8f
-                }
-                ,contentAlignment = Alignment.Center
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(size = 26.dp))
+                    .size(70.dp)
+                    .shadow(10.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFF58A1F8),
+                                Color(0xFF5A4CF7),
+                            ),
+                            startY = 0f,
+                            endY = 200f
+                        )
+                    )
+                    .graphicsLayer {
+                        shadowElevation = 10f
+                        alpha = 0.8f
+                    }, contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = PlusIcon,
@@ -117,11 +89,9 @@ fun NoteLandingScreen(
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
-        },
-        floatingActionButtonPosition = FabPosition.End
+        }
+
     ) { innerPadding ->
-
-
         Column(
             modifier = Modifier
                 .background(Color.LightGray)
@@ -134,12 +104,6 @@ fun NoteLandingScreen(
                     .padding(horizontal = 30.dp)
                     .padding(top = 60.dp),
                 text = "You've got an empty board, let's place your first note on it!")
-//            Button(
-//                onClick = {
-//                onAction(NoteLandingAction.OnLogoutClick)
-//            }) {
-//                Text("Logout")
-//            }
         }
     }
 }
