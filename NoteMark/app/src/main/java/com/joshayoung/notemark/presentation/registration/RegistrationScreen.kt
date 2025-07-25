@@ -171,7 +171,8 @@ private fun Form(
         }
         NoteMarkButton(
             text = "Create Account",
-            isEnabled = !state.isRegistering && state.canRegister
+            isEnabled = state.canRegister && !state.isRegistering,
+            isLoading = state.isRegistering
         ) {
             onnAction(RegistrationAction.OnRegisterClick)
         }

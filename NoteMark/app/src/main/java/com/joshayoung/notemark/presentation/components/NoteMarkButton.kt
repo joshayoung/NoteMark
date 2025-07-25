@@ -51,7 +51,7 @@ fun NoteMarkButton(
                     .size(15.dp),
 //                    .alpha(if (isLoading) 1f else 0f),
                 strokeWidth = 1.5.dp,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = if(isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onTertiary
             )
         } else {
             Text(text)
@@ -78,6 +78,12 @@ fun NoteMarkButtonPreview() {
             NoteMarkButton(
                 text = "Login In",
                 isEnabled = true,
+                isLoading = true,
+                onClick = {}
+            )
+            NoteMarkButton(
+                text = "Disabled and Loading",
+                isEnabled = false,
                 isLoading = true,
                 onClick = {}
             )
