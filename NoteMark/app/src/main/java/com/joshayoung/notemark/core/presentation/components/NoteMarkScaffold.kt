@@ -44,40 +44,12 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun NoteMarkScaffold(
+    topAppBar: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
-        topBar = {
-            Row(
-                modifier = Modifier
-                    .background(Color.White)
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp, vertical = 20.dp)
-                ,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("NoteMark", modifier = Modifier,
-                    fontWeight = FontWeight.Bold
-                )
-                Box(modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(size = 10.dp))
-                    .background(brush = Brush.radialGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primary,
-                            MaterialTheme.colorScheme.secondary
-                        )
-                    )),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "pl".uppercase(), modifier = Modifier,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-            }
-        },
+        topBar = topAppBar,
         floatingActionButton = floatingActionButton,
         floatingActionButtonPosition = FabPosition.End
     ) { innerPadding ->
@@ -90,6 +62,9 @@ fun NoteMarkScaffold(
 fun NoteMarkScaffoldPreview() {
     NoteMarkTheme {
         NoteMarkScaffold(
+            topAppBar = {
+                Text("My top bar")
+            },
             floatingActionButton = {
                 Text("FAB")
             }
@@ -97,8 +72,7 @@ fun NoteMarkScaffoldPreview() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Red),
-                verticalArrangement = Arrangement.Center,
+                ,verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text("my content")

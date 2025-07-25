@@ -124,8 +124,7 @@ private fun PasswordTextField(
                 ) {
                     if (state.text.isEmpty() && !isFocused)
                     {
-                        Text(text = hint, modifier = Modifier
-                        )
+                        Text(text = hint)
                     }
                     innerBox()
                 }

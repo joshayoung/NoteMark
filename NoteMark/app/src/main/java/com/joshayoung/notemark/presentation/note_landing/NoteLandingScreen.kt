@@ -62,12 +62,43 @@ fun NoteLandingScreen(
     onAddNoteClick: () -> Unit
 ) {
     NoteMarkScaffold(
+        topAppBar = {
+            Row(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 20.dp)
+                ,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("NoteMark", modifier = Modifier,
+                    fontWeight = FontWeight.Bold
+                )
+                Box(modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(size = 10.dp))
+                    .background(brush = Brush.radialGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.secondary
+                        )
+                    )),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "pl".uppercase(), modifier = Modifier,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
+        },
         floatingActionButton = {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(size = 26.dp))
                     .size(70.dp)
                     .shadow(10.dp)
+                    .clickable(onClick = onAddNoteClick)
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
