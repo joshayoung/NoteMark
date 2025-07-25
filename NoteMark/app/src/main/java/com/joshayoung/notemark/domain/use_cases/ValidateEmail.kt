@@ -1,7 +1,7 @@
 package com.joshayoung.notemark.domain.use_cases
 
 import androidx.compose.animation.core.infiniteRepeatable
-import com.joshayoung.notemark.domain.PatternValidator
+import com.joshayoung.notemark.domain.use_cases.PatternValidator
 import com.joshayoung.notemark.domain.ValidationState
 
 class ValidateEmail(
