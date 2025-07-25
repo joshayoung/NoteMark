@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.joshayoung.notemark.presentation.GettingStartedScreen
+import com.joshayoung.notemark.presentation.add_note.AddNoteScreenRoot
 import com.joshayoung.notemark.presentation.registration.RegistrationScreenRoot
 import com.joshayoung.notemark.presentation.log_in.LoginScreenRoot
 import com.joshayoung.notemark.presentation.note_landing.NoteLandingScreenRoot
@@ -87,8 +88,15 @@ class MainActivity : ComponentActivity() {
                                 inclusive = true
                             }
                         }
+                    },
+                    onAddNoteClick = {
+                        navController.navigate(Screen.AddNote.route)
                     }
                 )
+            }
+
+            composable(Screen.AddNote.route) {
+                AddNoteScreenRoot()
             }
         }
     }

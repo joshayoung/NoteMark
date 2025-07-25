@@ -2,6 +2,7 @@ package com.joshayoung.notemark.presentation.note_landing
 
 import android.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,7 +39,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun NoteLandingScreenRoot(
     viewModel: NoteLandingViewModel = koinViewModel(),
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onAddNoteClick: () -> Unit
 ) {
     NoteLandingScreen(
         onAction = { action ->
@@ -48,13 +50,15 @@ fun NoteLandingScreenRoot(
                 }
             }
             viewModel.onAction(action)
-        }
+        },
+        onAddNoteClick = onAddNoteClick
     )
 }
 
 @Composable
 fun NoteLandingScreen(
-    onAction: (NoteLandingAction) -> Unit
+    onAction: (NoteLandingAction) -> Unit,
+    onAddNoteClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -91,6 +95,7 @@ fun NoteLandingScreen(
             Box(modifier = Modifier
                 .clip(RoundedCornerShape(size = 26.dp))
                 .size(70.dp)
+                .clickable(onClick = onAddNoteClick)
                 .shadow(10.dp)
                 .background(brush = Brush.verticalGradient(
                     colors = listOf(
@@ -144,7 +149,8 @@ fun NoteLandingScreen(
 fun NoteLandingScreenPreview() {
     NoteMarkTheme {
         NoteLandingScreen(
-            onAction = {}
+            onAction = {},
+            onAddNoteClick = {}
         )
     }
 }
