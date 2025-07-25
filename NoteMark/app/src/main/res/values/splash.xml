@@ -3,7 +3,7 @@
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/splash</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_large</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_image</item>
         <item name="postSplashScreenTheme">@style/Theme.NoteMark</item>
     </style>
 </resources>
