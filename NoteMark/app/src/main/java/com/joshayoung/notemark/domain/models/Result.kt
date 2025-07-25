@@ -4,5 +4,6 @@ typealias Error = com.joshayoung.notemark.data.Error
 
 data class Result(
     var success: Boolean,
-    var error: Error? = null
+    var error: Error? = null,
+    val note: Note? = null
 )

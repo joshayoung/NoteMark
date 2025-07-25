@@ -57,6 +57,11 @@ android {
             )
             buildConfigField(
                 "String",
+                "NOTE_PATH",
+                localProperties.getProperty("NOTE_PATH")
+            )
+            buildConfigField(
+                "String",
                 "LOGIN_PATH",
                 localProperties.getProperty("LOGIN_PATH")
             )

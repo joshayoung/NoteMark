@@ -14,6 +14,7 @@ import com.joshayoung.notemark.domain.SessionStorage
 import com.joshayoung.notemark.domain.use_cases.ValidateEmail
 import com.joshayoung.notemark.domain.use_cases.ValidatePassword
 import com.joshayoung.notemark.domain.use_cases.ValidateUsername
+import com.joshayoung.notemark.presentation.add_note.AddNoteViewModel
 import com.joshayoung.notemark.presentation.log_in.LoginViewModel
 import com.joshayoung.notemark.presentation.note_landing.NoteLandingViewModel
 import com.joshayoung.notemark.presentation.registration.RegistrationViewModel
@@ -50,4 +51,5 @@ var appModule = module {
     }
 
     viewModelOf(::NoteLandingViewModel)
+    viewModelOf(::AddNoteViewModel)
 }

@@ -18,3 +18,5 @@
 * https://www.youtube.com/watch?v=TosPS55y_IY
   * good architecture video
 * https://developer.android.com/studio/write/create-app-icons
+* https://www.guidgenerator.com
+* https://timestampgenerator.com/1753546625/+00:00

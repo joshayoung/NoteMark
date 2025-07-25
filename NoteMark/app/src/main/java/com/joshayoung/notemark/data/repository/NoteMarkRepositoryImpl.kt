@@ -7,6 +7,7 @@ import com.joshayoung.notemark.domain.LoginResponse
 import com.joshayoung.notemark.domain.repository.NoteMarkRepository
 import com.joshayoung.notemark.domain.models.Registration
 import com.joshayoung.notemark.domain.SessionStorage
+import com.joshayoung.notemark.domain.models.Note
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.auth.AuthCircuitBreaker
 import io.ktor.client.request.post
@@ -16,6 +17,10 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.json.Json
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 typealias Result = com.joshayoung.notemark.domain.models.Result
 
@@ -79,5 +84,47 @@ class NoteMarkRepositoryImpl (
         } catch(e: Exception) {
             return Result(success = false)
         }
+    }
+
+    override suspend fun createNote(title: String, body: String): Result {
+        val currentDateTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        val formattedDateTime = currentDateTime.format(formatter)
+        val note = Note(
+            id = UUID.randomUUID().toString(),
+            title = title,
+            content = body,
+            createdAt = formattedDateTime
+        )
+        val response = client.post {
+            url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
+            setBody(note)
+        }
+
+        return when (response.status) {
+            HttpStatusCode.OK -> {
+                val responseText = response.bodyAsText()
+                val jsonObject = Json.decodeFromString<Note>(responseText)
+                Result(success = true, note = jsonObject)
+            }
+            else -> {
+                val responseText = response.bodyAsText()
+                val jsonObject = Json.decodeFromString<Error>(responseText)
+                // TODO: Make this more robust:
+                Result(success = false, error = jsonObject)
+            }
+        }
+    }
+
+    override suspend fun updateNote(note: Note): Result {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getNotes(note: Note): Result {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteNote(note: Note): Result {
+        TODO("Not yet implemented")
     }
 }
