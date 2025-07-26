@@ -3,7 +3,7 @@
 		"_postman_id": "",
 		"name": "NoteMark",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "14565902"
+		"_exporter_id": ""
 	},
 	"item": [
 		{
@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\"username\": \"josh1\",\n\"email\": \"{{appEmail\",\n\"password\": \"{{appPassword}}\"\n}",
+					"raw": "{\n\"username\": \"{{appUsername}}\",\n\"email\": \"{{appEmail}}\",\n\"password\": \"{{appPassword}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -38,10 +38,274 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Register a User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-User-Email",
+								"value": "{{classEmail}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"username\": \"{{appUsername}}\",\n\"email\": \"{{appEmail}}\",\n\"password\": \"{{appPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.18.0 (Ubuntu)"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 18 Jul 2025 19:55:39 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						}
+					],
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "Register a User - conflict",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-User-Email",
+								"value": "{{classEmail}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"username\": \"{{appUsername}}\",\n\"email\": \"{{appEmail}}\",\n\"password\": \"{{appPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.18.0 (Ubuntu)"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 18 Jul 2025 19:56:01 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": \"CONFLICT\",\n    \"reason\": \"A user with that email or username already exists.\"\n}"
+				},
+				{
+					"name": "Register a User - errors",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-User-Email",
+								"value": "{{classEmail}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"username\": \"{{appUsername}}\",\n\"email\": \"{{appEmail}}\",\n\"password\": \"{{appPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.18.0 (Ubuntu)"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 18 Jul 2025 19:57:04 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"errors\": [\n        \"Password must be at least 8 characters long and contain at least one digit or special character.\"\n    ]\n}"
+				}
+			]
 		},
 		{
 			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();",
+							"pm.collectionVariables.set(\"note-mark-token\", response.accessToken)",
+							"console.log(response)",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -49,6 +313,12 @@
 						"key": "X-User-Email",
 						"value": "{{classEmail}}",
 						"type": "text"
+					},
+					{
+						"key": "Debug",
+						"value": "true",
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"body": {
@@ -107,6 +377,476 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Create Note",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{note-mark-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-User-Email",
+						"value": "{{classEmail}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"id\": \"ff0e7d35-01e6-4a6e-a780-58791c3cc512\",\n\"title\": \"My First Note\",\n\"content\": \"My First Note Content\",\n\"createdAt\": \"2025-07-26T16:15:05+00:00\" ,\n\"lastEditedAt\": \"2025-07-26T16:17:05+00:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/notes",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"notes"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create Note",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-User-Email",
+								"value": "{{classEmail}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"id\": \"ff0e7d35-01e6-4a6e-a780-58791c3cc512\",\n\"title\": \"My First Note\",\n\"content\": \"My First Note Content\",\n\"createdAt\": \"2025-07-26T16:15:05+00:00\" ,\n\"lastEditedAt\": \"2025-07-26T16:17:05+00:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"notes"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.18.0 (Ubuntu)"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Jul 2025 16:23:09 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"ff0e7d35-01e6-4a6e-a780-58791c3cc512\",\n    \"title\": \"My First Note\",\n    \"content\": \"My First Note Content\",\n    \"createdAt\": \"2025-07-26T16:15:05Z\",\n    \"lastEditedAt\": \"2025-07-26T16:17:05Z\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Update Note",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{note-mark-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-User-Email",
+						"value": "{{classEmail}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"ff0e7d35-01e6-4a6e-a780-58791c3cc512\",\n    \"title\": \"My First Note - updated\",\n    \"content\": \"My First Note Content - updated\",\n    \"createdAt\": \"2025-07-26T16:15:05Z\",\n    \"lastEditedAt\": \"2025-07-26T16:18:05Z\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/notes",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"notes"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "successful update",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-User-Email",
+								"value": "{{classEmail}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"ff0e7d35-01e6-4a6e-a780-58791c3cc512\",\n    \"title\": \"My First Note - updated\",\n    \"content\": \"My First Note Content - updated\",\n    \"createdAt\": \"2025-07-26T16:15:05Z\",\n    \"lastEditedAt\": \"2025-07-26T16:18:05Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"notes"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.18.0 (Ubuntu)"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Jul 2025 16:26:59 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"ff0e7d35-01e6-4a6e-a780-58791c3cc512\",\n    \"title\": \"My First Note - updated\",\n    \"content\": \"My First Note Content - updated\",\n    \"createdAt\": \"2025-07-26T16:15:05Z\",\n    \"lastEditedAt\": \"2025-07-26T16:18:05Z\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Notes",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{note-mark-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-User-Email",
+						"value": "{{classEmail}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/api/notes",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"notes"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-User-Email",
+								"value": "{{classEmail}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"notes"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.18.0 (Ubuntu)"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Jul 2025 16:29:56 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"notes\": [\n        {\n            \"id\": \"ff0e7d35-01e6-4a6e-a780-58791c3cc512\",\n            \"title\": \"My First Note - updated\",\n            \"content\": \"My First Note Content - updated\",\n            \"createdAt\": \"2025-07-26T16:15:05Z\",\n            \"lastEditedAt\": \"2025-07-26T16:18:05Z\"\n        },\n        {\n            \"id\": \"ff0e7d35-01e6-4a6e-a780-58e91c33c512\",\n            \"title\": \"My Second Note\",\n            \"content\": \"My Second Note Content\",\n            \"createdAt\": \"2025-07-26T16:16:05Z\",\n            \"lastEditedAt\": \"2025-07-26T16:18:05Z\"\n        }\n    ],\n    \"total\": 2\n}"
+				}
+			]
+		},
+		{
+			"name": "Delete Note",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{note-mark-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-User-Email",
+						"value": "{{classEmail}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/api/notes/ff0e7d35-01e6-4a6e-a780-29791c3cc512",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"notes",
+						"ff0e7d35-01e6-4a6e-a780-29791c3cc512"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-User-Email",
+								"value": "{{classEmail}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/notes/ff0e7d35-01e6-4a6e-a780-29791c3cc512",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								"ff0e7d35-01e6-4a6e-a780-29791c3cc512"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.18.0 (Ubuntu)"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Jul 2025 16:32:22 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
 		}
 	],
 	"event": [
@@ -129,6 +869,37 @@
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "classEmail",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "appUsername",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "appEmail",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "appPassword",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "note-mark-token",
+			"value": ""
 		}
 	]
 }
