@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -37,6 +38,9 @@ import com.joshayoung.notemark.domain.models.Notes
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
 import com.joshayoung.notemark.ui.theme.PlusIcon
 import org.koin.androidx.compose.koinViewModel
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun NoteLandingScreenRoot(
@@ -142,24 +146,56 @@ fun NoteLandingScreen(
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = 30.dp)
-                    .padding(top = 60.dp),
-                text = "You've got an empty board, let's place your first note on it!")
+            if (!state.hasItems) {
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = 30.dp)
+                        .padding(top = 60.dp),
+                    text = "You've got an empty board, let's place your first note on it!")
+            }
 
-
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2),
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalItemSpacing = 10.dp
-            ) {
-                items(state.notes.notes) { item ->
-                    Text(text = item.title)
+            if (state.hasItems) {
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Fixed(2),
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalItemSpacing = 10.dp,
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    items(state.notes.notes) { item ->
+                        NoteItem(item)
+                    }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun NoteItem(note: Note) {
+    Column(
+        modifier = Modifier
+            .padding(10.dp)
+            .clip(RoundedCornerShape(size = 20.dp))
+            .background(Color.White.copy(alpha = 0.8f))
+            .padding(20.dp)
+    ) {
+        val inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+        val outputFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss")
+
+        val dateTime = OffsetDateTime.parse(note.createdAt, inputFormatter)
+        val formatted = dateTime.format(outputFormatter)
+
+        Text(text = formatted)
+        Text(text = note.title,
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+            )
+        Text(
+            text = note.content,
+            maxLines = 4,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 
@@ -169,16 +205,29 @@ fun NoteLandingScreenPreview() {
     NoteMarkTheme {
         NoteLandingScreen(
             state = NoteLandingState(
+                hasItems = true,
                 notes = Notes(
                     notes = listOf(
                         Note(
                             id = "1",
-                            title = "tei",
-                            content = "cont",
-                            createdAt = "s"
+                            title = "My First Note",
+                            content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
+                            createdAt = "2025-07-26T16:16:05Z"
+                        ),
+                        Note(
+                            id = "2",
+                            title = "Second Note",
+                            content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
+                            createdAt = "2025-07-26T16:16:05Z"
+                        ),
+                        Note(
+                            id = "3",
+                            title = "Another Note With",
+                            content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
+                            createdAt = "2025-07-26T16:16:05Z"
                         )
                     ),
-                    total = 1
+                    total = 3
                 )
             ),
             onAction = {},

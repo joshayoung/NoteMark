@@ -47,11 +47,17 @@ import java.nio.file.WatchEvent
 
 @Composable
 fun AddNoteScreenRoot(
-    viewModel: AddNoteViewModel = koinViewModel()
+    viewModel: AddNoteViewModel = koinViewModel(),
+    redirectBack: () -> Unit
 ) {
     AddNoteScreen(
         state = viewModel.state,
         onAction = { action ->
+            when(action) {
+                AddNoteAction.OnSaveClick -> {
+                    redirectBack()
+                }
+            }
             viewModel.onAction(action)
         }
     )

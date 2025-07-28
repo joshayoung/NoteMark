@@ -53,7 +53,8 @@ class NoteLandingViewModel(
         if (notes != null) {
             _state.update {
                 it.copy(
-                    notes = notes
+                    notes = notes,
+                    hasItems = true
                 )
             }
         }

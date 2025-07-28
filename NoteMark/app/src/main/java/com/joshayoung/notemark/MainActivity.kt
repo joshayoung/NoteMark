@@ -16,6 +16,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.joshayoung.notemark.presentation.GettingStartedScreen
 import com.joshayoung.notemark.presentation.add_note.AddNoteScreenRoot
 import com.joshayoung.notemark.presentation.registration.RegistrationScreenRoot
@@ -103,7 +104,11 @@ class MainActivity : ComponentActivity() {
             }
 
             composable(Screen.AddNote.route) {
-                AddNoteScreenRoot()
+                AddNoteScreenRoot(
+                    redirectBack = {
+                        navController.navigateUp()
+                    }
+                )
             }
         }
     }
