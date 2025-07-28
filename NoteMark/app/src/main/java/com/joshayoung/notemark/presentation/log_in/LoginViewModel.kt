@@ -7,18 +7,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joshayoung.notemark.data.DataStorageImpl
 import com.joshayoung.notemark.domain.repository.NoteMarkRepository
 import com.joshayoung.notemark.domain.use_cases.ValidateEmail
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val noteMarkRepository: NoteMarkRepository,
-    private val validateEmail: ValidateEmail
+    private val validateEmail: ValidateEmail,
+    private val dataStorageImpl: DataStorageImpl
 ) : ViewModel() {
 
     var state by mutableStateOf(LoginState())

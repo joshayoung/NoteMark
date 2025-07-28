@@ -91,6 +91,13 @@ class MainActivity : ComponentActivity() {
                     },
                     onAddNoteClick = {
                         navController.navigate(Screen.AddNote.route)
+                    },
+                    redirectToLogin = {
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Login.route) {
+                                inclusive = true
+                            }
+                        }
                     }
                 )
             }

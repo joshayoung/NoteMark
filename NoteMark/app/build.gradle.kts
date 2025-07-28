@@ -111,4 +111,6 @@ dependencies {
     implementation(libs.ktor.client.logging)
     implementation(libs.kotlinx.serialization.json)
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha03")
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }

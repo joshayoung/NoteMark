@@ -8,6 +8,6 @@ interface NoteMarkRepository {
     suspend fun login(email: String, password: String): Result
     suspend fun createNote(title: String, body: String): Result
     suspend fun updateNote(note: Note): Result
-    suspend fun getNotes(note: Note): Result
+    suspend fun getNotes(): Result
     suspend fun deleteNote(note: Note): Result
 }

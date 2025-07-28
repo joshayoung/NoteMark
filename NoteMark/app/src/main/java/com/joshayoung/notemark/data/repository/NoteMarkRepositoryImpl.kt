@@ -6,10 +6,12 @@ import com.joshayoung.notemark.domain.models.Login
 import com.joshayoung.notemark.domain.LoginResponse
 import com.joshayoung.notemark.domain.repository.NoteMarkRepository
 import com.joshayoung.notemark.domain.models.Registration
-import com.joshayoung.notemark.domain.SessionStorage
+import com.joshayoung.notemark.domain.DataStorage
 import com.joshayoung.notemark.domain.models.Note
+import com.joshayoung.notemark.domain.models.Notes
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.auth.AuthCircuitBreaker
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -18,7 +20,6 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 
@@ -26,7 +27,7 @@ typealias Result = com.joshayoung.notemark.domain.models.Result
 
 class NoteMarkRepositoryImpl (
     private val client: HttpClient,
-    private val sessionStorage: SessionStorage
+    private val dataStorage: DataStorage
 ) : NoteMarkRepository {
     override suspend fun register(username: String, email: String, password: String) : Result {
         val response : HttpResponse = client.post {
@@ -65,7 +66,7 @@ class NoteMarkRepositoryImpl (
                     val responseText = response.bodyAsText()
                     // TODO: Use this:
                     val jsonObject = Json.decodeFromString<LoginResponse>(responseText)
-                    sessionStorage.set(
+                    dataStorage.saveAuthData(
                         LoginResponse(
                             accessToken = jsonObject.accessToken,
                             refreshToken = jsonObject.refreshToken,
@@ -120,8 +121,21 @@ class NoteMarkRepositoryImpl (
         TODO("Not yet implemented")
     }
 
-    override suspend fun getNotes(note: Note): Result {
-        TODO("Not yet implemented")
+    override suspend fun getNotes(): Result {
+        val response = client.get {
+            url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
+        }
+
+        when (response.status) {
+            HttpStatusCode.OK -> {
+                val responseText = response.bodyAsText()
+                val jsonObject = Json.decodeFromString<Notes>(responseText)
+                return Result(success = true, notes = jsonObject)
+            }
+            else -> {
+                return Result(success = false)
+            }
+        }
     }
 
     override suspend fun deleteNote(note: Note): Result {

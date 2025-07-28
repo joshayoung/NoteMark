@@ -10,11 +10,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,7 +30,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
+import com.joshayoung.notemark.domain.models.Note
+import com.joshayoung.notemark.domain.models.Notes
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
 import com.joshayoung.notemark.ui.theme.PlusIcon
 import org.koin.androidx.compose.koinViewModel
@@ -34,9 +42,19 @@ import org.koin.androidx.compose.koinViewModel
 fun NoteLandingScreenRoot(
     viewModel: NoteLandingViewModel = koinViewModel(),
     onLogoutClick: () -> Unit,
-    onAddNoteClick: () -> Unit
+    onAddNoteClick: () -> Unit,
+    redirectToLogin: () -> Unit
 ) {
+
+    val authData by viewModel.authData.collectAsState(initial = "loading...")
+
+    if (authData == "")
+    {
+        redirectToLogin()
+    }
+
     NoteLandingScreen(
+       state = viewModel.state.collectAsStateWithLifecycle().value,
         onAction = { action ->
             when(action) {
                 NoteLandingAction.OnLogoutClick -> {
@@ -51,6 +69,7 @@ fun NoteLandingScreenRoot(
 
 @Composable
 fun NoteLandingScreen(
+    state: NoteLandingState,
     onAction: (NoteLandingAction) -> Unit,
     onAddNoteClick: () -> Unit
 ) {
@@ -128,6 +147,18 @@ fun NoteLandingScreen(
                     .padding(horizontal = 30.dp)
                     .padding(top = 60.dp),
                 text = "You've got an empty board, let's place your first note on it!")
+
+
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(2),
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalItemSpacing = 10.dp
+            ) {
+                items(state.notes.notes) { item ->
+                    Text(text = item.title)
+                }
+            }
         }
     }
 }
@@ -137,6 +168,19 @@ fun NoteLandingScreen(
 fun NoteLandingScreenPreview() {
     NoteMarkTheme {
         NoteLandingScreen(
+            state = NoteLandingState(
+                notes = Notes(
+                    notes = listOf(
+                        Note(
+                            id = "1",
+                            title = "tei",
+                            content = "cont",
+                            createdAt = "s"
+                        )
+                    ),
+                    total = 1
+                )
+            ),
             onAction = {},
             onAddNoteClick = {}
         )

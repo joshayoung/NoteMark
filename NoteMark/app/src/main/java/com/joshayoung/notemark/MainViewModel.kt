@@ -5,12 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joshayoung.notemark.domain.SessionStorage
-import kotlinx.coroutines.isActive
+import com.joshayoung.notemark.domain.DataStorage
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val sessionStorage: SessionStorage
+    private val dataStorage: DataStorage
 ) : ViewModel() {
     var state by mutableStateOf(MainState())
         private set
@@ -18,7 +18,7 @@ class MainViewModel(
     init {
         viewModelScope.launch {
             state = state.copy(isCheckingSession = true)
-            state = state.copy(isAuthenticated = sessionStorage.get()?.accessToken != null)
+            state = state.copy(isAuthenticated = dataStorage.getAuthData().first().accessToken != null)
             state = state.copy(isCheckingSession = false)
         }
 

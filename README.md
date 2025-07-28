@@ -20,3 +20,5 @@
 * https://developer.android.com/studio/write/create-app-icons
 * https://www.guidgenerator.com
 * https://timestampgenerator.com/1753546625/+00:00
+* https://www.youtube.com/watch?v=McnVx7l5awk
+* JSON to Data Class Plugin: https://plugins.jetbrains.com/plugin/9960-json-to-kotlin-class-jsontokotlinclass-
