@@ -113,4 +113,7 @@ dependencies {
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha03")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore:1.1.7")
+    // The Preferences DataStore library
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
 }

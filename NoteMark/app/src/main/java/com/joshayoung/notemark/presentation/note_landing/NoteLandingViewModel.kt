@@ -1,5 +1,6 @@
 package com.joshayoung.notemark.presentation.note_landing
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.data.DataStorageImpl
@@ -9,6 +10,7 @@ import com.joshayoung.notemark.domain.models.Notes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -29,19 +31,21 @@ class NoteLandingViewModel(
             SharingStarted.WhileSubscribed(1000L),
             NoteLandingState(notes = Notes(notes = emptyList()))
         )
-
-    val authData: Flow<String?> = dataStorage.getAuthData()
-        .map { preferences -> preferences.refreshToken  }
+    val authData: StateFlow<String> = dataStorage.values
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = "Loading Token..."
+            started = SharingStarted.WhileSubscribed(1000L),
+            initialValue = ""
         )
 
     fun onAction(action: NoteLandingAction) {
         when(action) {
             NoteLandingAction.OnLogoutClick -> {
                 viewModelScope.launch {
+
+//                    authData.collect { myvalue ->
+//                        println(myvalue)
+//                    }
                     dataStorage.saveAuthData(null)
                 }
             }

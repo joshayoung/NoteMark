@@ -1,5 +1,6 @@
 package com.joshayoung.notemark.data
 
+import android.util.Log
 import com.joshayoung.notemark.domain.LoginResponse
 import com.joshayoung.notemark.domain.DataStorage
 import androidx.datastore.core.DataStore
@@ -18,6 +19,14 @@ private object AuthPreferenceValues {
 class DataStorageImpl(
     private val dataStore: DataStore<Preferences>
 ) : DataStorage {
+
+    override val values: Flow<String> = dataStore.data
+        .map { preferences ->
+            val value = preferences[AuthPreferenceValues.REFRESH_TOKEN] ?: "Default Value"
+            Log.d("DataStore", "Emitting value: $value") // Log emitted value
+            value
+        }
+
     override fun getAuthData(): Flow<LoginResponse> = dataStore.data
         .map { preferences ->
             LoginResponse(
@@ -29,10 +38,15 @@ class DataStorageImpl(
 
     override suspend fun saveAuthData(settings: LoginResponse?) {
         if (settings == null) {
+//            dataStore.edit { preferences ->
+//                preferences.remove(AuthPreferenceValues.USERNAME)
+//                preferences.remove(AuthPreferenceValues.ACCESS_TOKEN)
+//                preferences.remove(AuthPreferenceValues.REFRESH_TOKEN)
+//            }
             dataStore.edit { preferences ->
-                preferences[AuthPreferenceValues.ACCESS_TOKEN] = ""
-                preferences[AuthPreferenceValues.REFRESH_TOKEN] = ""
-                preferences[AuthPreferenceValues.USERNAME] = ""
+                preferences[AuthPreferenceValues.ACCESS_TOKEN] = "unset"
+                preferences[AuthPreferenceValues.REFRESH_TOKEN] = "unset"
+                preferences[AuthPreferenceValues.USERNAME] = "unset"
             }
 
             return;

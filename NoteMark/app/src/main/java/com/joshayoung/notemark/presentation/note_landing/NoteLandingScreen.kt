@@ -1,5 +1,6 @@
 package com.joshayoung.notemark.presentation.note_landing
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,10 +15,12 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -45,26 +48,18 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun NoteLandingScreenRoot(
     viewModel: NoteLandingViewModel = koinViewModel(),
-    onLogoutClick: () -> Unit,
-    onAddNoteClick: () -> Unit,
-    redirectToLogin: () -> Unit
+    onAddNoteClick: () -> Unit
 ) {
 
-    val authData by viewModel.authData.collectAsState(initial = "loading...")
+    val authToken by viewModel.authData.collectAsStateWithLifecycle()
 
-    if (authData == "")
-    {
-        redirectToLogin()
-    }
+//    LaunchedEffect("test") {
+//        Log.d("MyScreen", "Screen value: $authToken")
+//    }
 
     NoteLandingScreen(
        state = viewModel.state.collectAsStateWithLifecycle().value,
         onAction = { action ->
-            when(action) {
-                NoteLandingAction.OnLogoutClick -> {
-                    onLogoutClick()
-                }
-            }
             viewModel.onAction(action)
         },
         onAddNoteClick = onAddNoteClick
@@ -146,6 +141,11 @@ fun NoteLandingScreen(
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
+            Button(onClick = {
+                onAction(NoteLandingAction.OnLogoutClick)
+            }) {
+                Text("Log Out")
+            }
             if (!state.hasItems) {
                 Text(
                     modifier = Modifier
