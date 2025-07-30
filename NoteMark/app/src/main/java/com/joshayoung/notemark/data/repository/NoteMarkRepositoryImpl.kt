@@ -11,7 +11,9 @@ import com.joshayoung.notemark.domain.models.Note
 import com.joshayoung.notemark.domain.models.Notes
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.auth.AuthCircuitBreaker
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -138,7 +140,24 @@ class NoteMarkRepositoryImpl (
         }
     }
 
-    override suspend fun deleteNote(note: Note): Result {
-        TODO("Not yet implemented")
+    override suspend fun deleteNote(id: String): Result {
+        println("test")
+        val url = BuildConfig.BASE_URL + BuildConfig.NOTE_PATH + "/" + id
+        val response = client.delete {
+            url(url)
+//            parameter("id", id)
+        }
+        when (response.status) {
+            HttpStatusCode.OK -> {
+                val responseText = response.bodyAsText()
+//                val jsonObject = Json.decodeFromString<Notes>(responseText)
+                return Result(success = true)
+            }
+            else -> {
+                val responseText = response.bodyAsText()
+                val jsonObject = Json.decodeFromString<Error>(responseText)
+                return Result(success = false)
+            }
+        }
     }
 }

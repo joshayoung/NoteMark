@@ -9,5 +9,5 @@ interface NoteMarkRepository {
     suspend fun createNote(title: String, body: String): Result
     suspend fun updateNote(note: Note): Result
     suspend fun getNotes(): Result
-    suspend fun deleteNote(note: Note): Result
+    suspend fun deleteNote(id: String): Result
 }

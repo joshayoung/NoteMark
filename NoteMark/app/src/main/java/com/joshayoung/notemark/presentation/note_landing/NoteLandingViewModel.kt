@@ -39,6 +39,19 @@ class NoteLandingViewModel(
                     dataStorage.saveAuthData(null)
                 }
             }
+            is NoteLandingAction.OnDeleteClick -> {
+                viewModelScope.launch {
+                    noteMarkRepository.deleteNote(
+                        id = action.id
+                    )
+                    loadData()
+                }
+            }
+            NoteLandingAction.OnEditClick -> {
+                viewModelScope.launch {
+                    dataStorage.saveAuthData(null)
+                }
+            }
         }
     }
 
