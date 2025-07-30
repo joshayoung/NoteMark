@@ -49,14 +49,16 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun NoteLandingScreenRoot(
     viewModel: NoteLandingViewModel = koinViewModel(),
-    onAddNoteClick: () -> Unit
+    onAddNoteClick: () -> Unit,
+    onNavigateToEdit: (id: String) -> Unit
 ) {
     NoteLandingScreen(
        state = viewModel.state.collectAsStateWithLifecycle().value,
         onAction = { action ->
             viewModel.onAction(action)
         },
-        onAddNoteClick = onAddNoteClick
+        onAddNoteClick = onAddNoteClick,
+        onNavigateToEdit = onNavigateToEdit
     )
 }
 
@@ -64,7 +66,8 @@ fun NoteLandingScreenRoot(
 fun NoteLandingScreen(
     state: NoteLandingState,
     onAction: (NoteLandingAction) -> Unit,
-    onAddNoteClick: () -> Unit
+    onAddNoteClick: () -> Unit,
+    onNavigateToEdit: (id: String) -> Unit
 ) {
     NoteMarkScaffold(
         topAppBar = {
@@ -159,7 +162,8 @@ fun NoteLandingScreen(
                     items(state.notes.notes) { item ->
                         NoteItem(
                             item,
-                            onAction = onAction
+                            onAction = onAction,
+                            onNavigateToEdit = onNavigateToEdit
                         )
                     }
                 }
@@ -171,7 +175,8 @@ fun NoteLandingScreen(
 @Composable
 fun NoteItem(
     note: Note,
-    onAction: (NoteLandingAction)-> Unit
+    onAction: (NoteLandingAction)-> Unit,
+    onNavigateToEdit: (id: String) -> Unit
     ) {
     Column(
         modifier = Modifier
@@ -179,6 +184,9 @@ fun NoteItem(
             .clip(RoundedCornerShape(size = 20.dp))
             .background(Color.White.copy(alpha = 0.8f))
             .padding(20.dp)
+            .clickable {
+                onNavigateToEdit(note.id)
+            }
     ) {
         val inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
         val outputFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss")
@@ -202,7 +210,8 @@ fun NoteItem(
             Text("Delete")
         }
         Button(onClick = {
-            onAction(NoteLandingAction.OnEditClick)
+//            onAction(NoteLandingAction.OnEditClick)
+            onNavigateToEdit(note.id)
         }) {
             Text("Edit")
         }
@@ -241,7 +250,8 @@ fun NoteLandingScreenPreview() {
                 )
             ),
             onAction = {},
-            onAddNoteClick = {}
+            onAddNoteClick = {},
+            onNavigateToEdit = {}
         )
     }
 }

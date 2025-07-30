@@ -9,9 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.presentation.GettingStartedScreen
 import com.joshayoung.notemark.presentation.add_note.AddNoteScreenRoot
@@ -89,11 +91,23 @@ class MainActivity : ComponentActivity() {
                 NoteLandingScreenRoot(
                     onAddNoteClick = {
                         navController.navigate(Screen.AddNote.route)
+                    },
+                    onNavigateToEdit = { id ->
+                        navController.navigate(
+                            Screen.AddNote.route + "?noteId=${id}"
+                        )
                     }
                 )
             }
 
-            composable(Screen.AddNote.route) {
+            composable(Screen.AddNote.route + "?noteId={noteId}",
+                arguments = listOf(
+                    navArgument(name = "noteId") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    }
+                )
+                ) {
                 AddNoteScreenRoot(
                     redirectBack = {
                         navController.navigateUp()
