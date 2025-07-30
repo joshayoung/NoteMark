@@ -15,6 +15,7 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
@@ -119,8 +120,29 @@ class NoteMarkRepositoryImpl (
         }
     }
 
-    override suspend fun updateNote(note: Note): Result {
-        TODO("Not yet implemented")
+    override suspend fun updateNote(note: Note?, title: String, body: String): Result {
+        val updatedNote = Note(
+            id = note?.id ?: "",
+            title = title,
+            content = body,
+            createdAt = note!!.createdAt
+        )
+        val response : HttpResponse = client.put {
+            url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
+            setBody(updatedNote)
+        }
+
+        return when (response.status) {
+            HttpStatusCode.OK -> {
+                Result(success = true)
+            }
+            else -> {
+                val responseText = response.bodyAsText()
+                val jsonObject = Json.decodeFromString<Error>(responseText)
+                // TODO: Make this more robust:
+                Result(success = false, error = jsonObject)
+            }
+        }
     }
 
     override suspend fun getNotes(): Result {

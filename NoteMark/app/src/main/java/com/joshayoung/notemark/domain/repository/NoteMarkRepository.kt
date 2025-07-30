@@ -7,7 +7,7 @@ interface NoteMarkRepository {
     suspend fun register(username: String, email: String, password: String): Result
     suspend fun login(email: String, password: String): Result
     suspend fun createNote(title: String, body: String): Result
-    suspend fun updateNote(note: Note): Result
+    suspend fun updateNote(note: Note?, title: String, body: String): Result
     suspend fun getNotes(): Result
     suspend fun deleteNote(id: String): Result
 }
