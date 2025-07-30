@@ -23,7 +23,6 @@ class DataStorageImpl(
     override val values: Flow<String> = dataStore.data
         .map { preferences ->
             val value = preferences[AuthPreferenceValues.REFRESH_TOKEN] ?: "Default Value"
-            Log.d("DataStore", "Emitting value: $value") // Log emitted value
             value
         }
 
@@ -38,11 +37,6 @@ class DataStorageImpl(
 
     override suspend fun saveAuthData(settings: LoginResponse?) {
         if (settings == null) {
-//            dataStore.edit { preferences ->
-//                preferences.remove(AuthPreferenceValues.USERNAME)
-//                preferences.remove(AuthPreferenceValues.ACCESS_TOKEN)
-//                preferences.remove(AuthPreferenceValues.REFRESH_TOKEN)
-//            }
             dataStore.edit { preferences ->
                 preferences[AuthPreferenceValues.ACCESS_TOKEN] = "unset"
                 preferences[AuthPreferenceValues.REFRESH_TOKEN] = "unset"

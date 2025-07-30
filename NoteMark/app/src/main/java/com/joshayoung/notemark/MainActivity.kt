@@ -1,35 +1,23 @@
 package com.joshayoung.notemark
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.presentation.GettingStartedScreen
 import com.joshayoung.notemark.presentation.add_note.AddNoteScreenRoot
-import com.joshayoung.notemark.presentation.registration.RegistrationScreenRoot
 import com.joshayoung.notemark.presentation.log_in.LoginScreenRoot
 import com.joshayoung.notemark.presentation.note_landing.NoteLandingScreenRoot
+import com.joshayoung.notemark.presentation.registration.RegistrationScreenRoot
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -41,9 +29,6 @@ class MainActivity : ComponentActivity() {
         isAuthenticated: Boolean,
         modifier: Modifier = Modifier
     ) {
-
-        val authToken by viewModel.authData.collectAsStateWithLifecycle(initialValue = "")
-
         ObserveAsEvents(viewModel.authData) { refreshToken ->
             val currentDestination = navController.currentDestination
             if (
@@ -59,7 +44,6 @@ class MainActivity : ComponentActivity() {
             startDestination = if (isAuthenticated) Screen.Landing.route else Screen.Start.route,
             modifier = modifier
         ) {
-
             composable(Screen.Start.route) {
                 GettingStartedScreen(
                     onCreateAccountClick = {
@@ -130,14 +114,6 @@ class MainActivity : ComponentActivity() {
             NoteMarkTheme {
                 val navController = rememberNavController()
                 Surface(modifier = Modifier.fillMaxSize()) {
-//                    LaunchedEffect("test") {
-//                        Log.d("MyScreen", "Screen value: $authToken")
-//                    }
-//
-//                    if (authToken == "") {
-//                        println("test")
-//                    }
-
                     // NOTE: There is a flash without this:
                     if (!viewModel.state.isCheckingSession)
                     {

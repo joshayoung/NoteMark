@@ -50,13 +50,6 @@ fun NoteLandingScreenRoot(
     viewModel: NoteLandingViewModel = koinViewModel(),
     onAddNoteClick: () -> Unit
 ) {
-
-    val authToken by viewModel.authData.collectAsStateWithLifecycle()
-
-//    LaunchedEffect("test") {
-//        Log.d("MyScreen", "Screen value: $authToken")
-//    }
-
     NoteLandingScreen(
        state = viewModel.state.collectAsStateWithLifecycle().value,
         onAction = { action ->

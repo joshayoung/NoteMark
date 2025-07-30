@@ -31,21 +31,11 @@ class NoteLandingViewModel(
             SharingStarted.WhileSubscribed(1000L),
             NoteLandingState(notes = Notes(notes = emptyList()))
         )
-    val authData: StateFlow<String> = dataStorage.values
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(1000L),
-            initialValue = ""
-        )
 
     fun onAction(action: NoteLandingAction) {
         when(action) {
             NoteLandingAction.OnLogoutClick -> {
                 viewModelScope.launch {
-
-//                    authData.collect { myvalue ->
-//                        println(myvalue)
-//                    }
                     dataStorage.saveAuthData(null)
                 }
             }
