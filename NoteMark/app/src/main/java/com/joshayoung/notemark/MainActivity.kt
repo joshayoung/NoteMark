@@ -15,11 +15,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
-import com.joshayoung.notemark.presentation.GettingStartedScreen
-import com.joshayoung.notemark.presentation.add_note.AddNoteScreenRoot
-import com.joshayoung.notemark.presentation.log_in.LoginScreenRoot
-import com.joshayoung.notemark.presentation.note_landing.NoteLandingScreenRoot
-import com.joshayoung.notemark.presentation.registration.RegistrationScreenRoot
+import com.joshayoung.notemark.note.presentation.start.GettingStartedScreen
+import com.joshayoung.notemark.note.presentation.add_note.AddNoteScreenRoot
+import com.joshayoung.notemark.auth.presentation.log_in.LoginScreenRoot
+import com.joshayoung.notemark.note.presentation.note_landing.NoteLandingScreenRoot
+import com.joshayoung.notemark.auth.presentation.registration.RegistrationScreenRoot
+import com.joshayoung.notemark.core.Screen
 import com.joshayoung.notemark.ui.theme.NoteMarkTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -100,7 +101,8 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            composable(Screen.AddNote.route + "?noteId={noteId}",
+            composable(
+                Screen.AddNote.route + "?noteId={noteId}",
                 arguments = listOf(
                     navArgument(name = "noteId") {
                         type = NavType.StringType
