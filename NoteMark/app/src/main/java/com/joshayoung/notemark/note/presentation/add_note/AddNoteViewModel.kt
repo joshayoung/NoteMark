@@ -12,7 +12,7 @@ import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import kotlinx.coroutines.launch
 
 class AddNoteViewModel (
-    val noteMarkRepository: NoteRepository,
+    val noteRepository: NoteRepository,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     var state by mutableStateOf(AddNoteState())
@@ -24,7 +24,7 @@ class AddNoteViewModel (
             if (id != "") {
                 viewModelScope.launch {
                     // TODO: get this from local db:
-                    var notes = noteMarkRepository.getNotes().notes?.let { (notes, total) ->
+                    var notes = noteRepository.getNotes().notes?.let { notes ->
                         currentNote = notes.find { n ->
                             n.id == id
                         }
@@ -52,11 +52,11 @@ class AddNoteViewModel (
 
                     if (currentNote != null) {
 
-                        noteMarkRepository.updateNote(currentNote, state.noteTitle.text.toString(), state.noteBody.text.toString())
+                        noteRepository.updateNote(currentNote, state.noteTitle.text.toString(), state.noteBody.text.toString())
 
                         return@launch
                     }
-                    noteMarkRepository.createNote(
+                    noteRepository.createNote(
                         state.noteTitle.text.toString(),
                         state.noteBody.text.toString()
                     )

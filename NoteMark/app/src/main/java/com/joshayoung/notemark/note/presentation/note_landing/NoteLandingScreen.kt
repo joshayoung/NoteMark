@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.note.domain.models.Note
-import com.joshayoung.notemark.note.domain.models.Notes
+import com.joshayoung.notemark.note.domain.models.NotesData
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.PlusIcon
 import org.koin.androidx.compose.koinViewModel
@@ -153,7 +153,7 @@ fun NoteLandingScreen(
                     verticalItemSpacing = 10.dp,
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    items(state.notes.notes) { item ->
+                    items(state.notes) { item ->
                         NoteItem(
                             item,
                             onAction = onAction,
@@ -219,28 +219,25 @@ fun NoteLandingScreenPreview() {
         NoteLandingScreen(
             state = NoteLandingState(
                 hasItems = true,
-                notes = Notes(
-                    notes = listOf(
-                        Note(
-                            id = "1",
-                            title = "My First Note",
-                            content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
-                            createdAt = "2025-07-26T16:16:05Z"
-                        ),
-                        Note(
-                            id = "2",
-                            title = "Second Note",
-                            content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
-                            createdAt = "2025-07-26T16:16:05Z"
-                        ),
-                        Note(
-                            id = "3",
-                            title = "Another Note With",
-                            content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
-                            createdAt = "2025-07-26T16:16:05Z"
-                        )
+                notes = listOf(
+                    Note(
+                        id = "1",
+                        title = "My First Note",
+                        content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
+                        createdAt = "2025-07-26T16:16:05Z"
                     ),
-                    total = 3
+                    Note(
+                        id = "2",
+                        title = "Second Note",
+                        content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
+                        createdAt = "2025-07-26T16:16:05Z"
+                    ),
+                    Note(
+                        id = "3",
+                        title = "Another Note With",
+                        content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
+                        createdAt = "2025-07-26T16:16:05Z"
+                    )
                 )
             ),
             onAction = {},

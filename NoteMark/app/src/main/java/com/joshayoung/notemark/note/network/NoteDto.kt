@@ -1,8 +1,9 @@
-package com.joshayoung.notemark.note.domain.models
+package com.joshayoung.notemark.note.network
 
 import kotlinx.serialization.Serializable
 
-data class Note(
+@Serializable
+data class NoteDto(
     val content: String,
     val createdAt: String,
     val id: String,

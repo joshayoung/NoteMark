@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
-import com.joshayoung.notemark.note.domain.models.Notes
+import com.joshayoung.notemark.note.domain.models.NotesData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -17,14 +17,14 @@ class NoteLandingViewModel(
     private val dataStorage: DataStorage
 ) : ViewModel() {
 
-    private var _state = MutableStateFlow(NoteLandingState(notes = Notes(notes = emptyList())))
+    private var _state = MutableStateFlow(NoteLandingState(notes = emptyList()))
     val state = _state
         .onStart {
             loadData()
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(1000L),
-            NoteLandingState(notes = Notes(notes = emptyList()))
+            NoteLandingState(notes = emptyList())
         )
 
     fun onAction(action: NoteLandingAction) {

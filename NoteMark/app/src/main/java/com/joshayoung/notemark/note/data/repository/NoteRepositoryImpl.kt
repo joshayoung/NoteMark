@@ -7,7 +7,8 @@ import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.models.Note
-import com.joshayoung.notemark.note.domain.models.Notes
+import com.joshayoung.notemark.note.domain.models.NotesData
+import com.joshayoung.notemark.note.network.toNote
 import io.ktor.client.HttpClient
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
@@ -101,8 +102,10 @@ class NoteRepositoryImpl (
         when (response.status) {
             HttpStatusCode.OK -> {
                 val responseText = response.bodyAsText()
-                val jsonObject = Json.decodeFromString<Notes>(responseText)
-                return Result(success = true, notes = jsonObject)
+                val jsonObject = Json.decodeFromString<NotesData>(responseText)
+                return Result(success = true, notes = jsonObject.notes.map { n ->
+                    n.toNote()
+                })
             }
             else -> {
                 return Result(success = false)
