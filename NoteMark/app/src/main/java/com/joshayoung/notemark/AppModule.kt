@@ -1,0 +1,75 @@
+package com.joshayoung.notemark
+import android.content.Context
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStoreFile
+import androidx.room.Room
+import com.joshayoung.notemark.auth.presentation.log_in.LoginViewModel
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import com.joshayoung.notemark.auth.presentation.registration.RegistrationViewModel
+import com.joshayoung.notemark.core.data.DataStorageImpl
+import com.joshayoung.notemark.core.data.HttpClientProvider
+import com.joshayoung.notemark.core.data.RoomLocalDataSource
+import com.joshayoung.notemark.core.data.database.NoteDatabase
+import com.joshayoung.notemark.core.data.use_cases.EmailValidator
+import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.note.data.repository.NoteMarkRepositoryImpl
+import com.joshayoung.notemark.note.domain.database.LocalDataSource
+import com.joshayoung.notemark.note.domain.repository.NoteMarkRepository
+import com.joshayoung.notemark.note.domain.use_cases.PatternValidator
+import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
+import com.joshayoung.notemark.note.domain.use_cases.ValidatePassword
+import com.joshayoung.notemark.note.domain.use_cases.ValidateUsername
+import com.joshayoung.notemark.note.presentation.add_note.AddNoteViewModel
+import com.joshayoung.notemark.note.presentation.note_landing.NoteLandingViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import org.koin.android.ext.koin.androidApplication
+
+var appModule = module {
+    viewModelOf(::MainViewModel)
+    viewModelOf(::RegistrationViewModel)
+    viewModelOf(::LoginViewModel)
+
+    single {
+        HttpClientProvider(get()).provide()
+    }
+
+    single {
+        PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler(
+                produceNewData = { emptyPreferences() }
+            ),
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+            produceFile = { get<Context>().preferencesDataStoreFile("notemark_preferences") }
+        )
+    }
+
+    singleOf(::NoteMarkRepositoryImpl).bind<NoteMarkRepository>()
+    singleOf(::EmailValidator).bind<PatternValidator>()
+    singleOf(::ValidateUsername)
+    singleOf(::ValidatePassword)
+    singleOf(::ValidateEmail)
+
+    singleOf(::DataStorageImpl).bind<DataStorage>()
+
+    viewModelOf(::NoteLandingViewModel)
+    viewModelOf(::AddNoteViewModel)
+
+    single {
+        Room.databaseBuilder(
+            androidApplication(),
+            NoteDatabase::class.java,
+            NoteDatabase.DATABASE_NAME
+        ).build()
+    }
+
+    single { get<NoteDatabase>().noteDao }
+
+    singleOf(::RoomLocalDataSource).bind<LocalDataSource>()
+}
