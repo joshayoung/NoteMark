@@ -111,16 +111,14 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.logging)
     implementation(libs.kotlinx.serialization.json)
-    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha03")
+    implementation(libs.androidx.security.crypto.ktx)
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.datastore:datastore:1.1.7")
-    // The Preferences DataStore library
-    implementation("androidx.datastore:datastore-preferences:1.1.7")
+    implementation(libs.androidx.datastore.datastore.preferences)
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.datastore.preferences)
 
-    implementation("com.google.devtools.ksp:symbol-processing:2.2.20-Beta2-2.0.2")
+    implementation(libs.symbol.processing)
 
-    implementation("androidx.room:room-runtime:2.7.2")
-
-    ksp("androidx.room:room-compiler:2.7.2")
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 }
