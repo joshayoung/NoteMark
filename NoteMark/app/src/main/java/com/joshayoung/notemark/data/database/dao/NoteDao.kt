@@ -1,10 +1,10 @@
-package com.joshayoung.notemark.data.data_source
+package com.joshayoung.notemark.data.database.dao
 
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.joshayoung.notemark.data.database.NoteEntity
+import com.joshayoung.notemark.data.database.entity.NoteEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

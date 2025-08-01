@@ -1,14 +1,12 @@
-package com.joshayoung.notemark.data.data_source
+package com.joshayoung.notemark.data
 
-import com.joshayoung.notemark.data.database.NoteEntity
+import com.joshayoung.notemark.data.database.dao.NoteDao
+import com.joshayoung.notemark.data.database.entity.NoteEntity
 import com.joshayoung.notemark.domain.database.LocalDataSource
+import com.joshayoung.notemark.domain.models.Result
 import kotlinx.coroutines.flow.Flow
 
-import com.joshayoung.notemark.data.data_source.NoteDao
-import com.joshayoung.notemark.domain.models.Note
-import com.joshayoung.notemark.domain.models.Result
-
-class NoteLocalDataSource(
+class RoomLocalDataSource(
     private val noteDao: NoteDao
 ) : LocalDataSource {
     override fun getNotes(): Flow<List<NoteEntity>> {

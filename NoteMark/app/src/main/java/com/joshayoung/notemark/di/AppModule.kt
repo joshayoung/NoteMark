@@ -9,8 +9,8 @@ import androidx.room.Room
 import com.joshayoung.notemark.MainViewModel
 import com.joshayoung.notemark.data.DataStorageImpl
 import com.joshayoung.notemark.data.HttpClientProvider
-import com.joshayoung.notemark.data.data_source.NoteDatabase
-import com.joshayoung.notemark.data.data_source.NoteLocalDataSource
+import com.joshayoung.notemark.data.database.NoteDatabase
+import com.joshayoung.notemark.data.RoomLocalDataSource
 import com.joshayoung.notemark.data.repository.NoteMarkRepositoryImpl
 import com.joshayoung.notemark.data.use_cases.EmailValidator
 import com.joshayoung.notemark.domain.DataStorage
@@ -75,5 +75,5 @@ var appModule = module {
 
     single { get<NoteDatabase>().noteDao }
 
-    singleOf(::NoteLocalDataSource).bind<LocalDataSource>()
+    singleOf(::RoomLocalDataSource).bind<LocalDataSource>()
 }

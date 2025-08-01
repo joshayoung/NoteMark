@@ -2,7 +2,7 @@ package com.joshayoung.notemark.data.repository
 
 import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.data.Error
-import com.joshayoung.notemark.data.database.NoteEntity
+import com.joshayoung.notemark.data.database.entity.NoteEntity
 import com.joshayoung.notemark.domain.models.Login
 import com.joshayoung.notemark.domain.LoginResponse
 import com.joshayoung.notemark.domain.repository.NoteMarkRepository
@@ -15,7 +15,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.plugins.auth.AuthCircuitBreaker
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
-import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody

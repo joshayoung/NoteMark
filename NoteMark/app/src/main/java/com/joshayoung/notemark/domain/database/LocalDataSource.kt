@@ -1,6 +1,6 @@
 package com.joshayoung.notemark.domain.database
 
-import com.joshayoung.notemark.data.database.NoteEntity
+import com.joshayoung.notemark.data.database.entity.NoteEntity
 import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {

@@ -1,8 +1,9 @@
-package com.joshayoung.notemark.data.data_source
+package com.joshayoung.notemark.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.joshayoung.notemark.data.database.NoteEntity
+import com.joshayoung.notemark.data.database.dao.NoteDao
+import com.joshayoung.notemark.data.database.entity.NoteEntity
 
 @Database(entities = [NoteEntity::class], version = 1)
 abstract class NoteDatabase : RoomDatabase() {
