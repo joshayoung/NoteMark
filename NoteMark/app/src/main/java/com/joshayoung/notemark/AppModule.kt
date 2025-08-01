@@ -5,6 +5,8 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.joshayoung.notemark.auth.data.repository.AuthRepositoryImpl
+import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.auth.presentation.log_in.LoginViewModel
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -17,9 +19,9 @@ import com.joshayoung.notemark.core.data.RoomLocalDataSource
 import com.joshayoung.notemark.core.data.database.NoteDatabase
 import com.joshayoung.notemark.core.data.use_cases.EmailValidator
 import com.joshayoung.notemark.core.domain.DataStorage
-import com.joshayoung.notemark.note.data.repository.NoteMarkRepositoryImpl
+import com.joshayoung.notemark.note.data.repository.NoteRepositoryImpl
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
-import com.joshayoung.notemark.note.domain.repository.NoteMarkRepository
+import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.use_cases.PatternValidator
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
 import com.joshayoung.notemark.note.domain.use_cases.ValidatePassword
@@ -50,7 +52,8 @@ var appModule = module {
         )
     }
 
-    singleOf(::NoteMarkRepositoryImpl).bind<NoteMarkRepository>()
+    singleOf(::NoteRepositoryImpl).bind<NoteRepository>()
+    singleOf(::AuthRepositoryImpl).bind<AuthRepository>()
     singleOf(::EmailValidator).bind<PatternValidator>()
     singleOf(::ValidateUsername)
     singleOf(::ValidatePassword)

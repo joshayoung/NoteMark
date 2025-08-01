@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.joshayoung.notemark.R
 import com.joshayoung.notemark.core.presentation.components.NoteMarkButton
-import com.joshayoung.notemark.ui.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 
 @Composable
 fun GettingStartedScreen(

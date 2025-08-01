@@ -32,7 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
-import com.joshayoung.notemark.ui.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import org.koin.androidx.compose.koinViewModel
 
 

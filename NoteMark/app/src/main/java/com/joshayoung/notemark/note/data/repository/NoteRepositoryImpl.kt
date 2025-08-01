@@ -1,11 +1,12 @@
 package com.joshayoung.notemark.note.data.repository
 
+import android.provider.ContactsContract
 import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.core.data.Error
 import com.joshayoung.notemark.core.data.database.entity.NoteEntity
 import com.joshayoung.notemark.auth.domain.models.Login
 import com.joshayoung.notemark.auth.domain.models.LoginResponse
-import com.joshayoung.notemark.note.domain.repository.NoteMarkRepository
+import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.auth.domain.models.Registration
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
@@ -30,69 +31,11 @@ import java.util.UUID
 
 typealias Result = com.joshayoung.notemark.core.domain.Result
 
-class NoteMarkRepositoryImpl (
+class NoteRepositoryImpl (
     private val client: HttpClient,
     private val dataStorage: DataStorage,
     private val localDataSource: LocalDataSource
-) : NoteMarkRepository {
-    override suspend fun register(username: String, email: String, password: String) : Result {
-        val response : HttpResponse = client.post {
-            url(BuildConfig.BASE_URL + BuildConfig.REGISTER_PATH)
-            setBody(Registration(username = username, email = email, password = password))
-        }
-
-        return when (response.status) {
-            HttpStatusCode.OK -> {
-                Result(success = true)
-            }
-            else -> {
-                val responseText = response.bodyAsText()
-                val jsonObject = Json.decodeFromString<Error>(responseText)
-                // TODO: Make this more robust:
-                Result(success = false, error = jsonObject)
-            }
-        }
-    }
-
-    override suspend fun login(
-        email: String,
-        password: String
-    ): com.joshayoung.notemark.core.domain.Result {
-        try {
-            val response = client.post {
-                url(BuildConfig.BASE_URL + BuildConfig.LOGIN_PATH)
-                setBody(Login(email = email, password = password))
-                attributes.put(AuthCircuitBreaker, Unit)
-            }
-            when (response.status) {
-                HttpStatusCode.Unauthorized -> {
-                    return Result(success = false)
-                }
-                HttpStatusCode.OK -> {
-                    val responseText = response.bodyAsText()
-                    // TODO: Use this:
-                    val jsonObject = Json.decodeFromString<LoginResponse>(responseText)
-                    dataStorage.saveAuthData(
-                        LoginResponse(
-                            accessToken = jsonObject.accessToken,
-                            refreshToken = jsonObject.refreshToken,
-                            username = jsonObject.username
-                        )
-                    )
-                    return Result(success = true)
-                }
-
-                else -> {
-//                    val responseText = response.bodyAsText()
-//                    val jsonObject = Json.decodeFromString<Error>(responseText)
-                    return Result(success = false)//, error = jsonObject)
-                }
-            }
-        } catch(e: Exception) {
-            return Result(success = false)
-        }
-    }
-
+) : NoteRepository {
     override suspend fun createNote(title: String, body: String): Result {
         val currentDateTime = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")

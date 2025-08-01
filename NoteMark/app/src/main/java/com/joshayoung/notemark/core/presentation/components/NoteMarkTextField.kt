@@ -35,9 +35,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.joshayoung.notemark.ui.theme.EyeClosedIcon
-import com.joshayoung.notemark.ui.theme.EyeIcon
-import com.joshayoung.notemark.ui.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.design.theme.EyeClosedIcon
+import com.joshayoung.notemark.core.design.theme.EyeIcon
+import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 
 @Composable
 fun NoteMarkTextField(

@@ -34,8 +34,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.models.Notes
-import com.joshayoung.notemark.ui.theme.NoteMarkTheme
-import com.joshayoung.notemark.ui.theme.PlusIcon
+import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.design.theme.PlusIcon
 import org.koin.androidx.compose.koinViewModel
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter

@@ -7,8 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.core.data.DataStorageImpl
-import com.joshayoung.notemark.note.domain.repository.NoteMarkRepository
+import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -18,11 +19,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val noteMarkRepository: NoteMarkRepository,
+    private val authRepository: AuthRepository,
     private val validateEmail: ValidateEmail,
     private val dataStorageImpl: DataStorageImpl
 ) : ViewModel() {
-
     var state by mutableStateOf(LoginState())
         private set
 
@@ -47,7 +47,7 @@ class LoginViewModel(
                 viewModelScope.launch {
                     state = state.copy(isLoggingIn = true)
                     viewModelScope.launch {
-                        val result = noteMarkRepository.login(
+                        val result = authRepository.login(
                             state.username.text.toString(),
                             state.password.text.toString(),
                         )

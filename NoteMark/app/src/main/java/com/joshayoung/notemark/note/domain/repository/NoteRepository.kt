@@ -1,11 +1,11 @@
 package com.joshayoung.notemark.note.domain.repository
 
+import android.provider.ContactsContract
 import com.joshayoung.notemark.note.domain.models.Note
-import com.joshayoung.notemark.core.domain.Result
 
-interface NoteMarkRepository {
-    suspend fun register(username: String, email: String, password: String): Result
-    suspend fun login(email: String, password: String): Result
+typealias Result = com.joshayoung.notemark.core.domain.Result
+
+interface NoteRepository {
     suspend fun createNote(title: String, body: String): Result
     suspend fun updateNote(note: Note?, title: String, body: String): Result
     suspend fun getNotes(): Result

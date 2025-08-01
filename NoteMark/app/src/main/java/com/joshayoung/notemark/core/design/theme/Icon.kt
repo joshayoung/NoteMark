@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.ui.theme
+package com.joshayoung.notemark.core.design.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector

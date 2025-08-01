@@ -8,11 +8,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.note.domain.models.Note
-import com.joshayoung.notemark.note.domain.repository.NoteMarkRepository
+import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import kotlinx.coroutines.launch
 
 class AddNoteViewModel (
-    val noteMarkRepository: NoteMarkRepository,
+    val noteMarkRepository: NoteRepository,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     var state by mutableStateOf(AddNoteState())

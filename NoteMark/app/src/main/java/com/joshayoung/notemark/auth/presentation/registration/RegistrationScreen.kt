@@ -31,8 +31,8 @@ import com.joshayoung.notemark.core.presentation.components.NoteMarkButton
 import com.joshayoung.notemark.core.presentation.components.NoteMarkTextField
 import com.joshayoung.notemark.core.presentation.components.TextFieldType
 import com.joshayoung.notemark.auth.presentation.registration.components.DisplayErrorList
-import com.joshayoung.notemark.ui.theme.EyeIcon
-import com.joshayoung.notemark.ui.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.design.theme.EyeIcon
+import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

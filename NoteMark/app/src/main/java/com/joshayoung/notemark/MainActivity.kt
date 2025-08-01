@@ -21,7 +21,7 @@ import com.joshayoung.notemark.auth.presentation.log_in.LoginScreenRoot
 import com.joshayoung.notemark.note.presentation.note_landing.NoteLandingScreenRoot
 import com.joshayoung.notemark.auth.presentation.registration.RegistrationScreenRoot
 import com.joshayoung.notemark.core.Screen
-import com.joshayoung.notemark.ui.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
