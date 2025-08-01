@@ -15,9 +15,9 @@ import org.koin.dsl.module
 import com.joshayoung.notemark.auth.presentation.registration.RegistrationViewModel
 import com.joshayoung.notemark.core.data.DataStorageImpl
 import com.joshayoung.notemark.core.data.HttpClientProvider
-import com.joshayoung.notemark.core.data.RoomLocalDataSource
-import com.joshayoung.notemark.core.data.database.NoteDatabase
-import com.joshayoung.notemark.core.data.use_cases.EmailValidator
+import com.joshayoung.notemark.note.data.database.RoomLocalDataSource
+import com.joshayoung.notemark.note.data.database.NoteDatabase
+import com.joshayoung.notemark.auth.data.use_cases.EmailValidator
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.note.data.repository.NoteRepositoryImpl
 import com.joshayoung.notemark.note.domain.database.LocalDataSource

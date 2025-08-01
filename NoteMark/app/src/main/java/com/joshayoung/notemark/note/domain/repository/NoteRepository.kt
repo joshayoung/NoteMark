@@ -1,9 +1,8 @@
 package com.joshayoung.notemark.note.domain.repository
 
-import android.provider.ContactsContract
 import com.joshayoung.notemark.note.domain.models.Note
 
-typealias Result = com.joshayoung.notemark.core.domain.Result
+typealias Result = com.joshayoung.notemark.core.domain.models.Result
 
 interface NoteRepository {
     suspend fun createNote(title: String, body: String): Result

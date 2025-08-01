@@ -1,9 +1,7 @@
-package com.joshayoung.notemark.core.domain
+package com.joshayoung.notemark.core.domain.models
 
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.models.Notes
-
-typealias Error = com.joshayoung.notemark.core.data.Error
 
 data class Result(
     var success: Boolean,

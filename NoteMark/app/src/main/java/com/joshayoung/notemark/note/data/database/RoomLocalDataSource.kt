@@ -1,9 +1,9 @@
-package com.joshayoung.notemark.core.data
+package com.joshayoung.notemark.note.data.database
 
-import com.joshayoung.notemark.core.data.database.dao.NoteDao
-import com.joshayoung.notemark.core.data.database.entity.NoteEntity
+import com.joshayoung.notemark.core.domain.models.Result
+import com.joshayoung.notemark.note.data.database.dao.NoteDao
+import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
-import com.joshayoung.notemark.core.domain.Result
 import kotlinx.coroutines.flow.Flow
 
 class RoomLocalDataSource(

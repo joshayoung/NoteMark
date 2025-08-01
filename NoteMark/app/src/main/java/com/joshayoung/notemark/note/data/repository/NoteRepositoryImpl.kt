@@ -1,19 +1,14 @@
 package com.joshayoung.notemark.note.data.repository
 
-import android.provider.ContactsContract
 import com.joshayoung.notemark.BuildConfig
-import com.joshayoung.notemark.core.data.Error
-import com.joshayoung.notemark.core.data.database.entity.NoteEntity
-import com.joshayoung.notemark.auth.domain.models.Login
-import com.joshayoung.notemark.auth.domain.models.LoginResponse
+import com.joshayoung.notemark.core.domain.models.Error
+import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
-import com.joshayoung.notemark.auth.domain.models.Registration
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.models.Notes
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.auth.AuthCircuitBreaker
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -29,7 +24,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 
-typealias Result = com.joshayoung.notemark.core.domain.Result
+typealias Result = com.joshayoung.notemark.core.domain.models.Result
 
 class NoteRepositoryImpl (
     private val client: HttpClient,
