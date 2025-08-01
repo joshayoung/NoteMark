@@ -2,11 +2,13 @@ package com.joshayoung.notemark.data.repository
 
 import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.data.Error
+import com.joshayoung.notemark.data.database.NoteEntity
 import com.joshayoung.notemark.domain.models.Login
 import com.joshayoung.notemark.domain.LoginResponse
 import com.joshayoung.notemark.domain.repository.NoteMarkRepository
 import com.joshayoung.notemark.domain.models.Registration
 import com.joshayoung.notemark.domain.DataStorage
+import com.joshayoung.notemark.domain.database.LocalDataSource
 import com.joshayoung.notemark.domain.models.Note
 import com.joshayoung.notemark.domain.models.Notes
 import io.ktor.client.HttpClient
@@ -21,6 +23,7 @@ import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -30,7 +33,8 @@ typealias Result = com.joshayoung.notemark.domain.models.Result
 
 class NoteMarkRepositoryImpl (
     private val client: HttpClient,
-    private val dataStorage: DataStorage
+    private val dataStorage: DataStorage,
+    private val localDataSource: LocalDataSource
 ) : NoteMarkRepository {
     override suspend fun register(username: String, email: String, password: String) : Result {
         val response : HttpResponse = client.post {
@@ -146,6 +150,13 @@ class NoteMarkRepositoryImpl (
     }
 
     override suspend fun getNotes(): Result {
+        val result = localDataSource.upsertNotes(NoteEntity(
+            content = "test",
+            title = "test",
+            createdAt = "test"
+        ))
+        val note = localDataSource.getNotes().first()
+
         val response = client.get {
             url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
         }

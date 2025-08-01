@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization")
+    id("com.google.devtools.ksp")
 }
 
 val localProperties = Properties().apply {
@@ -116,4 +117,10 @@ dependencies {
     implementation("androidx.datastore:datastore:1.1.7")
     // The Preferences DataStore library
     implementation("androidx.datastore:datastore-preferences:1.1.7")
+
+    implementation("com.google.devtools.ksp:symbol-processing:2.2.20-Beta2-2.0.2")
+
+    implementation("androidx.room:room-runtime:2.7.2")
+
+    ksp("androidx.room:room-compiler:2.7.2")
 }

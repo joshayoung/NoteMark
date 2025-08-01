@@ -5,12 +5,16 @@ import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import androidx.room.Room
 import com.joshayoung.notemark.MainViewModel
 import com.joshayoung.notemark.data.DataStorageImpl
 import com.joshayoung.notemark.data.HttpClientProvider
+import com.joshayoung.notemark.data.data_source.NoteDatabase
+import com.joshayoung.notemark.data.data_source.NoteLocalDataSource
 import com.joshayoung.notemark.data.repository.NoteMarkRepositoryImpl
 import com.joshayoung.notemark.data.use_cases.EmailValidator
 import com.joshayoung.notemark.domain.DataStorage
+import com.joshayoung.notemark.domain.database.LocalDataSource
 import com.joshayoung.notemark.domain.repository.NoteMarkRepository
 import com.joshayoung.notemark.domain.use_cases.PatternValidator
 import com.joshayoung.notemark.domain.use_cases.ValidateEmail
@@ -23,6 +27,7 @@ import com.joshayoung.notemark.presentation.registration.RegistrationViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
@@ -59,4 +64,16 @@ var appModule = module {
     viewModelOf(::NoteLandingViewModel)
 
     single { parameters -> AddNoteViewModel(get(), parameters.get()) }
+
+    single {
+        Room.databaseBuilder(
+            androidApplication(),
+            NoteDatabase::class.java,
+            NoteDatabase.DATABASE_NAME
+        ).build()
+    }
+
+    single { get<NoteDatabase>().noteDao }
+
+    singleOf(::NoteLocalDataSource).bind<LocalDataSource>()
 }
