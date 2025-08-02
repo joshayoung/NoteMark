@@ -25,7 +25,6 @@ data class NoteUi(
 
         val formatted =  dateTime.format(formatter)
 
-//        return ""
         return formatted.uppercase()
     }
 }

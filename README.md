@@ -1,4 +1,4 @@
-# mobile-dev-campus-app-dev-challenges
+# NoteMark app
 
 ### Notes
 * You have to add `INTERNET` permissions in order to make API calls.
@@ -26,3 +26,4 @@
 * https://www.youtube.com/watch?v=McnVx7l5awk
 * JSON to Data Class Plugin: https://plugins.jetbrains.com/plugin/9960-json-to-kotlin-class-jsontokotlinclass-
 * https://www.youtube.com/watch?v=fSB6_KE95bU
+* https://developer.android.com/topic/architecture/recommendations

@@ -6,8 +6,11 @@ import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.note.domain.models.NotesData
 import com.joshayoung.notemark.note.presentation.note_landing.mappers.toNoteUi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -27,6 +30,29 @@ class NoteLandingViewModel(
             SharingStarted.WhileSubscribed(1000L),
             NoteLandingState(notes = emptyList())
         )
+
+    init {
+        viewModelScope.launch {
+            dataStorage.username.collect { user ->
+                _state.update {
+                    it.copy(
+                        userAbbreviation = formatUser(user)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun formatUser(user: String): String {
+        if (user.length > 1)
+        {
+            val firstTwo = user.take(2)
+
+            return firstTwo.uppercase()
+        }
+
+        return user.uppercase()
+    }
 
     fun onAction(action: NoteLandingAction) {
         when(action) {

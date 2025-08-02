@@ -25,6 +25,11 @@ class DataStorageImpl(
             value
         }
 
+    override val username: Flow<String> = dataStore.data
+        .map { preferences ->
+            preferences[AuthPreferenceValues.USERNAME] ?: ""
+        }
+
     override fun getAuthData(): Flow<LoginResponse> = dataStore.data
         .map { preferences ->
             LoginResponse(
@@ -47,7 +52,9 @@ class DataStorageImpl(
         dataStore.edit { preferences ->
             preferences[AuthPreferenceValues.ACCESS_TOKEN] = settings.accessToken ?: ""
             preferences[AuthPreferenceValues.REFRESH_TOKEN] = settings.refreshToken ?: ""
-            preferences[AuthPreferenceValues.USERNAME] = settings.username ?: ""
+            if (settings.username != null) {
+                preferences[AuthPreferenceValues.USERNAME] = settings.username
+            }
         }
     }
 }

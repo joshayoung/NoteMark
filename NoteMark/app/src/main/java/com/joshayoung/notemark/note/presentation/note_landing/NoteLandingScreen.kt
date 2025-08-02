@@ -38,6 +38,7 @@ import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.PlusIcon
 import com.joshayoung.notemark.note.presentation.note_landing.model.NoteUi
 import org.koin.androidx.compose.koinViewModel
+import java.nio.file.WatchEvent
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
@@ -89,7 +90,7 @@ fun NoteLandingScreen(
                     )),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "pl".uppercase(), modifier = Modifier,
+                    Text(text = state.userAbbreviation, modifier = Modifier,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
@@ -185,7 +186,12 @@ fun NoteItem(
                 }
             }
     ) {
-        Text(text = note.date)
+        Text(text = note.date,
+            modifier = Modifier
+                ,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold
+        )
         Text(text = note.title,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
@@ -199,11 +205,6 @@ fun NoteItem(
             note.id?.let { onAction(NoteLandingAction.OnDeleteClick(it)) }
         }) {
             Text("Delete")
-        }
-        Button(onClick = {
-            note.id?.let { onNavigateToEdit(it) }
-        }) {
-            Text("Edit")
         }
     }
 }
