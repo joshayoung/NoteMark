@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.note.domain.models.NotesData
+import com.joshayoung.notemark.note.presentation.note_landing.mappers.toNoteUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -55,7 +56,9 @@ class NoteLandingViewModel(
         if (notes != null) {
             _state.update {
                 it.copy(
-                    notes = notes,
+                    notes = notes.map { it ->
+                        it.toNoteUi()
+                    },
                     hasItems = true
                 )
             }

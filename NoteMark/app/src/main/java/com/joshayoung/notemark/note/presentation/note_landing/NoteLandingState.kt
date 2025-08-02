@@ -1,9 +1,8 @@
 package com.joshayoung.notemark.note.presentation.note_landing
 
-import com.joshayoung.notemark.note.domain.models.Note
-import com.joshayoung.notemark.note.domain.models.NotesData
+import com.joshayoung.notemark.note.presentation.note_landing.model.NoteUi
 
 data class NoteLandingState(
-    var notes: List<Note>,
+    var notes: List<NoteUi>,
     var hasItems: Boolean = false
 )

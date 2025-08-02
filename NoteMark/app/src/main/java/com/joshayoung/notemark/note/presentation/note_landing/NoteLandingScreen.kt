@@ -36,6 +36,7 @@ import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.models.NotesData
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.PlusIcon
+import com.joshayoung.notemark.note.presentation.note_landing.model.NoteUi
 import org.koin.androidx.compose.koinViewModel
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -168,7 +169,7 @@ fun NoteLandingScreen(
 
 @Composable
 fun NoteItem(
-    note: Note,
+    note: NoteUi,
     onAction: (NoteLandingAction)-> Unit,
     onNavigateToEdit: (id: String) -> Unit
     ) {
@@ -217,24 +218,23 @@ fun NoteItem(
 @Composable
 fun NoteLandingScreenPreview() {
     NoteMarkTheme {
-//            onAction(NoteLandingAction.OnEditClick)
         NoteLandingScreen(
             state = NoteLandingState(
                 hasItems = true,
                 notes = listOf(
-                    Note(
+                    NoteUi(
                         id = "1",
                         title = "My First Note",
                         content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
                         createdAt = "2025-07-26T16:16:05Z"
                     ),
-                    Note(
+                    NoteUi(
                         id = "2",
                         title = "Second Note",
                         content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
                         createdAt = "2025-07-26T16:16:05Z"
                     ),
-                    Note(
+                    NoteUi(
                         id = "3",
                         title = "Another Note With",
                         content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
