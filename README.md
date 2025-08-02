@@ -6,6 +6,9 @@
   * I just used my splash image as a starting point. 
     * See notes on creating the splash image [here](https://github.com/joshayoung/android-kotlin-app-training/blob/main/README.md)
 
+### Add Test
+* Select class name and press `ALT` + `ENTER`.
+
 
 ### To Do
 * Test refresh logic once you start getting notes

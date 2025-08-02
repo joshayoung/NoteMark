@@ -185,13 +185,7 @@ fun NoteItem(
                 }
             }
     ) {
-        val inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-        val outputFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss")
-
-        val dateTime = OffsetDateTime.parse(note.createdAt, inputFormatter)
-        val formatted = dateTime.format(outputFormatter)
-
-        Text(text = formatted)
+        Text(text = note.date)
         Text(text = note.title,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
