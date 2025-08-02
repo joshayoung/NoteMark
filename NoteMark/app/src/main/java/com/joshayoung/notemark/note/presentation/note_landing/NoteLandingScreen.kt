@@ -179,7 +179,9 @@ fun NoteItem(
             .background(Color.White.copy(alpha = 0.8f))
             .padding(20.dp)
             .clickable {
-                onNavigateToEdit(note.id)
+                if (note.id != null) {
+                    onNavigateToEdit(note.id)
+                }
             }
     ) {
         val inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
@@ -199,13 +201,12 @@ fun NoteItem(
             overflow = TextOverflow.Ellipsis
         )
         Button(onClick = {
-            onAction(NoteLandingAction.OnDeleteClick(note.id))
+            note.id?.let { onAction(NoteLandingAction.OnDeleteClick(it)) }
         }) {
             Text("Delete")
         }
         Button(onClick = {
-//            onAction(NoteLandingAction.OnEditClick)
-            onNavigateToEdit(note.id)
+            note.id?.let { onNavigateToEdit(it) }
         }) {
             Text("Edit")
         }
@@ -216,6 +217,7 @@ fun NoteItem(
 @Composable
 fun NoteLandingScreenPreview() {
     NoteMarkTheme {
+//            onAction(NoteLandingAction.OnEditClick)
         NoteLandingScreen(
             state = NoteLandingState(
                 hasItems = true,

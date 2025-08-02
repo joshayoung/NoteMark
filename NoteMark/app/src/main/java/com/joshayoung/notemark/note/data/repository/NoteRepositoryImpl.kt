@@ -1,13 +1,15 @@
 package com.joshayoung.notemark.note.data.repository
 
+import android.R
 import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.core.domain.models.Error
-import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.note.data.mappers.toNoteDto
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.models.NotesData
+import com.joshayoung.notemark.note.network.NoteDto
 import com.joshayoung.notemark.note.network.toNote
 import io.ktor.client.HttpClient
 import io.ktor.client.request.delete
@@ -29,29 +31,29 @@ typealias Result = com.joshayoung.notemark.core.domain.models.Result
 
 class NoteRepositoryImpl (
     private val client: HttpClient,
-    private val dataStorage: DataStorage,
     private val localDataSource: LocalDataSource
 ) : NoteRepository {
     override suspend fun createNote(title: String, body: String): Result {
         val currentDateTime = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
         val formattedDateTime = currentDateTime.format(formatter)
-        val note = Note(
+        val noteDto = Note(
             id = UUID.randomUUID().toString(),
             title = title,
             content = body,
             createdAt = formattedDateTime
-        )
+        ).toNoteDto()
         val response = client.post {
             url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
-            setBody(note)
+            setBody(noteDto)
         }
+        println("test")
 
         return when (response.status) {
             HttpStatusCode.OK -> {
                 val responseText = response.bodyAsText()
-                val jsonObject = Json.decodeFromString<Note>(responseText)
-                Result(success = true, note = jsonObject)
+                val jsonObject = Json.decodeFromString<NoteDto>(responseText)
+                Result(success = true, note = jsonObject.toNote())
             }
             else -> {
                 val responseText = response.bodyAsText()
@@ -88,7 +90,7 @@ class NoteRepositoryImpl (
     }
 
     override suspend fun getNotes(): Result {
-        val result = localDataSource.upsertNotes(NoteEntity(
+        val result = localDataSource.upsertNote(Note(
             content = "test",
             title = "test",
             createdAt = "test"

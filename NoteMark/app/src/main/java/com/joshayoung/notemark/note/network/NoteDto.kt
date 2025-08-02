@@ -4,9 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NoteDto(
+    val id: String? = null,
     val content: String,
     val createdAt: String,
-    val id: String,
     val lastEditedAt: String? = null,
     val title: String
 )

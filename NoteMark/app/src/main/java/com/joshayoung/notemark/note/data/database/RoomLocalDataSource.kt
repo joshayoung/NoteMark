@@ -3,18 +3,28 @@ package com.joshayoung.notemark.note.data.database
 import com.joshayoung.notemark.core.domain.models.Result
 import com.joshayoung.notemark.note.data.database.dao.NoteDao
 import com.joshayoung.notemark.note.data.database.entity.NoteEntity
+import com.joshayoung.notemark.note.data.mappers.toNote
+import com.joshayoung.notemark.note.data.mappers.toNoteEntity
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
+import com.joshayoung.notemark.note.domain.models.Note
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class RoomLocalDataSource(
     private val noteDao: NoteDao
 ) : LocalDataSource {
-    override fun getNotes(): Flow<List<NoteEntity>> {
-        return noteDao.getNotes()
+    override fun getNotes(): Flow<List<Note>> {
+        val entities = noteDao.getNotes();
+
+        return entities.map { noteEntities ->
+            noteEntities.map {
+                it.toNote()
+            }
+        }
     }
 
-    override suspend fun upsertNotes(note: NoteEntity): Result {
-        noteDao.upsertNote(note)
+    override suspend fun upsertNote(note: Note): Result {
+        noteDao.upsertNote(note.toNoteEntity())
 
         return Result(success = true)
     }
