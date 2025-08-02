@@ -33,6 +33,7 @@ import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 
 @Composable
 fun GettingStartedScreen(
+    modifier: Modifier,
     onCreateAccountClick: () -> Unit,
     onLoginClick: () -> Unit
 ) {
@@ -40,7 +41,9 @@ fun GettingStartedScreen(
     val configuration = LocalConfiguration.current
     val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
     if (isPortrait) {
-        PortraitOrientation(onCreateAccountClick, onLoginClick)
+        PortraitOrientation(
+            modifier = modifier,
+            onCreateAccountClick, onLoginClick)
     } else {
         LandscapeOrientation(onCreateAccountClick, onLoginClick)
     }
@@ -73,9 +76,11 @@ fun LandscapeOrientation(onCreateAccountClick: () -> Unit, onLoginClick: () -> U
 }
 
 @Composable
-private fun PortraitOrientation(onCreateAccountClick: () -> Unit, onLoginClick: () -> Unit) {
+private fun PortraitOrientation(
+    modifier: Modifier,
+    onCreateAccountClick: () -> Unit, onLoginClick: () -> Unit) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background( Color(0xFFE0EAFF))
         ,verticalArrangement = Arrangement.Bottom
     ) {
@@ -155,7 +160,8 @@ private fun GettingStartedScreenPreview() {
     NoteMarkTheme {
         GettingStartedScreen(
             onCreateAccountClick = {},
-            onLoginClick = {}
+            onLoginClick = {},
+            modifier = Modifier
         )
     }
 }

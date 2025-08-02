@@ -37,6 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RegistrationScreenRoot(
+    modifier: Modifier,
     onRegistrationSuccess: () -> Unit,
     onAlreadyAccountClick: () -> Unit,
     viewModel: RegistrationViewModel = koinViewModel()
@@ -61,6 +62,7 @@ fun RegistrationScreenRoot(
     }
 
     RegistrationScreen(
+        modifier = modifier,
         state = viewModel.state,
         onAlreadyAccountClick = onAlreadyAccountClick,
         errorMessage = errorMessage,
@@ -72,6 +74,7 @@ fun RegistrationScreenRoot(
 
 @Composable
 fun RegistrationScreen(
+    modifier: Modifier,
     state: RegistrationState,
     onAlreadyAccountClick: () -> Unit,
     errorMessage: List<String?>?,
@@ -81,7 +84,7 @@ fun RegistrationScreen(
     val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 
     if (!isPortrait) {
-        Row(modifier = Modifier
+        Row(modifier = modifier
             .fillMaxSize()
         ) {
             Header(modifier = Modifier.weight(1f))
@@ -94,7 +97,9 @@ fun RegistrationScreen(
             )
         }
     } else {
-        Column {
+        Column(
+            modifier = modifier
+        ) {
             Header()
             Form(errorMessage,
                 onAlreadyAccountClick = onAlreadyAccountClick,
@@ -205,7 +210,8 @@ fun RegistrationScreenPreview() {
             state = RegistrationState(),
             onAlreadyAccountClick = {},
             errorMessage = null,
-            onnAction = {}
+            onnAction = {},
+            modifier = Modifier
         )
     }
 }

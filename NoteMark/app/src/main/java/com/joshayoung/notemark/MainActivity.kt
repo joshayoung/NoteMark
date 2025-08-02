@@ -3,10 +3,15 @@ package com.joshayoung.notemark
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -30,7 +35,7 @@ class MainActivity : ComponentActivity() {
     fun MyNavigation(
         navController: NavHostController,
         isAuthenticated: Boolean,
-        modifier: Modifier = Modifier
+        modifier: Modifier
     ) {
         ObserveAsEvents(viewModel.authData) { refreshToken ->
             val currentDestination = navController.currentDestination
@@ -49,6 +54,7 @@ class MainActivity : ComponentActivity() {
         ) {
             composable(Screen.Start.route) {
                 GettingStartedScreen(
+                    modifier = modifier,
                     onCreateAccountClick = {
                         navController.navigate(Screen.Register.route)
                     },
@@ -60,6 +66,7 @@ class MainActivity : ComponentActivity() {
 
             composable(Screen.Register.route) {
                 RegistrationScreenRoot(
+                    modifier = modifier,
                     onRegistrationSuccess = {
                         navController.navigate(Screen.Login.route)
                     },
@@ -73,6 +80,7 @@ class MainActivity : ComponentActivity() {
 
             composable(Screen.Login.route) {
                 LoginScreenRoot(
+                    modifier = modifier,
                     onLoginSuccess = {
                         navController.navigate(Screen.Landing.route) {
                             popUpTo(Screen.Start.route) {
@@ -90,6 +98,7 @@ class MainActivity : ComponentActivity() {
 
             composable(Screen.Landing.route) {
                 NoteLandingScreenRoot(
+                    modifier = modifier,
                     onAddNoteClick = {
                         navController.navigate(Screen.AddNote.route)
                     },
@@ -111,6 +120,7 @@ class MainActivity : ComponentActivity() {
                 )
                 ) {
                 AddNoteScreenRoot(
+                    modifier = modifier,
                     redirectBack = {
                         navController.navigateUp()
                     }
@@ -134,6 +144,7 @@ class MainActivity : ComponentActivity() {
                     if (!viewModel.state.isCheckingSession)
                     {
                         MyNavigation(
+                            modifier = Modifier.fillMaxSize().statusBarsPadding(),
                             navController = navController,
                             isAuthenticated = viewModel.state.isAuthenticated
                         )

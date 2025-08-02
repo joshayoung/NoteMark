@@ -34,6 +34,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreenRoot(
+    modifier: Modifier,
     viewModel: LoginViewModel = koinViewModel(),
     onLoginSuccess: () -> Unit,
     onDontHaveAccount: () -> Unit
@@ -58,6 +59,7 @@ fun LoginScreenRoot(
     }
 
     LoginScreen(
+        modifier = modifier,
         state = viewModel.state,
         onDontHaveAccount = onDontHaveAccount,
         onAction = { action ->
@@ -82,6 +84,7 @@ fun LoginHeader(
 
 @Composable
 fun LoginScreen(
+    modifier: Modifier,
     state: LoginState,
     onDontHaveAccount: () -> Unit,
     onAction: (LoginAction) -> Unit
@@ -91,7 +94,7 @@ fun LoginScreen(
 
     if (isPortrait) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .background(color = MaterialTheme.colorScheme.primary)
                 .padding(top =10.dp)
                 .fillMaxSize(),
@@ -99,7 +102,7 @@ fun LoginScreen(
         )
         {
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                     .background(Color.White)
                     .padding(20.dp)
@@ -188,6 +191,8 @@ fun LoginScreenPreview() {
     NoteMarkTheme {
         LoginScreen(state = LoginState(),
             onDontHaveAccount = {},
-            onAction = {})
+            onAction = {},
+            modifier = Modifier
+        )
     }
 }

@@ -44,11 +44,13 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun NoteLandingScreenRoot(
+    modifier: Modifier,
     viewModel: NoteLandingViewModel = koinViewModel(),
     onAddNoteClick: () -> Unit,
     onNavigateToEdit: (id: String) -> Unit
 ) {
     NoteLandingScreen(
+        modifier = modifier,
        state = viewModel.state.collectAsStateWithLifecycle().value,
         onAction = { action ->
             viewModel.onAction(action)
@@ -60,6 +62,7 @@ fun NoteLandingScreenRoot(
 
 @Composable
 fun NoteLandingScreen(
+    modifier: Modifier,
     state: NoteLandingState,
     onAction: (NoteLandingAction) -> Unit,
     onAddNoteClick: () -> Unit,
@@ -128,7 +131,7 @@ fun NoteLandingScreen(
 
     ) { innerPadding ->
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .background(Color.LightGray)
                 .padding(innerPadding)
                 .padding(10.dp)
@@ -239,7 +242,8 @@ fun NoteLandingScreenPreview() {
             ),
             onAction = {},
             onAddNoteClick = {},
-            onNavigateToEdit = {}
+            onNavigateToEdit = {},
+            modifier = Modifier
         )
     }
 }
