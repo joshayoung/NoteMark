@@ -298,6 +298,7 @@
 						"exec": [
 							"let response = pm.response.json();",
 							"pm.collectionVariables.set(\"note-mark-token\", response.accessToken)",
+							"pm.collectionVariables.set(\"note-mark-refresh-token\", response.refreshToken)",
 							"console.log(response)",
 							""
 						],
@@ -346,6 +347,21 @@
 		},
 		{
 			"name": "Token Refresh",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();",
+							"pm.collectionVariables.set(\"note-mark-token\", response.accessToken)",
+							"pm.collectionVariables.set(\"note-mark-refresh-token\", response.refreshToken)",
+							"console.log(response)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -357,7 +373,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\"refreshToken\": \"\"\n}",
+					"raw": "{\n\"refreshToken\": \"{{note-mark-refresh-token}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -899,6 +915,10 @@
 		},
 		{
 			"key": "note-mark-token",
+			"value": ""
+		},
+		{
+			"key": "note-mark-refresh-token",
 			"value": ""
 		}
 	]
