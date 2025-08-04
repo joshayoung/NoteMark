@@ -1,63 +1,49 @@
 package com.joshayoung.notemark.note.data.repository
 
-import android.R
 import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.core.domain.models.Error
-import com.joshayoung.notemark.note.domain.repository.NoteRepository
-import com.joshayoung.notemark.core.domain.DataStorage
-import com.joshayoung.notemark.core.utils.getTimeStampForInsert
-import com.joshayoung.notemark.note.data.database.entity.NoteEntity
-import com.joshayoung.notemark.note.data.mappers.toNoteDto
-import com.joshayoung.notemark.note.data.mappers.toNoteEntity
 import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.models.Note
-import com.joshayoung.notemark.note.domain.models.NotesData
-import com.joshayoung.notemark.note.network.NoteDto
-import com.joshayoung.notemark.note.network.toNote
+import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.request.delete
-import io.ktor.client.request.get
-import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.serialization.json.Json
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.UUID
 
 typealias Result = com.joshayoung.notemark.core.domain.models.Result
 
 class NoteRepositoryImpl (
     private val client: HttpClient,
     private val localDataSource: LocalDataSource,
+    private val applicationScope: CoroutineScope,
     private val remoteDataSource: KtorRemoteDataSource
 ) : NoteRepository {
     override suspend fun createNote(note: Note): Result {
-        try {
-            
-//            val numberList = mutableListOf<Note>()
-//            val localNotes = localDataSource.getNotes().collect { notes ->
-//                notes.map { note ->
-//                    numberList.add(note)
-//                }
-//            }
-//            val remoteNotes = remoteDataSource.getNotes().notes
+        val localResult = localDataSource.upsertNote(note)
 
-            localDataSource.upsertNote(note)
-            remoteDataSource.saveNote(note)
-
-        } catch(e: Exception) {
-            println(e)
+        // TODO: Handle this case:
+        if (!localResult.success) {
+            return localResult
         }
 
-        return Result(success = true)
+        return applicationScope.async {
+            val noteSave = remoteDataSource.saveNote(note)
+
+            // TODO: Handle the failure:
+            if (!noteSave.success) {
+                return@async return@async Result(success = false)
+            }
+
+            return@async Result(success = true)
+        }.await()
     }
 
     override suspend fun updateNote(note: Note?, title: String, body: String): Result {

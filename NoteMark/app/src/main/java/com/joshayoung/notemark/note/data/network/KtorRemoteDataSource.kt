@@ -28,7 +28,6 @@ class KtorRemoteDataSource(
             url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
             setBody(noteDto)
         }
-        println("test")
 
         return when (response.status) {
             HttpStatusCode.OK -> {

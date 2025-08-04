@@ -78,4 +78,8 @@ var appModule = module {
 
     singleOf(::RoomLocalDataSource).bind<LocalDataSource>()
     singleOf(::KtorRemoteDataSource).bind<RemoteDataSource>()
+
+    single<CoroutineScope> {
+        (androidApplication() as NoteMarkApp).applicationScope
+    }
 }

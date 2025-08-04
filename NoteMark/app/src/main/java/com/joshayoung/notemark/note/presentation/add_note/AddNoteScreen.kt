@@ -50,11 +50,11 @@ fun AddNoteScreenRoot(
         modifier = modifier,
         state = viewModel.state,
         onAction = { action ->
-//            when(action) {
-//                AddNoteAction.OnSaveClick -> {
-//                    redirectBack()
-//                }
-//            }
+            when(action) {
+                AddNoteAction.OnSaveClick -> {
+                    redirectBack()
+                }
+            }
             viewModel.onAction(action)
         },
         navigateBack = navigateBack
