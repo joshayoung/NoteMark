@@ -1,6 +1,7 @@
 package com.joshayoung.notemark.note.presentation.add_note
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.joshayoung.notemark.core.design.theme.CloseIcon
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import org.koin.androidx.compose.koinViewModel
@@ -40,19 +43,21 @@ import org.koin.androidx.compose.koinViewModel
 fun AddNoteScreenRoot(
     modifier: Modifier,
     viewModel: AddNoteViewModel = koinViewModel(),
-    redirectBack: () -> Unit
+    redirectBack: () -> Unit,
+    navigateBack: () -> Unit,
 ) {
     AddNoteScreen(
         modifier = modifier,
         state = viewModel.state,
         onAction = { action ->
-            when(action) {
-                AddNoteAction.OnSaveClick -> {
-                    redirectBack()
-                }
-            }
+//            when(action) {
+//                AddNoteAction.OnSaveClick -> {
+//                    redirectBack()
+//                }
+//            }
             viewModel.onAction(action)
-        }
+        },
+        navigateBack = navigateBack
     )
 }
 
@@ -60,7 +65,8 @@ fun AddNoteScreenRoot(
 fun AddNoteScreen(
     modifier: Modifier,
     state: AddNoteState,
-    onAction: (AddNoteAction)-> Unit
+    onAction: (AddNoteAction)-> Unit,
+    navigateBack: () -> Unit
 ) {
     NoteMarkScaffold(
         topAppBar = {
@@ -73,8 +79,10 @@ fun AddNoteScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("NoteMark", modifier = Modifier,
-                    fontWeight = FontWeight.Bold
+                Icon(imageVector = CloseIcon, contentDescription = null, modifier = Modifier
+                    .clickable {
+                        navigateBack()
+                    },
                 )
                 Button(
                     onClick = {
@@ -186,7 +194,8 @@ fun AddNoteScreenPreview() {
         AddNoteScreen(
             state = AddNoteState(),
             onAction = {},
-            modifier = Modifier
+            modifier = Modifier,
+            navigateBack = {}
         )
     }
 }

@@ -5,7 +5,11 @@ import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.core.domain.models.Error
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.core.utils.getTimeStampForInsert
+import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.data.mappers.toNoteDto
+import com.joshayoung.notemark.note.data.mappers.toNoteEntity
+import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.models.NotesData
@@ -22,6 +26,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -31,37 +36,28 @@ typealias Result = com.joshayoung.notemark.core.domain.models.Result
 
 class NoteRepositoryImpl (
     private val client: HttpClient,
-    private val localDataSource: LocalDataSource
+    private val localDataSource: LocalDataSource,
+    private val remoteDataSource: KtorRemoteDataSource
 ) : NoteRepository {
-    override suspend fun createNote(title: String, body: String): Result {
-        val currentDateTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        val formattedDateTime = currentDateTime.format(formatter)
-        val noteDto = Note(
-            id = UUID.randomUUID().toString(),
-            title = title,
-            content = body,
-            createdAt = formattedDateTime
-        ).toNoteDto()
-        val response = client.post {
-            url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
-            setBody(noteDto)
-        }
-        println("test")
+    override suspend fun createNote(note: Note): Result {
+        try {
+            
+//            val numberList = mutableListOf<Note>()
+//            val localNotes = localDataSource.getNotes().collect { notes ->
+//                notes.map { note ->
+//                    numberList.add(note)
+//                }
+//            }
+//            val remoteNotes = remoteDataSource.getNotes().notes
 
-        return when (response.status) {
-            HttpStatusCode.OK -> {
-                val responseText = response.bodyAsText()
-                val jsonObject = Json.decodeFromString<NoteDto>(responseText)
-                Result(success = true, note = jsonObject.toNote())
-            }
-            else -> {
-                val responseText = response.bodyAsText()
-                val jsonObject = Json.decodeFromString<Error>(responseText)
-                // TODO: Make this more robust:
-                Result(success = false, error = jsonObject)
-            }
+            localDataSource.upsertNote(note)
+            remoteDataSource.saveNote(note)
+
+        } catch(e: Exception) {
+            println(e)
         }
+
+        return Result(success = true)
     }
 
     override suspend fun updateNote(note: Note?, title: String, body: String): Result {
@@ -90,29 +86,7 @@ class NoteRepositoryImpl (
     }
 
     override suspend fun getNotes(): Result {
-        val result = localDataSource.upsertNote(Note(
-            content = "test",
-            title = "test",
-            createdAt = "test"
-        ))
-        val note = localDataSource.getNotes().first()
-
-        val response = client.get {
-            url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
-        }
-
-        when (response.status) {
-            HttpStatusCode.OK -> {
-                val responseText = response.bodyAsText()
-                val jsonObject = Json.decodeFromString<NotesData>(responseText)
-                return Result(success = true, notes = jsonObject.notes.map { n ->
-                    n.toNote()
-                })
-            }
-            else -> {
-                return Result(success = false)
-            }
-        }
+        return Result(success = false)
     }
 
     override suspend fun deleteNote(id: String): Result {

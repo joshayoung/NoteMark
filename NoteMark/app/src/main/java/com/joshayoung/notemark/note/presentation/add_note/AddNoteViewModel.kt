@@ -7,13 +7,17 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joshayoung.notemark.core.utils.getTimeStampForInsert
+import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class AddNoteViewModel (
     val noteRepository: NoteRepository,
-    val savedStateHandle: SavedStateHandle
+    val savedStateHandle: SavedStateHandle,
+    val localDataSource: LocalDataSource
 ) : ViewModel() {
     var state by mutableStateOf(AddNoteState())
 
@@ -49,17 +53,21 @@ class AddNoteViewModel (
         when(action) {
             AddNoteAction.OnSaveClick -> {
                 viewModelScope.launch {
-
                     if (currentNote != null) {
 
                         noteRepository.updateNote(currentNote, state.noteTitle.text.toString(), state.noteBody.text.toString())
 
                         return@launch
                     }
-                    noteRepository.createNote(
-                        state.noteTitle.text.toString(),
-                        state.noteBody.text.toString()
+
+                    val note = Note(
+                        id = UUID.randomUUID().toString(),
+                        title = state.noteTitle.text.toString(),
+                        content = state.noteBody.text.toString(),
+                        createdAt = getTimeStampForInsert()
                     )
+
+                    noteRepository.createNote(note)
                 }
             }
         }

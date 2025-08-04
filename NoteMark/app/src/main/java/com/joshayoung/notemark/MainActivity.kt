@@ -123,6 +123,9 @@ class MainActivity : ComponentActivity() {
                     modifier = modifier,
                     redirectBack = {
                         navController.navigateUp()
+                    },
+                    navigateBack = {
+                        navController.navigateUp()
                     }
                 )
             }

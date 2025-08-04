@@ -19,6 +19,7 @@ import com.joshayoung.notemark.note.data.database.RoomLocalDataSource
 import com.joshayoung.notemark.note.data.database.NoteDatabase
 import com.joshayoung.notemark.auth.data.use_cases.EmailValidator
 import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
 import com.joshayoung.notemark.note.data.repository.NoteRepositoryImpl
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
@@ -26,6 +27,7 @@ import com.joshayoung.notemark.note.domain.use_cases.PatternValidator
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
 import com.joshayoung.notemark.note.domain.use_cases.ValidatePassword
 import com.joshayoung.notemark.note.domain.use_cases.ValidateUsername
+import com.joshayoung.notemark.note.network.RemoteDataSource
 import com.joshayoung.notemark.note.presentation.add_note.AddNoteViewModel
 import com.joshayoung.notemark.note.presentation.note_landing.NoteLandingViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -75,4 +77,5 @@ var appModule = module {
     single { get<NoteDatabase>().noteDao }
 
     singleOf(::RoomLocalDataSource).bind<LocalDataSource>()
+    singleOf(::KtorRemoteDataSource).bind<RemoteDataSource>()
 }

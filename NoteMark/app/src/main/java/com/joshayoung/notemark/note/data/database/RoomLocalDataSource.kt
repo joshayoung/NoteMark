@@ -1,12 +1,14 @@
 package com.joshayoung.notemark.note.data.database
 
 import com.joshayoung.notemark.core.domain.models.Result
+import com.joshayoung.notemark.core.utils.getTimeStampForInsert
 import com.joshayoung.notemark.note.data.database.dao.NoteDao
 import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.data.mappers.toNoteEntity
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.models.Note
+import com.joshayoung.notemark.note.presentation.note_landing.mappers.toNoteUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -24,7 +26,8 @@ class RoomLocalDataSource(
     }
 
     override suspend fun upsertNote(note: Note): Result {
-        noteDao.upsertNote(note.toNoteEntity())
+        val noteEntity = note.toNoteEntity()
+        noteDao.upsertNote(noteEntity)
 
         return Result(success = true)
     }

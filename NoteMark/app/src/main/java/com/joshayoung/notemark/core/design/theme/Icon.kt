@@ -9,6 +9,10 @@ val CopyIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(R.drawable.copy)
 
+val CloseIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(R.drawable.close)
+
 val EyeIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(R.drawable.eye)
