@@ -53,10 +53,10 @@ fun RegistrationScreenRoot(
             }
             is RegistrationEvent.Error -> {
                 keyboardController?.hide()
-                val errors = event.error?.errors
-                val reason = event.error?.reason
+                val errors = event.error
 
-                errorMessage = (errors ?: emptyList()) + reason
+                // TODO: Fix this:
+//                errorMessage = errors.
             }
         }
     }

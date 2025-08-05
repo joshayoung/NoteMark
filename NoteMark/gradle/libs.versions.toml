@@ -27,6 +27,7 @@ navigationCompose = "2.9.3"
 roomRuntime = "2.7.2"
 securityCryptoKtx = "1.1.0"
 symbolProcessing = "2.2.20-Beta2-2.0.2"
+credentials = "1.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +65,7 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorCli
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientLogging" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorSerializationKotlinxJson" }
 symbol-processing = { module = "com.google.devtools.ksp:symbol-processing", version.ref = "symbolProcessing" }
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

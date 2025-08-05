@@ -1,6 +1,10 @@
 package com.joshayoung.notemark.note.data.database
 
-import com.joshayoung.notemark.core.domain.models.Result
+import android.database.sqlite.SQLiteFullException
+import com.joshayoung.notemark.core.domain.util.DataError
+import com.joshayoung.notemark.core.domain.util.EmptyDataResult
+import com.joshayoung.notemark.core.domain.util.EmptyResult
+import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.utils.getTimeStampForInsert
 import com.joshayoung.notemark.note.data.database.dao.NoteDao
 import com.joshayoung.notemark.note.data.database.entity.NoteEntity
@@ -25,19 +29,22 @@ class RoomLocalDataSource(
         }
     }
 
-    override suspend fun upsertNote(note: Note): Result {
-        val noteEntity = note.toNoteEntity()
-        noteDao.upsertNote(noteEntity)
-
-        return Result(success = true)
+    override suspend fun upsertNote(note: Note): Result<Int?, DataError.Local> {
+        try {
+            val noteEntity = note.toNoteEntity()
+            noteDao.upsertNote(noteEntity)
+            return Result.Success(data = noteEntity.id)
+        } catch(e: SQLiteFullException) {
+            return Result.Error(DataError.Local.DISK_FULL)
+        }
     }
-
+//
     override suspend fun getNote(id: Int) : Note? {
         val noteEntity = noteDao.getNoteById(id)?.toNote()
 
         return noteEntity
     }
-
+//
     override suspend fun deleteNote(id: Int) {
         noteDao.deleteNote(id)
     }

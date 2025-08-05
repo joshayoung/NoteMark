@@ -5,13 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
-import com.joshayoung.notemark.note.domain.models.NotesData
 import com.joshayoung.notemark.note.presentation.note_landing.mappers.toNoteUi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -20,7 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class NoteLandingViewModel(
-    private val noteMarkRepository: NoteRepository,
+    private val noteRepository: NoteRepository,
     private val dataStorage: DataStorage,
     private val localDataSource: LocalDataSource
 ) : ViewModel() {
@@ -67,15 +63,10 @@ class NoteLandingViewModel(
             }
             is NoteLandingAction.OnDeleteClick -> {
                 viewModelScope.launch {
-                    noteMarkRepository.deleteNote(
+                    noteRepository.deleteNote(
                         id = action.id
                     )
                     loadData()
-                }
-            }
-            NoteLandingAction.OnEditClick -> {
-                viewModelScope.launch {
-                    dataStorage.saveAuthData(null)
                 }
             }
         }

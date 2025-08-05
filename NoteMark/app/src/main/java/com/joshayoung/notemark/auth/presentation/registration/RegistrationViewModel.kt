@@ -8,6 +8,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
+import com.joshayoung.notemark.core.domain.util.DataError
+import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
 import com.joshayoung.notemark.note.domain.use_cases.ValidatePassword
@@ -116,11 +118,14 @@ class RegistrationViewModel(
 
             state = state.copy(isRegistering = false)
 
-            if (result.success) {
-                eventChannel.send(RegistrationEvent.RegistrationSuccess)
-            } else {
-                // TODO: Edit the state here instead of sending a message for errors?
-                eventChannel.send(RegistrationEvent.Error(result.error))
+            when(result) {
+                is Result.Error -> {
+                    // TODO: Get the specific error:
+                    eventChannel.send(RegistrationEvent.Error("Error Registering"))
+                }
+                is Result.Success ->  {
+                    eventChannel.send(RegistrationEvent.RegistrationSuccess)
+                }
             }
         }
     }

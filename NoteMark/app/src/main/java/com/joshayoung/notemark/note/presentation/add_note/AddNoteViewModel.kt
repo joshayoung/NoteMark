@@ -27,7 +27,7 @@ class AddNoteViewModel (
         savedStateHandle.get<Int>("noteId")?.let { id ->
             viewModelScope.launch {
                 // TODO: get this from local db:
-                var currentNote = noteRepository.getNote(id)
+                currentNote = noteRepository.getNote(id)
 
                 state = state.copy(
                     noteTitle = TextFieldState(
@@ -63,6 +63,5 @@ class AddNoteViewModel (
                 }
             }
         }
-
     }
 }

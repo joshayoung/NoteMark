@@ -6,6 +6,7 @@ import com.joshayoung.notemark.note.network.NoteDto
 
 fun Note.toNoteEntity() : NoteEntity {
     return NoteEntity(
+        id  = id,
         title = title,
         content = content,
         createdAt = createdAt,
