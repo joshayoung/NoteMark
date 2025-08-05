@@ -220,7 +220,7 @@ fun NoteItem(
                     Text("Cancel")
                 }
             }
-        )
+       )
     }
 
     Column(
