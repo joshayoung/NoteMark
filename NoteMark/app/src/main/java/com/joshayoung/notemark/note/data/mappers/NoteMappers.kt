@@ -15,6 +15,7 @@ fun Note.toNoteEntity() : NoteEntity {
 
 fun NoteEntity.toNote() : Note {
     return Note(
+        id = id,
         title = title,
         content = content,
         createdAt = createdAt,

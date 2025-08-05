@@ -16,6 +16,9 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMap
+import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.json.Json
 
 typealias Result = com.joshayoung.notemark.core.domain.models.Result
@@ -48,7 +51,7 @@ class NoteRepositoryImpl (
 
     override suspend fun updateNote(note: Note?, title: String, body: String): Result {
         val updatedNote = Note(
-            id = note?.id ?: "",
+            id = note?.id,
             title = title,
             content = body,
             createdAt = note!!.createdAt
@@ -71,28 +74,36 @@ class NoteRepositoryImpl (
         }
     }
 
-    override suspend fun getNotes(): Result {
-        return Result(success = false)
+    override suspend fun getNotes(): Flow<List<Note>> {
+        return localDataSource.getNotes()
     }
 
-    override suspend fun deleteNote(id: String): Result {
-        println("test")
-        val url = BuildConfig.BASE_URL + BuildConfig.NOTE_PATH + "/" + id
-        val response = client.delete {
-            url(url)
-//            parameter("id", id)
-        }
-        when (response.status) {
-            HttpStatusCode.OK -> {
-                val responseText = response.bodyAsText()
-//                val jsonObject = Json.decodeFromString<Notes>(responseText)
-                return Result(success = true)
-            }
-            else -> {
-                val responseText = response.bodyAsText()
-                val jsonObject = Json.decodeFromString<Error>(responseText)
-                return Result(success = false)
-            }
-        }
+    override suspend fun deleteNote(id: Int): Result {
+        localDataSource.deleteNote(id)
+
+        return Result(success = true)
+
+//        println("test")
+//        val url = BuildConfig.BASE_URL + BuildConfig.NOTE_PATH + "/" + id
+//        val response = client.delete {
+//            url(url)
+////            parameter("id", id)
+//        }
+//        when (response.status) {
+//            HttpStatusCode.OK -> {
+//                val responseText = response.bodyAsText()
+////                val jsonObject = Json.decodeFromString<Notes>(responseText)
+//                return Result(success = true)
+//            }
+//            else -> {
+//                val responseText = response.bodyAsText()
+//                val jsonObject = Json.decodeFromString<Error>(responseText)
+//                return Result(success = false)
+//            }
+//        }
+    }
+
+    override suspend fun getNote(id: Int) : Note? {
+        return localDataSource.getNote(id)
     }
 }

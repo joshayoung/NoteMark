@@ -114,8 +114,8 @@ class MainActivity : ComponentActivity() {
                 Screen.AddNote.route + "?noteId={noteId}",
                 arguments = listOf(
                     navArgument(name = "noteId") {
-                        type = NavType.StringType
-                        defaultValue = ""
+                        type = NavType.IntType
+                        defaultValue = -1
                     }
                 )
                 ) {

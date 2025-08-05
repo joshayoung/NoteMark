@@ -31,4 +31,14 @@ class RoomLocalDataSource(
 
         return Result(success = true)
     }
+
+    override suspend fun getNote(id: Int) : Note? {
+        val noteEntity = noteDao.getNoteById(id)?.toNote()
+
+        return noteEntity
+    }
+
+    override suspend fun deleteNote(id: Int) {
+        noteDao.deleteNote(id)
+    }
 }

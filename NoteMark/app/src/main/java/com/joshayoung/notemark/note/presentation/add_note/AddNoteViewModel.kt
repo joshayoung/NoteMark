@@ -24,27 +24,19 @@ class AddNoteViewModel (
     private var currentNote: Note? = null
 
     init {
-        savedStateHandle.get<String>("noteId")?.let { id ->
-            if (id != "") {
-                viewModelScope.launch {
-                    // TODO: get this from local db:
-                    var notes = noteRepository.getNotes().notes?.let { notes ->
-                        currentNote = notes.find { n ->
-                            n.id == id
-                        }
+        savedStateHandle.get<Int>("noteId")?.let { id ->
+            viewModelScope.launch {
+                // TODO: get this from local db:
+                var currentNote = noteRepository.getNote(id)
 
-                        state = state.copy(
-                            noteTitle = TextFieldState(
-                                initialText = currentNote?.title ?: ""
-                            ),
-                            noteBody = TextFieldState(
-                                initialText = currentNote?.content ?: ""
-                            )
-                        )
-
-                        println("test")
-                    }
-                }
+                state = state.copy(
+                    noteTitle = TextFieldState(
+                        initialText = currentNote?.title ?: ""
+                    ),
+                    noteBody = TextFieldState(
+                        initialText = currentNote?.content ?: ""
+                    )
+                )
             }
         }
     }
@@ -61,7 +53,7 @@ class AddNoteViewModel (
                     }
 
                     val note = Note(
-                        id = UUID.randomUUID().toString(),
+                        remoteId = UUID.randomUUID().toString(),
                         title = state.noteTitle.text.toString(),
                         content = state.noteBody.text.toString(),
                         createdAt = getTimeStampForInsert()

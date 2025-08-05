@@ -8,4 +8,6 @@ import kotlinx.coroutines.flow.Flow
 interface LocalDataSource {
     fun getNotes(): Flow<List<Note>>
     suspend fun upsertNote(note: Note) : Result
+    suspend fun getNote(id: Int) : Note?
+    suspend fun deleteNote(id: Int)
 }

@@ -2,6 +2,7 @@ package com.joshayoung.notemark.note.presentation.note_landing
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,11 +15,17 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +33,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,21 +50,22 @@ import java.nio.file.WatchEvent
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
+
 @Composable
 fun NoteLandingScreenRoot(
     modifier: Modifier,
     viewModel: NoteLandingViewModel = koinViewModel(),
     onAddNoteClick: () -> Unit,
-    onNavigateToEdit: (id: String) -> Unit
+    onNavigateToEdit: (id: Int) -> Unit
 ) {
     NoteLandingScreen(
-        modifier = modifier,
+       modifier = modifier,
        state = viewModel.state.collectAsStateWithLifecycle().value,
-        onAction = { action ->
+       onAction = { action ->
             viewModel.onAction(action)
-        },
-        onAddNoteClick = onAddNoteClick,
-        onNavigateToEdit = onNavigateToEdit
+       },
+       onAddNoteClick = onAddNoteClick,
+       onNavigateToEdit = onNavigateToEdit
     )
 }
 
@@ -66,7 +75,7 @@ fun NoteLandingScreen(
     state: NoteLandingState,
     onAction: (NoteLandingAction) -> Unit,
     onAddNoteClick: () -> Unit,
-    onNavigateToEdit: (id: String) -> Unit
+    onNavigateToEdit: (id: Int) -> Unit
 ) {
     NoteMarkScaffold(
         topAppBar = {
@@ -175,18 +184,52 @@ fun NoteLandingScreen(
 fun NoteItem(
     note: NoteUi,
     onAction: (NoteLandingAction)-> Unit,
-    onNavigateToEdit: (id: String) -> Unit
+    onNavigateToEdit: (id: Int) -> Unit
     ) {
+    var showConfirmDeleteDialog by remember { mutableStateOf(false) }
+
+    if (showConfirmDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showConfirmDeleteDialog = false },
+            title = {
+                Text("Delete This Note?")
+            },
+            text = { Text(text = "If you delete this note is will be permanently removed!")},
+            confirmButton = {
+                TextButton(onClick = {
+                    showConfirmDeleteDialog = false
+                    note.id?.let{
+                        onAction(NoteLandingAction.OnDeleteClick(it))
+                    }
+                }) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showConfirmDeleteDialog = false
+                }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
     Column(
         modifier = Modifier
-            .padding(10.dp)
-            .clip(RoundedCornerShape(size = 20.dp))
-            .background(Color.White.copy(alpha = 0.8f))
-            .padding(20.dp)
             .clickable {
                 if (note.id != null) {
                     onNavigateToEdit(note.id)
                 }
+            }
+            .padding(10.dp)
+            .clip(RoundedCornerShape(size = 20.dp))
+            .background(Color.White.copy(alpha = 0.8f))
+            .padding(20.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(onLongPress = {
+                    showConfirmDeleteDialog = true
+                })
             }
     ) {
         Text(text = note.date,
@@ -204,11 +247,6 @@ fun NoteItem(
             maxLines = 4,
             overflow = TextOverflow.Ellipsis
         )
-        Button(onClick = {
-            note.id?.let { onAction(NoteLandingAction.OnDeleteClick(it)) }
-        }) {
-            Text("Delete")
-        }
     }
 }
 
@@ -221,19 +259,19 @@ fun NoteLandingScreenPreview() {
                 hasItems = true,
                 notes = listOf(
                     NoteUi(
-                        id = "1",
+                        id = 1,
                         title = "My First Note",
                         content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
                         createdAt = "2025-07-26T16:16:05Z"
                     ),
                     NoteUi(
-                        id = "2",
+                        id = 2,
                         title = "Second Note",
                         content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
                         createdAt = "2025-07-26T16:16:05Z"
                     ),
                     NoteUi(
-                        id = "3",
+                        id = 3,
                         title = "Another Note With",
                         content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
                         createdAt = "2025-07-26T16:16:05Z"
