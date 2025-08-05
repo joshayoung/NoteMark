@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -39,16 +40,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
-import com.joshayoung.notemark.note.domain.models.Note
-import com.joshayoung.notemark.note.domain.models.NotesData
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.PlusIcon
+import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.note.presentation.note_landing.model.NoteUi
 import org.koin.androidx.compose.koinViewModel
-import java.nio.file.WatchEvent
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 
 
 @Composable
@@ -94,12 +90,14 @@ fun NoteLandingScreen(
                 Box(modifier = Modifier
                     .size(40.dp)
                     .clip(RoundedCornerShape(size = 10.dp))
-                    .background(brush = Brush.radialGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primary,
-                            MaterialTheme.colorScheme.secondary
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primary,
+                                MaterialTheme.colorScheme.secondary
+                            )
                         )
-                    )),
+                    ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(text = state.userAbbreviation, modifier = Modifier,
@@ -141,7 +139,16 @@ fun NoteLandingScreen(
     ) { innerPadding ->
         Column(
             modifier = modifier
-                .background(Color.LightGray)
+                .background(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.surface,
+                            MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
+                        ),
+                        center = Offset(0.5f, 0.5f),
+                        radius = 9300f
+                    )
+                )
                 .padding(innerPadding)
                 .padding(10.dp)
                 .fillMaxSize()
