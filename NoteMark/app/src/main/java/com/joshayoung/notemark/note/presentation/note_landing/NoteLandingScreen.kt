@@ -2,6 +2,7 @@ package com.joshayoung.notemark.note.presentation.note_landing
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -199,9 +200,9 @@ fun NoteItem(
         AlertDialog(
             onDismissRequest = { showConfirmDeleteDialog = false },
             title = {
-                Text("Delete This Note?")
+                Text("Delete Note?")
             },
-            text = { Text(text = "If you delete this note is will be permanently removed!")},
+            text = { Text(text = "Are you sure you want to delete this note? This action cannot be undone.")},
             confirmButton = {
                 TextButton(onClick = {
                     showConfirmDeleteDialog = false
@@ -224,20 +225,20 @@ fun NoteItem(
 
     Column(
         modifier = Modifier
-            .clickable {
-                if (note.id != null) {
-                    onNavigateToEdit(note.id)
-                }
-            }
             .padding(10.dp)
             .clip(RoundedCornerShape(size = 20.dp))
             .background(Color.White.copy(alpha = 0.8f))
-            .padding(20.dp)
-            .pointerInput(Unit) {
-                detectTapGestures(onLongPress = {
+            .combinedClickable(
+                onClick = {
+                    if (note.id != null) {
+                        onNavigateToEdit(note.id)
+                    }
+                },
+                onLongClick = {
                     showConfirmDeleteDialog = true
-                })
-            }
+                }
+            )
+            .padding(20.dp)
     ) {
         Text(text = note.date,
             modifier = Modifier
