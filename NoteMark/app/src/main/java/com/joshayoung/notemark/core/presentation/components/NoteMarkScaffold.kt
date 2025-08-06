@@ -13,7 +13,6 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 
-
 @Composable
 fun NoteMarkScaffold(
     topAppBar: @Composable () -> Unit = {},

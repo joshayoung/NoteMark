@@ -1,7 +1,6 @@
 package com.joshayoung.notemark
 
 import android.app.Application
-import com.joshayoung.notemark.appModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidContext

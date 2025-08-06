@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 
-
 @Composable
 fun NoteMarkButton(
     text: String,

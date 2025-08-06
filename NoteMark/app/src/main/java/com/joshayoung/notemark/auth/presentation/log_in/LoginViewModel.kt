@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.core.data.DataStorageImpl
 import com.joshayoung.notemark.core.domain.util.Result
-import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -21,8 +20,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
-    private val validateEmail: ValidateEmail,
-    private val dataStorageImpl: DataStorageImpl
+    private val validateEmail: ValidateEmail
 ) : ViewModel() {
     var state by mutableStateOf(LoginState())
         private set

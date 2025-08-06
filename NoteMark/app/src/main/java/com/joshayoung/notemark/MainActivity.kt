@@ -3,15 +3,11 @@ package com.joshayoung.notemark
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
-import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -19,14 +15,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.joshayoung.notemark.core.presentation.ObserveAsEvents
-import com.joshayoung.notemark.note.presentation.start.GettingStartedScreen
-import com.joshayoung.notemark.note.presentation.add_note.AddNoteScreenRoot
 import com.joshayoung.notemark.auth.presentation.log_in.LoginScreenRoot
-import com.joshayoung.notemark.note.presentation.note_landing.NoteLandingScreenRoot
 import com.joshayoung.notemark.auth.presentation.registration.RegistrationScreenRoot
 import com.joshayoung.notemark.core.Screen
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.presentation.ObserveAsEvents
+import com.joshayoung.notemark.note.presentation.add_note.AddNoteScreenRoot
+import com.joshayoung.notemark.note.presentation.note_landing.NoteLandingScreenRoot
+import com.joshayoung.notemark.note.presentation.start.GettingStartedScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
