@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.core.domain.util.Result
+import com.joshayoung.notemark.core.utils.textAsFlow
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
 import com.joshayoung.notemark.note.domain.use_cases.ValidatePassword
 import com.joshayoung.notemark.note.domain.use_cases.ValidateUsername
@@ -88,8 +89,6 @@ class RegistrationViewModel(
             )
         }.launchIn(viewModelScope)
     }
-
-    fun TextFieldState.textAsFlow() : Flow<CharSequence> = snapshotFlow { text }
 
     fun onAction(action: RegistrationAction) {
         when(action) {

@@ -42,7 +42,6 @@ fun RegistrationScreenRoot(
     onAlreadyAccountClick: () -> Unit,
     viewModel: RegistrationViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     var errorMessage by remember { mutableStateOf<List<String?>?>(null) }
 
