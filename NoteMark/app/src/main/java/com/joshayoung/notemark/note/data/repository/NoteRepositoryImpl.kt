@@ -36,23 +36,21 @@ class NoteRepositoryImpl (
     override suspend fun createNote(note: Note): EmptyDataResult<DataError> {
         val localResult = localDataSource.upsertNote(note)
 
-        return if (localResult is Result.Success) {
-    //        return applicationScope.async {
-    //            val noteSave = remoteDataSource.saveNote(note)
-    //
-    //            // TODO: Handle the failure:
-    //            if (!noteSave.success) {
-    //                return@async return@async Result(success = false)
-    //            }
-    //
-    //            return@async Result(success = true)
-    //        }.await()
-            Result.Success(Unit)
-        } else {
-            localResult.asEmptyDataResult()
+        // TODO: Is this right?
+        if (localResult is Result.Success)
+        {
+            applicationScope.async {
+                val noteSave = remoteDataSource.saveNote(note)
+                if (noteSave is Result.Success)
+                {
+                    return@async Result.Success(Unit)
+                }
+            }
         }
+
+        return localResult.asEmptyDataResult()
     }
-//
+
     override suspend fun updateNote(note: Note?, title: String, body: String): EmptyResult<DataError> {
         val updatedNote = Note(
             id = note?.id,
@@ -67,56 +65,16 @@ class NoteRepositoryImpl (
         } else {
             return result.asEmptyDataResult();
         }
-
-//    val response : HttpResponse =
-//        client.put {
-//            url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
-//            setBody(updatedNote)
-//        }
-//
-//        return Result.Success(data = Unit)
-//
-//        return when (response.status) {
-//            HttpStatusCode.OK -> {
-//                Result(success = true)
-//            }
-//            else -> {
-//                val responseText = response.bodyAsText()
-//                val jsonObject = Json.decodeFromString<Error>(responseText)
-//                // TODO: Make this more robust:
-//                Result(success = false, error = jsonObject)
-//            }
-//        }
     }
-//
+
     override suspend fun getNotes(): Flow<List<Note>> {
         return localDataSource.getNotes()
     }
-//
+
     override suspend fun deleteNote(id: Int) {
         localDataSource.deleteNote(id)
     }
-//
-////        println("test")
-////        val url = BuildConfig.BASE_URL + BuildConfig.NOTE_PATH + "/" + id
-////        val response = client.delete {
-////            url(url)
-//////            parameter("id", id)
-////        }
-////        when (response.status) {
-////            HttpStatusCode.OK -> {
-////                val responseText = response.bodyAsText()
-//////                val jsonObject = Json.decodeFromString<Notes>(responseText)
-////                return Result(success = true)
-////            }
-////            else -> {
-////                val responseText = response.bodyAsText()
-////                val jsonObject = Json.decodeFromString<Error>(responseText)
-////                return Result(success = false)
-////            }
-////        }
-//    }
-//
+
     override suspend fun getNote(id: Int) : Note? {
         return localDataSource.getNote(id)
     }
