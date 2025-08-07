@@ -1,6 +1,5 @@
 package com.joshayoung.notemark.note.presentation.add_note
 
-import android.util.Log
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.core.utils.getTimeStampForInsert
 import com.joshayoung.notemark.core.utils.textAsFlow
-import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.combine
@@ -26,35 +24,39 @@ class AddNoteViewModel (
         private set
 
     private var currentNote: Note? = null
+    private var initialTitle : String = ""
+    private var initialBody : String = ""
 
     init {
-        var title = state.noteTitle
-        var content = state.noteBody
-        savedStateHandle.get<Int>("noteId")?.let { id ->
-            if (id != -1) {
-
-                viewModelScope.launch {
-                    currentNote = noteRepository.getNote(id)
-
+        viewModelScope.launch {
+            savedStateHandle.get<Int>("noteId")?.let { id ->
+                if (id != -1) {
                     state = state.copy(
-                        noteTitle = TextFieldState(
-                            initialText = currentNote?.title ?: ""
-                        ),
-                        noteBody = TextFieldState(
-                            initialText = currentNote?.content ?: ""
-                        ),
-                        isEdit = true
+                        inEditMode = true
                     )
-                    title = state.noteTitle
-                    content = state.noteBody
+                    currentNote = noteRepository.getNote(id)
+                    initialTitle = currentNote?.title ?: ""
+                    initialBody = currentNote?.content ?: ""
                 }
             }
+
+            state = state.copy(
+                noteTitle = TextFieldState(
+                    initialText = initialTitle
+                ),
+                noteBody = TextFieldState(
+                    initialText = initialBody
+                )
+            )
+
+            combine(state.noteTitle.textAsFlow(), state.noteBody.textAsFlow()) { title, body ->
+                if (title != initialTitle || body != initialBody) {
+                    state = state.copy(
+                        hasChangeInitialContent = true
+                    )
+                }
+            }.launchIn(viewModelScope)
         }
-        combine(title.textAsFlow(), content.textAsFlow()) { title, body ->
-            if (title != "" || body != "") {
-                Log.d("combining flow", "Collecting")
-            }
-        }.launchIn(viewModelScope)
     }
 
     fun onAction(action: AddNoteAction) {

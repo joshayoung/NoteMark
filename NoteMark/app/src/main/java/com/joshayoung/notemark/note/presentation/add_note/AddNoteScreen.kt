@@ -30,18 +30,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.room.util.TableInfo
 import com.joshayoung.notemark.core.design.theme.CloseIcon
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.presentation.components.NoteMarkTextField
 import org.koin.androidx.compose.koinViewModel
-import java.nio.file.WatchEvent
 
 
 @Composable
@@ -77,7 +73,7 @@ fun AddNoteScreen(
 ) {
     var showNonSavePrompt by remember { mutableStateOf(false) }
 
-    if (showNonSavePrompt) {
+    if (showNonSavePrompt && state.hasChangeInitialContent) {
         AlertDialog(
             onDismissRequest = {
                 showNonSavePrompt = false
@@ -87,6 +83,7 @@ fun AddNoteScreen(
             confirmButton = {
                 Button(onClick = {
                     showNonSavePrompt = false
+                    navigateBack()
                 }) {
                     Text("Discard")
                 }
@@ -114,9 +111,11 @@ fun AddNoteScreen(
             ) {
                 Icon(imageVector = CloseIcon, contentDescription = null, modifier = Modifier
                     .clickable {
-                        showNonSavePrompt = true
-//                        onAction(AddNoteAction.OnCloseClick)
-//                        navigateBack()
+                        if (state.hasChangeInitialContent) {
+                            showNonSavePrompt = true
+                        } else {
+                        navigateBack()
+                        }
                     },
                 )
                 Button(
@@ -183,12 +182,12 @@ fun NoteTextFieldMultiline(
     }
 
     Column() {
-        NoteMarkTextField(
-            state = state,
-            hint = "test",
-            helperText = "test",
-            label ="test",
-            keyboardType = KeyboardType.Text)
+//        NoteMarkTextField(
+//            state = state,
+//            hint = "test",
+//            helperText = "test",
+//            label ="test",
+//            keyboardType = KeyboardType.Text)
         BasicTextField(
             state = state,
             textStyle = LocalTextStyle.current.copy(
