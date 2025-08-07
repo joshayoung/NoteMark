@@ -5,6 +5,7 @@
 * You can use 'Image Asset Studio' inside of Android Studio to create all of the app icons you need.
   * I just used my splash image as a starting point. 
     * See notes on creating the splash image [here](https://github.com/joshayoung/android-kotlin-app-training/blob/main/README.md)
+* **If you want the top bar of the app to display correctly, `enableEdgeToEdge()` needs to be called below the splash screen code in your `MainActivity`!**
 
 ### Add Test
 * Select class name and press `ALT` + `ENTER`.
