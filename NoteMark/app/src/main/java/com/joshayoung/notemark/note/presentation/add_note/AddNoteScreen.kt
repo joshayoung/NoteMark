@@ -1,5 +1,7 @@
 package com.joshayoung.notemark.note.presentation.add_note
 
+import android.R
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +10,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -29,10 +33,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.google.devtools.ksp.symbol.impl.modifierMap
 import com.joshayoung.notemark.core.design.theme.CloseIcon
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
@@ -110,6 +119,7 @@ fun AddNoteScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(imageVector = CloseIcon, contentDescription = null, modifier = Modifier
+                    .size(26.dp)
                     .clickable {
                         if (state.hasChangeInitialContent) {
                             showNonSavePrompt = true
@@ -117,14 +127,20 @@ fun AddNoteScreen(
                         navigateBack()
                         }
                     },
+                    tint = MaterialTheme.colorScheme.primary
                 )
-                Button(
-                    onClick = {
+                Text(
+                    "Save Note".uppercase()
+                    , modifier = Modifier
+                        .padding(end = 10.dp)
+                    .clickable {
                         onAction(AddNoteAction.OnSaveClick)
-                    }
-                ) {
-                    Text("Save Note")
-                }
+                    },
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.titleSmall
+
+                )
             }
         }
     ) { innerPadding ->
@@ -150,6 +166,10 @@ fun NoteTextFieldSingleLine(
     Column {
         BasicTextField(
             state = state,
+            textStyle = TextStyle(
+                fontSize = 40.sp,
+                color = MaterialTheme.colorScheme.primary
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged {
@@ -159,18 +179,42 @@ fun NoteTextFieldSingleLine(
             decorator = { innerBox ->
                 Box() {
                     if (state.text.isEmpty() && !isFocused) {
-                        Text(text = "Note Title")
+                        Text(text = "Note Title", modifier = Modifier
+                            ,fontSize = 40.sp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
                     }
                     innerBox()
                 }
             }
         )
     }
-    HorizontalDivider(
-        modifier = Modifier
-            .fillMaxWidth(),
-        color = MaterialTheme.colorScheme.onSurface
-    )
+    DashedDivider(MaterialTheme.colorScheme.primary)
+}
+
+@Composable
+fun DashedDivider(color: Color) {
+    Canvas(modifier = Modifier
+        .fillMaxWidth()
+        .height(1.dp)) {
+        val width = size.width
+        val y = size.height / 2
+
+        val dashLength = 18f
+        val gapLength = 9f
+        val thickness = 2f
+
+        var x = 0f
+        while (x < width) {
+            drawLine(
+                start = Offset(x, y),
+                color = color,
+                end = Offset(x + dashLength, y),
+                strokeWidth = thickness
+            )
+            x += dashLength + gapLength
+        }
+    }
 }
 
 @Composable
@@ -218,8 +262,8 @@ fun NoteTextFieldMultiline(
                 .onFocusChanged {
                     isFocused = it.isFocused
                 }
+                .padding(20.dp)
                 .clip(RoundedCornerShape(4.dp))
-                .padding(12.dp)
         )
     }
 }
