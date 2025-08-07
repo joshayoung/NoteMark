@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -58,6 +59,8 @@ fun AddNoteScreenRoot(
                 AddNoteAction.OnSaveClick -> {
                     redirectBack()
                 }
+
+                AddNoteAction.OnCloseClick -> TODO()
             }
             viewModel.onAction(action)
         },
@@ -72,6 +75,32 @@ fun AddNoteScreen(
     onAction: (AddNoteAction)-> Unit,
     navigateBack: () -> Unit
 ) {
+    var showNonSavePrompt by remember { mutableStateOf(false) }
+
+    if (showNonSavePrompt) {
+        AlertDialog(
+            onDismissRequest = {
+                showNonSavePrompt = false
+            },
+            title = { Text("Discard Changes?") },
+            text = { Text("You have unsaved changes. If you discard now, all changes will be lost.") },
+            confirmButton = {
+                Button(onClick = {
+                    showNonSavePrompt = false
+                }) {
+                    Text("Discard")
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    showNonSavePrompt = false
+                }) {
+                    Text("Keep Editing")
+                }
+            }
+        )
+    }
+
     NoteMarkScaffold(
         topAppBar = {
             Row(
@@ -85,7 +114,9 @@ fun AddNoteScreen(
             ) {
                 Icon(imageVector = CloseIcon, contentDescription = null, modifier = Modifier
                     .clickable {
-                        navigateBack()
+                        showNonSavePrompt = true
+//                        onAction(AddNoteAction.OnCloseClick)
+//                        navigateBack()
                     },
                 )
                 Button(

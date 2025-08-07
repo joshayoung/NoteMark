@@ -32,6 +32,7 @@ class AddNoteViewModel (
         var content = state.noteBody
         savedStateHandle.get<Int>("noteId")?.let { id ->
             if (id != -1) {
+
                 viewModelScope.launch {
                     currentNote = noteRepository.getNote(id)
 
@@ -41,7 +42,8 @@ class AddNoteViewModel (
                         ),
                         noteBody = TextFieldState(
                             initialText = currentNote?.content ?: ""
-                        )
+                        ),
+                        isEdit = true
                     )
                     title = state.noteTitle
                     content = state.noteBody
@@ -75,6 +77,10 @@ class AddNoteViewModel (
 
                     noteRepository.createNote(note)
                 }
+            }
+
+            AddNoteAction.OnCloseClick -> {
+
             }
         }
     }

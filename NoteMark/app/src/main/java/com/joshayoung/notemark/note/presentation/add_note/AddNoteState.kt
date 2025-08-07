@@ -4,5 +4,6 @@ import androidx.compose.foundation.text.input.TextFieldState
 
 data class AddNoteState(
     val noteTitle: TextFieldState = TextFieldState(),
-    val noteBody: TextFieldState = TextFieldState()
+    val noteBody: TextFieldState = TextFieldState(),
+    val isEdit: Boolean = false
 )
