@@ -12,5 +12,5 @@ internal fun isNotInAuthGraph(backStack: NavBackStackEntry) : Boolean
 {
     val route = backStack.destination.route
 
-    return Screen.authRoutes.contains(route)
+    return !Screen.authRoutes.contains(route)
 }
