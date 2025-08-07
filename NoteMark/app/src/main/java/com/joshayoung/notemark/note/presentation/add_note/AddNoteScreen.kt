@@ -25,6 +25,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +33,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -47,6 +50,7 @@ import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.presentation.components.NoteMarkTextField
 import org.koin.androidx.compose.koinViewModel
+
 
 
 @Composable
@@ -162,6 +166,10 @@ fun NoteTextFieldSingleLine(
     var isFocused by remember {
         mutableStateOf(false)
     }
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(Unit)  {
+        focusRequester.requestFocus()
+    }
 
     Column {
         BasicTextField(
@@ -175,6 +183,7 @@ fun NoteTextFieldSingleLine(
                 .onFocusChanged {
                     isFocused = it.isFocused
                 }
+                .focusRequester(focusRequester)
                 .padding(20.dp),
             decorator = { innerBox ->
                 Box() {
