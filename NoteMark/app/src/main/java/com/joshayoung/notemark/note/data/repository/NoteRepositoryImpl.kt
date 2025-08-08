@@ -66,20 +66,29 @@ class NoteRepositoryImpl (
     }
 
     override suspend fun updateNote(note: Note?, title: String, body: String): EmptyResult<DataError> {
-        val updatedNote = Note(
+        val localNoteForUpdate = Note(
             id = note?.id,
             title = title,
             content = body,
             createdAt = note!!.createdAt,
             remoteId = note.remoteId
         )
-        val result = localDataSource.upsertNote(updatedNote)
+        val result = localDataSource.upsertNote(localNoteForUpdate)
 
-        if (result is Result.Success) {
+        if (result is Result.Success)
+        {
+            applicationScope.async {
+                val remoteUpdate = remoteDataSource.updateNote(localNoteForUpdate)
+                if (remoteUpdate is Result.Success) {
+
+                    return@async Result.Success(Unit)
+                }
+            }.await()
+
             return Result.Success(Unit)
-        } else {
-            return result.asEmptyDataResult();
         }
+
+        return result.asEmptyDataResult();
     }
 
     override suspend fun getNotes(): Flow<List<Note>> {

@@ -22,7 +22,7 @@ fun NoteEntity.toNote() : Note {
         content = content,
         createdAt = createdAt,
         lastEditedAt = lastEditedAt,
-        remoteId = ""
+        remoteId = remoteId
     )
 }
 
