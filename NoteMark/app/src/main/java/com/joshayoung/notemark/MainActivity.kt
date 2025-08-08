@@ -29,6 +29,7 @@ import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.note.presentation.add_note.AddNoteScreenRoot
 import com.joshayoung.notemark.note.presentation.note_landing.NoteLandingScreenRoot
+import com.joshayoung.notemark.note.presentation.settings.SettingsScreenRoot
 import com.joshayoung.notemark.note.presentation.start.GettingStartedScreen
 import kotlinx.coroutines.flow.combine
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -68,6 +69,9 @@ class MainActivity : ComponentActivity() {
                 onAddNoteClick = {
                     navController.navigate(Screen.AddNote.route)
                 },
+                onSettingsClick = {
+                    navController.navigate(Screen.Settings.route)
+                },
                 onNavigateToEdit = { id ->
                     navController.navigate(
                         Screen.AddNote.route + "?noteId=${id}"
@@ -90,6 +94,17 @@ class MainActivity : ComponentActivity() {
                 redirectBack = {
                     navController.navigateUp()
                 },
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable(
+            Screen.Settings.route
+        ) {
+            SettingsScreenRoot(
+                modifier = modifier,
                 navigateBack = {
                     navController.navigateUp()
                 }

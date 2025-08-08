@@ -30,6 +30,7 @@ import com.joshayoung.notemark.note.domain.use_cases.ValidateUsername
 import com.joshayoung.notemark.note.network.RemoteDataSource
 import com.joshayoung.notemark.note.presentation.add_note.AddNoteViewModel
 import com.joshayoung.notemark.note.presentation.note_landing.NoteLandingViewModel
+import com.joshayoung.notemark.note.presentation.settings.SettingsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -65,6 +66,7 @@ var appModule = module {
 
     viewModelOf(::NoteLandingViewModel)
     viewModelOf(::AddNoteViewModel)
+    viewModelOf(::SettingsViewModel)
 
     single {
         Room.databaseBuilder(

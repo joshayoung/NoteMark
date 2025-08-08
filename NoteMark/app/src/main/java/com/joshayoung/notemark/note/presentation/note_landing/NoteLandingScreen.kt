@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -41,8 +42,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.joshayoung.notemark.core.design.theme.EyeClosedIcon
+import com.joshayoung.notemark.core.design.theme.EyeIcon
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.PlusIcon
+import com.joshayoung.notemark.core.design.theme.SettingsIcon
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.note.presentation.note_landing.model.NoteUi
 import org.koin.androidx.compose.koinViewModel
@@ -53,6 +57,7 @@ fun NoteLandingScreenRoot(
     modifier: Modifier,
     viewModel: NoteLandingViewModel = koinViewModel(),
     onAddNoteClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     onNavigateToEdit: (id: Int) -> Unit
 ) {
     NoteLandingScreen(
@@ -62,7 +67,8 @@ fun NoteLandingScreenRoot(
             viewModel.onAction(action)
        },
        onAddNoteClick = onAddNoteClick,
-       onNavigateToEdit = onNavigateToEdit
+       onNavigateToEdit = onNavigateToEdit,
+       onSettingsClick = onSettingsClick
     )
 }
 
@@ -72,6 +78,7 @@ fun NoteLandingScreen(
     state: NoteLandingState,
     onAction: (NoteLandingAction) -> Unit,
     onAddNoteClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     onNavigateToEdit: (id: Int) -> Unit
 ) {
     NoteMarkScaffold(
@@ -85,26 +92,44 @@ fun NoteLandingScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("NoteMark", modifier = Modifier,
+                Text(
+                    "NoteMark", modifier = Modifier,
                     fontWeight = FontWeight.Bold
                 )
-                Box(modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(size = 10.dp))
-                    .background(
-                        brush = Brush.radialGradient(
-                            colors = listOf(
-                                MaterialTheme.colorScheme.primary,
-                                MaterialTheme.colorScheme.secondary
+
+                Row() {
+                IconButton(
+                    onClick = {
+                        onSettingsClick()
+                    }) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(end = 10.dp),
+                        imageVector = SettingsIcon,
+                        contentDescription = null
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(size = 10.dp))
+                        .background(
+                            brush = Brush.radialGradient(
+                                colors = listOf(
+                                    MaterialTheme.colorScheme.primary,
+                                    MaterialTheme.colorScheme.secondary
+                                )
                             )
-                        )
-                    ),
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = state.userAbbreviation, modifier = Modifier,
+                    Text(
+                        text = state.userAbbreviation, modifier = Modifier,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
+            }
             }
         },
         floatingActionButton = {
@@ -264,6 +289,7 @@ fun NoteLandingScreenPreview() {
     NoteMarkTheme {
         NoteLandingScreen(
             state = NoteLandingState(
+                userAbbreviation = "NM",
                 hasItems = true,
                 notes = listOf(
                     NoteUi(
@@ -292,7 +318,8 @@ fun NoteLandingScreenPreview() {
             onAction = {},
             onAddNoteClick = {},
             onNavigateToEdit = {},
-            modifier = Modifier
+            modifier = Modifier,
+            onSettingsClick = {}
         )
     }
 }

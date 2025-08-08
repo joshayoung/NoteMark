@@ -1,0 +1,5 @@
+package com.joshayoung.notemark.note.presentation.settings
+
+sealed interface SettingsAction {
+
+}
