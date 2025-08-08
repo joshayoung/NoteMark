@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import java.util.UUID
+import kotlin.toString
 
 class AddNoteViewModel (
     val noteRepository: NoteRepository,
@@ -70,14 +71,10 @@ class AddNoteViewModel (
                         return@launch
                     }
 
-                    val note = Note(
-                        remoteId = UUID.randomUUID().toString(),
+                    noteRepository.createNote(
                         title = state.noteTitle.text.toString(),
-                        content = state.noteBody.text.toString(),
-                        createdAt = getTimeStampForInsert()
+                        body = state.noteBody.text.toString()
                     )
-
-                    noteRepository.createNote(note)
                 }
             }
 

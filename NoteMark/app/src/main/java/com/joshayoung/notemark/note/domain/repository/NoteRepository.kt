@@ -7,7 +7,7 @@ import com.joshayoung.notemark.note.domain.models.Note
 import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
-    suspend fun createNote(note: Note): EmptyDataResult<DataError>
+    suspend fun createNote(title: String, body: String): EmptyDataResult<DataError>
     suspend fun updateNote(note: Note?, title: String, body: String): EmptyResult<DataError>
     suspend fun getNotes(): Flow<List<Note>>
     suspend fun deleteNote(id: Int)

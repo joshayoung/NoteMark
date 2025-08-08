@@ -2,13 +2,11 @@ package com.joshayoung.notemark.note.data.network
 
 import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.core.data.networking.catchErrors
-import com.joshayoung.notemark.core.domain.models.Error
 import com.joshayoung.notemark.core.domain.util.DataError
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.domain.util.map
 import com.joshayoung.notemark.note.data.mappers.toNoteDto
 import com.joshayoung.notemark.note.domain.models.Note
-import com.joshayoung.notemark.note.domain.models.NotesData
 import com.joshayoung.notemark.note.network.NoteDto
 import com.joshayoung.notemark.note.network.RemoteDataSource
 import com.joshayoung.notemark.note.network.toNote
@@ -17,9 +15,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.HttpStatusCode
-import kotlinx.serialization.json.Json
 
 
 class KtorRemoteDataSource(

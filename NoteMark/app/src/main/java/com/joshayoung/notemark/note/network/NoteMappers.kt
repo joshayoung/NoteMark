@@ -4,7 +4,7 @@ import com.joshayoung.notemark.note.domain.models.Note
 
 fun NoteDto.toNote(): Note {
     return Note(
-        id = id,
+        remoteId = id,
         title = title,
         content = content,
         createdAt = createdAt,

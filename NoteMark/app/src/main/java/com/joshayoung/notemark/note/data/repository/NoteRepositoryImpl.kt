@@ -7,6 +7,8 @@ import com.joshayoung.notemark.core.domain.util.EmptyDataResult
 import com.joshayoung.notemark.core.domain.util.EmptyResult
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.domain.util.asEmptyDataResult
+import com.joshayoung.notemark.core.utils.getTimeStampForInsert
+import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.models.Note
@@ -25,6 +27,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMap
 import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.json.Json
+import java.util.UUID
 
 
 class NoteRepositoryImpl (
@@ -33,7 +36,14 @@ class NoteRepositoryImpl (
     private val applicationScope: CoroutineScope,
     private val remoteDataSource: KtorRemoteDataSource
 ) : NoteRepository {
-    override suspend fun createNote(note: Note): EmptyDataResult<DataError> {
+    override suspend fun createNote(title: String, body: String): EmptyDataResult<DataError> {
+        val remoteId = UUID.randomUUID().toString()
+        val note = Note(
+            remoteId = remoteId,
+            title = title,
+            content = body,
+            createdAt = getTimeStampForInsert()
+        )
         val localResult = localDataSource.upsertNote(note)
 
         // TODO: Is this right?
@@ -43,9 +53,13 @@ class NoteRepositoryImpl (
                 val noteSave = remoteDataSource.saveNote(note)
                 if (noteSave is Result.Success)
                 {
+
+                    // left off: Update local note with remote ID
+
+
                     return@async Result.Success(Unit)
                 }
-            }
+            }.await()
         }
 
         return localResult.asEmptyDataResult()
@@ -56,7 +70,8 @@ class NoteRepositoryImpl (
             id = note?.id,
             title = title,
             content = body,
-            createdAt = note!!.createdAt
+            createdAt = note!!.createdAt,
+            remoteId = note.remoteId
         )
         val result = localDataSource.upsertNote(updatedNote)
 

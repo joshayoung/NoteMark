@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class NoteEntity(
     @PrimaryKey val id: Int? = null,
 
+    val remoteId: String,
     val content: String,
     val createdAt: String,
     val lastEditedAt: String? = null,

@@ -10,7 +10,8 @@ fun Note.toNoteEntity() : NoteEntity {
         title = title,
         content = content,
         createdAt = createdAt,
-        lastEditedAt = lastEditedAt
+        lastEditedAt = lastEditedAt,
+        remoteId = remoteId
     )
 }
 
@@ -20,13 +21,14 @@ fun NoteEntity.toNote() : Note {
         title = title,
         content = content,
         createdAt = createdAt,
-        lastEditedAt = lastEditedAt
+        lastEditedAt = lastEditedAt,
+        remoteId = ""
     )
 }
 
 fun Note.toNoteDto() : NoteDto {
     return NoteDto(
-        id  = id,
+        id  = remoteId,
         title = title,
         content = content,
         createdAt = createdAt,
