@@ -6,6 +6,7 @@ import com.joshayoung.notemark.note.presentation.note_landing.model.NoteUi
 fun Note.toNoteUi() : NoteUi {
     return NoteUi(
         id = id,
+        remoteId = remoteId,
         title = title,
         content = content,
         createdAt = createdAt,

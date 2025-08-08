@@ -10,6 +10,6 @@ interface NoteRepository {
     suspend fun createNote(title: String, body: String): EmptyDataResult<DataError>
     suspend fun updateNote(note: Note?, title: String, body: String): EmptyResult<DataError>
     suspend fun getNotes(): Flow<List<Note>>
-    suspend fun deleteNote(id: Int)
     suspend fun getNote(id: Int) : Note?
+    suspend fun deleteNote(note: Note) : EmptyResult<DataError>
 }

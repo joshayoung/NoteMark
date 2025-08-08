@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.presentation.note_landing.mappers.toNoteUi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -64,7 +65,7 @@ class NoteLandingViewModel(
             is NoteLandingAction.OnDeleteClick -> {
                 viewModelScope.launch {
                     noteRepository.deleteNote(
-                        id = action.id
+                        note = action.noteUi.toNote()
                     )
                     loadData()
                 }

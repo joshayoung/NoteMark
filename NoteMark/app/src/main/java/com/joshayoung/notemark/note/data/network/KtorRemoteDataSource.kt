@@ -1,5 +1,6 @@
 package com.joshayoung.notemark.note.data.network
 
+import androidx.room.util.query
 import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.core.data.networking.catchErrors
 import com.joshayoung.notemark.core.domain.util.DataError
@@ -13,6 +14,7 @@ import com.joshayoung.notemark.note.network.NoteDto
 import com.joshayoung.notemark.note.network.RemoteDataSource
 import com.joshayoung.notemark.note.network.toNote
 import io.ktor.client.HttpClient
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.put
@@ -55,6 +57,16 @@ class KtorRemoteDataSource(
             client.put {
                 url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
                 setBody(noteDto)
+            }
+        }
+
+        return response.asEmptyDataResult()
+    }
+
+    override suspend fun deleteNote(id: String): EmptyDataResult<DataError.Network> {
+        val response = catchErrors<Unit> {
+            client.delete {
+                url("${BuildConfig.BASE_URL}${BuildConfig.NOTE_PATH}/${id}")
             }
         }
 

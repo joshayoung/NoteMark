@@ -9,4 +9,5 @@ interface RemoteDataSource {
      suspend fun saveNote(note: Note): Result<Note, DataError.Network>
     suspend fun getNotes(): Result<List<Note>, DataError.Network>
     suspend fun updateNote(note: Note): EmptyDataResult<DataError.Network>
+    suspend fun deleteNote(id: String) : EmptyDataResult<DataError.Network>
 }

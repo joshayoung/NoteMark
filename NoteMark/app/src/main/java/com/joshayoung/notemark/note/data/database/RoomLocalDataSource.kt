@@ -45,7 +45,9 @@ class RoomLocalDataSource(
         return noteEntity
     }
 //
-    override suspend fun deleteNote(id: Int) {
-        noteDao.deleteNote(id)
+    override suspend fun deleteNote(id: Int) : Boolean {
+        val rows = noteDao.deleteNote(id)
+
+        return rows == 1
     }
 }

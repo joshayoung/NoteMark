@@ -3,6 +3,7 @@ package com.joshayoung.notemark.note.data.mappers
 import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.network.NoteDto
+import com.joshayoung.notemark.note.presentation.note_landing.model.NoteUi
 
 fun Note.toNoteEntity() : NoteEntity {
     return NoteEntity(
@@ -33,5 +34,16 @@ fun Note.toNoteDto() : NoteDto {
         content = content,
         createdAt = createdAt,
         lastEditedAt = lastEditedAt
+    )
+}
+
+fun NoteUi.toNote() : Note {
+    return Note(
+        id  = id,
+        title = title,
+        content = content,
+        createdAt = createdAt,
+        lastEditedAt = lastEditedAt,
+        remoteId = remoteId
     )
 }

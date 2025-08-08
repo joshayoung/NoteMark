@@ -95,8 +95,23 @@ class NoteRepositoryImpl (
         return localDataSource.getNotes()
     }
 
-    override suspend fun deleteNote(id: Int) {
-        localDataSource.deleteNote(id)
+    override suspend fun deleteNote(note: Note) : EmptyResult<DataError> {
+        if (note.id == null)
+        {
+            return Result.Error(error = DataError.Network.UNKNOWN)
+        }
+
+        val result = localDataSource.deleteNote(note.id)
+        if (result) {
+            applicationScope.async {
+                val remoteDelete = remoteDataSource.deleteNote(note.remoteId)
+                if (remoteDelete is Result.Success) {
+                    return@async Result.Success(Unit)
+                }
+            }.await()
+        }
+
+        return Result.Success(Unit)
     }
 
     override suspend fun getNote(id: Int) : Note? {

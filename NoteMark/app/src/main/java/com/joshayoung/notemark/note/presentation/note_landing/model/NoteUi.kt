@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter
 
 data class NoteUi(
     val id: Int? = null,
+    val remoteId: String,
     val title: String,
     val content: String,
     val createdAt: String,

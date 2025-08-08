@@ -11,5 +11,5 @@ interface LocalDataSource {
     fun getNotes(): Flow<List<Note>>
      suspend fun upsertNote(note: Note): Result<Int?, DataError.Local>
     suspend fun getNote(id: Int) : Note?
-    suspend fun deleteNote(id: Int)
+    suspend fun deleteNote(id: Int) : Boolean
 }
