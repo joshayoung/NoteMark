@@ -13,6 +13,9 @@
 
 ### To Do
 * Test refresh logic once you start getting notes
+* Add linting
+* Set notes to auto-save
+* Add back link for detail page
 
 ### NoteMark Resources
 * https://jwt.io/
