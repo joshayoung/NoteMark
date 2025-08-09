@@ -22,7 +22,7 @@ sealed interface Destination {
     data object NoteList: Destination
 
     @Serializable
-    data object AddNote: Destination
+    data class AddNote(val id: Int?): Destination
 
     @Serializable
     data object Settings: Destination

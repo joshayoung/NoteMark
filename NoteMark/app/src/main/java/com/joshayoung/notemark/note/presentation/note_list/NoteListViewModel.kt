@@ -2,8 +2,12 @@ package com.joshayoung.notemark.note.presentation.note_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.navArgument
+import androidx.navigation.navOptions
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.core.navigation.Destination
+import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.presentation.note_list.mappers.toNoteUi
@@ -19,7 +23,8 @@ import kotlinx.coroutines.launch
 class NoteListViewModel(
     private val noteRepository: NoteRepository,
     private val dataStorage: DataStorage,
-    private val localDataSource: LocalDataSource
+    private val localDataSource: LocalDataSource,
+    private val navigator: Navigator
 ) : ViewModel() {
 
     private var _state = MutableStateFlow(NoteListState(notes = emptyList()))
@@ -62,6 +67,25 @@ class NoteListViewModel(
                     noteRepository.deleteNote(
                         note = action.noteUi.toNote()
                     )
+                }
+            }
+
+            is NoteListAction.AddNoteClick -> {
+                viewModelScope.launch {
+                    navigator.navigate(Destination.AddNote(null))
+                }
+            }
+
+            is NoteListAction.GoToEdit -> {
+                viewModelScope.launch {
+                    navigator.navigate(
+                        Destination.AddNote(id = action.id)
+                    )
+                }
+            }
+            NoteListAction.OnSettingsClick -> {
+                viewModelScope.launch {
+                    navigator.navigate(Destination.Settings)
                 }
             }
         }

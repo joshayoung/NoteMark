@@ -48,20 +48,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun NoteListScreenRoot(
     modifier: Modifier,
-    viewModel: NoteListViewModel = koinViewModel(),
-    onAddNoteClick: () -> Unit,
-    onSettingsClick: () -> Unit,
-    onNavigateToEdit: (id: Int) -> Unit
+    viewModel: NoteListViewModel = koinViewModel()
 ) {
     NoteListScreen(
        modifier = modifier,
        state = viewModel.state.collectAsStateWithLifecycle().value,
        onAction = { action ->
             viewModel.onAction(action)
-       },
-       onAddNoteClick = onAddNoteClick,
-       onNavigateToEdit = onNavigateToEdit,
-       onSettingsClick = onSettingsClick
+       }
     )
 }
 
@@ -69,10 +63,7 @@ fun NoteListScreenRoot(
 fun NoteListScreen(
     modifier: Modifier,
     state: NoteListState,
-    onAction: (NoteListAction) -> Unit,
-    onAddNoteClick: () -> Unit,
-    onSettingsClick: () -> Unit,
-    onNavigateToEdit: (id: Int) -> Unit
+    onAction: (NoteListAction) -> Unit
 ) {
     NoteMarkScaffold(
         topAppBar = {
@@ -81,7 +72,9 @@ fun NoteListScreen(
                 hasBackButton = false,
                 hasActions = true,
                 userAbbreviation = state.userAbbreviation,
-                navigateToSettings = onSettingsClick
+                navigateToSettings = {
+                    onAction(NoteListAction.OnSettingsClick)
+                }
             )
         },
         floatingActionButton = {
@@ -90,7 +83,11 @@ fun NoteListScreen(
                     .clip(RoundedCornerShape(size = 26.dp))
                     .size(70.dp)
                     .shadow(10.dp)
-                    .clickable(onClick = onAddNoteClick)
+                    .clickable(onClick = {
+                        onAction(NoteListAction.AddNoteClick)
+                    }
+
+                    )
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
@@ -151,7 +148,9 @@ fun NoteListScreen(
                         NoteItem(
                             item,
                             onAction = onAction,
-                            onNavigateToEdit = onNavigateToEdit
+                            onNavigateToEdit = {
+                                onAction(NoteListAction.GoToEdit(item.id))
+                            }
                         )
                     }
                 }
@@ -263,10 +262,7 @@ fun NoteListScreenPreview() {
                 )
             ),
             onAction = {},
-            onAddNoteClick = {},
-            onNavigateToEdit = {},
-            modifier = Modifier,
-            onSettingsClick = {}
+            modifier = Modifier
         )
     }
 }

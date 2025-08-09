@@ -7,15 +7,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joshayoung.notemark.core.utils.getTimeStampForInsert
+import androidx.navigation.toRoute
+import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.utils.textAsFlow
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
-import java.util.UUID
-import kotlin.toString
 
 class AddNoteViewModel (
     val noteRepository: NoteRepository,
@@ -30,15 +29,15 @@ class AddNoteViewModel (
 
     init {
         viewModelScope.launch {
-            savedStateHandle.get<Int>("noteId")?.let { id ->
-                if (id != -1) {
-                    state = state.copy(
-                        inEditMode = true
-                    )
-                    currentNote = noteRepository.getNote(id)
-                    initialTitle = currentNote?.title ?: ""
-                    initialBody = currentNote?.content ?: ""
-                }
+            val n = savedStateHandle.toRoute<Destination.AddNote>()
+            val id = n.id
+            if (id != null) {
+                state = state.copy(
+                    inEditMode = true
+                )
+                currentNote = noteRepository.getNote(id)
+                initialTitle = currentNote?.title ?: ""
+                initialBody = currentNote?.content ?: ""
             }
 
             state = state.copy(

@@ -21,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.joshayoung.notemark.auth.presentation.log_in.LoginScreenRoot
 import com.joshayoung.notemark.auth.presentation.registration.RegistrationScreenRoot
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
@@ -72,8 +73,7 @@ class MainActivity : ComponentActivity() {
 
         NavHost(
             navController = navController,
-//            startDestination = if (isAuthenticated) Screen.NoteList.route else Screen.Start.route,
-            startDestination = navigator.startDestination,
+            startDestination = if (isAuthenticated) Destination.NoteGraph  else Destination.AuthGraph,
             modifier = modifier
         ) {
             navigation<Destination.AuthGraph>(
@@ -90,7 +90,6 @@ class MainActivity : ComponentActivity() {
             ) {
                 noteGraph(
                     navController,
-                    navigator = navigator,
                     modifier = modifier
                 )
             }
@@ -99,34 +98,12 @@ class MainActivity : ComponentActivity() {
 
     private fun NavGraphBuilder.noteGraph(
         navController: NavController,
-        navigator: Navigator,
         modifier: Modifier) {
         composable<Destination.NoteList> {
-            NoteListScreenRoot(
-                modifier = modifier,
-                onAddNoteClick = {
-                    navController.navigate(Destination.AddNote)
-                },
-                onSettingsClick = {
-                    navController.navigate(Destination.Settings)
-                },
-                onNavigateToEdit = { id ->
-                    navController.navigate(
-                        Destination.AddNote.toString() + "?noteId=${id}"
-                    )
-                }
-            )
+            NoteListScreenRoot(modifier = modifier)
         }
 
-        composable(
-            Destination.AddNote.toString() + "?noteId={noteId}",
-            arguments = listOf(
-                navArgument(name = "noteId") {
-                    type = NavType.IntType
-                    defaultValue = -1
-                }
-            )
-        ) {
+        composable<Destination.AddNote> {
             AddNoteScreenRoot(
                 modifier = modifier,
                 redirectBack = {
