@@ -2,8 +2,10 @@ package com.joshayoung.notemark.core.presentation.components
 
 import android.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joshayoung.notemark.core.design.theme.BackIcon
@@ -59,32 +62,40 @@ fun NoteMarkToolbar(
         },
         actions = {
             if (hasActions) {
-                Row() {
-                    IconButton(onClick = navigateToSettings) {
-                        Icon(
-                            imageVector = SettingsIcon,
-                            contentDescription = null,
+                Row(
+                    modifier = Modifier
+                    ,
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                    ) {
+                        IconButton(onClick = navigateToSettings,
                             modifier = Modifier
-                                .size(16.dp)
-                        )
+                                .size(26.dp)
+                        ) {
+                            Icon(
+                                imageVector = SettingsIcon,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(26.dp),
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
                         Box(
                             modifier = Modifier
-                                .size(40.dp)
+                                .size(34.dp)
                                 .clip(RoundedCornerShape(size = 10.dp))
-                                .background(
-                                    brush = Brush.radialGradient(
-                                        colors = listOf(
-                                            MaterialTheme.colorScheme.primary,
-                                            MaterialTheme.colorScheme.secondary
-                                        )
-                                    )
-                                ),
+                                .background(color = MaterialTheme.colorScheme.primary),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = userAbbreviation ?: "NM", modifier = Modifier,
-                                color = MaterialTheme.colorScheme.onPrimary
+                                text = userAbbreviation ?: "NM", modifier = Modifier
+                                ,color = MaterialTheme.colorScheme.onPrimary,
+                                style = MaterialTheme.typography.titleSmall
                             )
                         }
                     }
@@ -101,6 +112,7 @@ fun NoteMarkToolbarPreview() {
         NoteMarkToolbar(
             title = "Home",
             goBack = {},
+            hasActions = true,
             navigateToSettings = {},
             userAbbreviation = "NM"
         )

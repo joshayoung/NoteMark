@@ -67,6 +67,11 @@ android {
                 "LOGIN_PATH",
                 localProperties.getProperty("LOGIN_PATH")
             )
+            buildConfigField(
+                "String",
+                "LOGOUT_PATH",
+                localProperties.getProperty("LOGOUT_PATH")
+            )
         }
     }
     compileOptions {

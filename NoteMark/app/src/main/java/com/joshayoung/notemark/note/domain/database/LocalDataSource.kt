@@ -12,4 +12,5 @@ interface LocalDataSource {
      suspend fun upsertNote(note: Note): Result<Int?, DataError.Local>
     suspend fun getNote(id: Int) : Note?
     suspend fun deleteNote(id: Int) : Boolean
+    suspend fun removeAllNotes()
 }

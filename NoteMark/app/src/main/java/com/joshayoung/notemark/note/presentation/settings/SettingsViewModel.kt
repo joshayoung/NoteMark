@@ -5,11 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joshayoung.notemark.auth.data.repository.AuthRepositoryImpl
 import com.joshayoung.notemark.core.domain.DataStorage
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    var dataStorage: DataStorage
+    val authRepositoryImpl: AuthRepositoryImpl
 ) : ViewModel() {
     var state by mutableStateOf(SettingsState())
         private set
@@ -18,7 +19,7 @@ class SettingsViewModel(
         when(action) {
             SettingsAction.OnLogoutClick -> {
                 viewModelScope.launch {
-                    dataStorage.saveAuthData(null)
+                    authRepositoryImpl.logout()
                 }
             }
         }

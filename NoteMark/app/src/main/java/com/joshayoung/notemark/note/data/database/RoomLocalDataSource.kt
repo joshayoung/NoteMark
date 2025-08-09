@@ -45,4 +45,8 @@ class RoomLocalDataSource(
 
         return rows == 1
     }
+
+    override suspend fun removeAllNotes() {
+        noteDao.deleteAllNotes()
+    }
 }

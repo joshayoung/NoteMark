@@ -56,6 +56,7 @@ class LoginViewModel(
                             state = state.copy(isLoggingIn = false)
                             eventChannel.send(LoginEvent.Success)
                         } else {
+                            state = state.copy(isLoggingIn = false)
                             eventChannel.send(LoginEvent.Failure)
                         }
                     }
