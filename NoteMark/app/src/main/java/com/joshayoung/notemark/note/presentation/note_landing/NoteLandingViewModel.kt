@@ -57,11 +57,6 @@ class NoteLandingViewModel(
 
     fun onAction(action: NoteLandingAction) {
         when(action) {
-            NoteLandingAction.OnLogoutClick -> {
-                viewModelScope.launch {
-                    dataStorage.saveAuthData(null)
-                }
-            }
             is NoteLandingAction.OnDeleteClick -> {
                 viewModelScope.launch {
                     noteRepository.deleteNote(

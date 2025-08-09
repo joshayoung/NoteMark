@@ -3,6 +3,7 @@ package com.joshayoung.notemark.note.presentation.settings
 import android.R
 import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,13 +55,15 @@ fun SettingsScreen(
         topAppBar = {
             NoteMarkToolbar(
                 goBack = goBack,
-                title = "Settings"
+                title = "Settings",
+                hasBackButton = true
             )
         }
     ) { innerPadding ->
     Column(
         modifier
             .padding(innerPadding)
+            .padding(20.dp)
             .fillMaxSize()
     ) {
         Row(
@@ -70,8 +73,7 @@ fun SettingsScreen(
             IconButton(
                 modifier = Modifier
                     .padding(end = 10.dp)
-
-                    .size(16.dp),
+                    .size(20.dp),
                 onClick = {
                 },
 
@@ -84,9 +86,12 @@ fun SettingsScreen(
             }
             Text(
                 "Log Out",
-                modifier = Modifier,
+                modifier = Modifier
+                    .clickable {
+                        onAction(SettingsAction.OnLogoutClick)
+                    },
                 color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.titleSmall
+                style = MaterialTheme.typography.titleMedium
             )
         }
     }

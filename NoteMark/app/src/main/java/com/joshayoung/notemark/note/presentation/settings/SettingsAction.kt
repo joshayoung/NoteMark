@@ -1,5 +1,6 @@
 package com.joshayoung.notemark.note.presentation.settings
 
-sealed interface SettingsAction {
 
+sealed interface SettingsAction {
+    data object OnLogoutClick: SettingsAction
 }

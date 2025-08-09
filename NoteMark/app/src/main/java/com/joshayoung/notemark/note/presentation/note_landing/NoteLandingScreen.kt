@@ -3,11 +3,9 @@ package com.joshayoung.notemark.note.presentation.note_landing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -36,18 +33,15 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.joshayoung.notemark.core.design.theme.EyeClosedIcon
-import com.joshayoung.notemark.core.design.theme.EyeIcon
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.PlusIcon
-import com.joshayoung.notemark.core.design.theme.SettingsIcon
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
+import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
 import com.joshayoung.notemark.note.presentation.note_landing.model.NoteUi
 import org.koin.androidx.compose.koinViewModel
 
@@ -83,54 +77,12 @@ fun NoteLandingScreen(
 ) {
     NoteMarkScaffold(
         topAppBar = {
-            Row(
-                modifier = Modifier
-                    .background(Color.White)
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp, vertical = 20.dp)
-                ,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    "NoteMark", modifier = Modifier,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Row() {
-                IconButton(
-                    onClick = {
-                        onSettingsClick()
-                    }) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(end = 10.dp),
-                        imageVector = SettingsIcon,
-                        contentDescription = null
-                    )
-                }
-
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(size = 10.dp))
-                        .background(
-                            brush = Brush.radialGradient(
-                                colors = listOf(
-                                    MaterialTheme.colorScheme.primary,
-                                    MaterialTheme.colorScheme.secondary
-                                )
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = state.userAbbreviation, modifier = Modifier,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-            }
-            }
+            NoteMarkToolbar(
+                title = "Note Mark",
+                hasBackButton = false,
+                hasActions = true,
+                navigateToSettings = onSettingsClick
+            )
         },
         floatingActionButton = {
             Box(
@@ -179,11 +131,6 @@ fun NoteLandingScreen(
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
-            Button(onClick = {
-                onAction(NoteLandingAction.OnLogoutClick)
-            }) {
-                Text("Log Out")
-            }
             if (!state.hasItems) {
                 Text(
                     modifier = Modifier

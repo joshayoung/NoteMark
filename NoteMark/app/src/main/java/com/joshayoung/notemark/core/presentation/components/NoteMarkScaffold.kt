@@ -34,7 +34,10 @@ fun NoteMarkScaffoldPreview() {
     NoteMarkTheme {
         NoteMarkScaffold(
             topAppBar = {
-                Text("My top bar")
+                NoteMarkToolbar(
+                    title = "Home",
+                    navigateToSettings = {}
+                )
             },
             floatingActionButton = {
                 Text("FAB")
