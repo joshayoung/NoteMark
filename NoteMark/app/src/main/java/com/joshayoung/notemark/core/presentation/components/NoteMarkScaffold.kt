@@ -36,7 +36,8 @@ fun NoteMarkScaffoldPreview() {
             topAppBar = {
                 NoteMarkToolbar(
                     title = "Home",
-                    navigateToSettings = {}
+                    navigateToSettings = {},
+                    userAbbreviation = "NM"
                 )
             },
             floatingActionButton = {

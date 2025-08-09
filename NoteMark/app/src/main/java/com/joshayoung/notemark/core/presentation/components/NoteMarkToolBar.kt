@@ -31,6 +31,7 @@ fun NoteMarkToolbar(
     goBack: () -> Unit = {},
     hasBackButton: Boolean = false,
     hasActions: Boolean = false,
+    userAbbreviation: String? = null,
     navigateToSettings: () -> Unit = {}
 ) {
     TopAppBar(
@@ -82,7 +83,7 @@ fun NoteMarkToolbar(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "NM", modifier = Modifier,
+                                text = userAbbreviation ?: "NM", modifier = Modifier,
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
                         }
@@ -100,7 +101,8 @@ fun NoteMarkToolbarPreview() {
         NoteMarkToolbar(
             title = "Home",
             goBack = {},
-            navigateToSettings = {}
+            navigateToSettings = {},
+            userAbbreviation = "NM"
         )
     }
 }

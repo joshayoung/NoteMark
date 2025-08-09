@@ -22,7 +22,6 @@ class SettingsViewModel(
                     dataStorage.saveAuthData(null)
                 }
             }
-            else -> {}
         }
     }
 }

@@ -81,6 +81,7 @@ fun NoteLandingScreen(
                 title = "Note Mark",
                 hasBackButton = false,
                 hasActions = true,
+                userAbbreviation = state.userAbbreviation,
                 navigateToSettings = onSettingsClick
             )
         },
