@@ -30,3 +30,4 @@
 * https://developer.android.com/topic/architecture/recommendations
 * [Jetpack Compose previews for edge-to-edge design](https://medium.com/@timo_86166/jetpack-compose-previews-for-edge-to-edge-design-a03b3a3713f3)
 * https://dev.to/theplebdev/android-notes-understanding-viewmodelscopelaunch-230f
+* [Navigation in ViewModels](https://www.youtube.com/watch?v=BFhVvAzC52w)

@@ -26,6 +26,7 @@ import com.joshayoung.notemark.core.Screen
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.note.presentation.add_note.AddNoteScreenRoot
+import com.joshayoung.notemark.note.presentation.note_detail.NoteDetailScreenRoot
 import com.joshayoung.notemark.note.presentation.note_list.NoteListScreenRoot
 import com.joshayoung.notemark.note.presentation.settings.SettingsScreenRoot
 import com.joshayoung.notemark.note.presentation.start.GettingStartedScreen
@@ -106,6 +107,12 @@ class MainActivity : ComponentActivity() {
                 navigateBack = {
                     navController.navigateUp()
                 }
+            )
+        }
+
+        composable(Screen.NoteDetail.route) {
+            NoteDetailScreenRoot(
+                modifier = modifier,
             )
         }
     }

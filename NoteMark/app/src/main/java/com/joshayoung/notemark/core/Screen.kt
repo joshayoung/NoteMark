@@ -6,6 +6,7 @@ sealed class Screen(val route: String) {
     object Login: Screen(LOGIN)
     object NoteList: Screen(NOTE_LIST)
     object AddNote: Screen(ADD_NOTE)
+    object NoteDetail: Screen(NOTE_DETAIL)
     object Settings: Screen(SETTINGS)
 
     companion object {
@@ -15,6 +16,7 @@ sealed class Screen(val route: String) {
         const val SETTINGS = "settings"
         const val ADD_NOTE = "add_note"
         const val NOTE_LIST = "note_list"
+        const val NOTE_DETAIL = "note_detail"
 
         val authRoutes = listOf(
             LOGIN,
