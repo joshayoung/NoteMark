@@ -1,5 +1,6 @@
 package com.joshayoung.notemark.note.presentation.note_landing
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
@@ -56,19 +57,18 @@ class NoteLandingViewModel(
     }
 
     fun onAction(action: NoteLandingAction) {
-        when(action) {
+        when (action) {
             is NoteLandingAction.OnDeleteClick -> {
                 viewModelScope.launch {
                     noteRepository.deleteNote(
                         note = action.noteUi.toNote()
                     )
-                    loadData()
                 }
             }
         }
     }
 
-    private suspend fun loadData() {
+    private fun loadData() {
         localDataSource.getNotes().map { notes ->
             val noteUi = notes.map { it.toNoteUi() }
             _state.update {

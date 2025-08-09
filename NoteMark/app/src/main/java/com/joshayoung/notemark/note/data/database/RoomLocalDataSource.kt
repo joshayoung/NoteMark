@@ -38,13 +38,13 @@ class RoomLocalDataSource(
             return Result.Error(DataError.Local.DISK_FULL)
         }
     }
-//
+
     override suspend fun getNote(id: Int) : Note? {
         val noteEntity = noteDao.getNoteById(id)?.toNote()
 
         return noteEntity
     }
-//
+
     override suspend fun deleteNote(id: Int) : Boolean {
         val rows = noteDao.deleteNote(id)
 

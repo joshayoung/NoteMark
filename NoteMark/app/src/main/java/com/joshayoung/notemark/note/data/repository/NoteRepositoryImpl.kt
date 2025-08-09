@@ -31,7 +31,6 @@ import java.util.UUID
 
 
 class NoteRepositoryImpl (
-    private val client: HttpClient,
     private val localDataSource: LocalDataSource,
     private val applicationScope: CoroutineScope,
     private val remoteDataSource: KtorRemoteDataSource
@@ -53,10 +52,6 @@ class NoteRepositoryImpl (
                 val noteSave = remoteDataSource.saveNote(note)
                 if (noteSave is Result.Success)
                 {
-
-                    // left off: Update local note with remote ID
-
-
                     return@async Result.Success(Unit)
                 }
             }.await()
