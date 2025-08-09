@@ -30,29 +30,40 @@ import androidx.compose.ui.unit.sp
 import com.joshayoung.notemark.R
 import com.joshayoung.notemark.core.presentation.components.NoteMarkButton
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
+import org.koin.androidx.compose.koinViewModel
+
+@Composable
+fun GettingStartedScreenRoot(
+    viewModel: GettingStartedViewModel = koinViewModel(),
+    modifier: Modifier
+) {
+    GettingStartedScreen(
+        modifier = modifier,
+        onAction = { action ->
+            viewModel.onAction(action)
+        }
+    )
+}
 
 @Composable
 fun GettingStartedScreen(
-    modifier: Modifier,
-    onCreateAccountClick: () -> Unit,
-    onLoginClick: () -> Unit
+    onAction: (StartAction) -> Unit,
+    modifier: Modifier
 ) {
-
     val configuration = LocalConfiguration.current
     val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
     if (isPortrait) {
         PortraitOrientation(
-            modifier = modifier,
-            onCreateAccountClick, onLoginClick)
+            modifier = modifier, onAction = onAction)
     } else {
-        LandscapeOrientation(onCreateAccountClick, onLoginClick)
+        LandscapeOrientation(modifier = modifier, onAction = onAction)
     }
 }
 
 @Composable
-fun LandscapeOrientation(onCreateAccountClick: () -> Unit, onLoginClick: () -> Unit) {
+fun LandscapeOrientation(modifier: Modifier, onAction: (StartAction) -> Unit) {
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .background( Color(0xFFE0EAFF))
                 .fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -66,8 +77,7 @@ fun LandscapeOrientation(onCreateAccountClick: () -> Unit, onLoginClick: () -> U
                         .fillMaxHeight(),
                 )
                 NoteIntroCard(
-                    onCreateAccountClick = onCreateAccountClick,
-                    onLoginClick = onLoginClick,
+                    onAction = onAction,
                     modifier = Modifier
                         .width(400.dp)
                         .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp))
@@ -76,9 +86,7 @@ fun LandscapeOrientation(onCreateAccountClick: () -> Unit, onLoginClick: () -> U
 }
 
 @Composable
-private fun PortraitOrientation(
-    modifier: Modifier,
-    onCreateAccountClick: () -> Unit, onLoginClick: () -> Unit) {
+private fun PortraitOrientation(modifier: Modifier, onAction: (StartAction) -> Unit) {
     Column(
         modifier = modifier
             .background( Color(0xFFE0EAFF))
@@ -95,19 +103,18 @@ private fun PortraitOrientation(
                     .fillMaxWidth()
             )
         }
-        NoteIntroCard(onCreateAccountClick,
-            onLoginClick,
+        NoteIntroCard(
             modifier = Modifier
-                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+                    onAction = onAction
         )
     }
 }
 
 @Composable
 private fun NoteIntroCard(
-    onCreateAccountClick: () -> Unit,
-    onLoginClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onAction: (StartAction) -> Unit
     ) {
     Box(
         modifier = modifier
@@ -133,7 +140,7 @@ private fun NoteIntroCard(
             NoteMarkButton(
                 text = "Get Started",
                 onClick = {
-                    onCreateAccountClick()
+                    onAction(StartAction.CreateAccount)
                 },
                 isEnabled = true
             )
@@ -142,7 +149,7 @@ private fun NoteIntroCard(
                 modifier = Modifier
                     .fillMaxWidth(),
                 onClick = {
-                    onLoginClick()
+                    onAction(StartAction.Login)
                 }
             ) {
                 Text("Log in")
@@ -159,9 +166,8 @@ private fun NoteIntroCard(
 private fun GettingStartedScreenPreview() {
     NoteMarkTheme {
         GettingStartedScreen(
-            onCreateAccountClick = {},
-            onLoginClick = {},
-            modifier = Modifier
+            modifier = Modifier,
+            onAction = {}
         )
     }
 }

@@ -18,25 +18,33 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.joshayoung.notemark.auth.presentation.log_in.LoginScreenRoot
 import com.joshayoung.notemark.auth.presentation.registration.RegistrationScreenRoot
-import com.joshayoung.notemark.core.Screen
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.navigation.Destination
+import com.joshayoung.notemark.core.navigation.NavigationAction
+import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.note.presentation.add_note.AddNoteScreenRoot
 import com.joshayoung.notemark.note.presentation.note_detail.NoteDetailScreenRoot
 import com.joshayoung.notemark.note.presentation.note_list.NoteListScreenRoot
 import com.joshayoung.notemark.note.presentation.settings.SettingsScreenRoot
 import com.joshayoung.notemark.note.presentation.start.GettingStartedScreen
+import com.joshayoung.notemark.note.presentation.start.GettingStartedScreenRoot
 import kotlinx.coroutines.flow.combine
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.compose.koinInject
 
 class MainActivity : ComponentActivity() {
 
+
+
     @Composable
     fun MyNavigation(
+        navigator: Navigator,
         navController: NavHostController,
         isAuthenticated: Boolean,
         modifier: Modifier
@@ -47,40 +55,71 @@ class MainActivity : ComponentActivity() {
 
         ObserveAsEvents(tokenWithBackstack) { tokenWithBackstack ->
             if (tokenWithBackstack.refreshToken == "unset" && isNotInAuthGraph(tokenWithBackstack.navBackStackEntry)) {
-                navController.navigate(Screen.Login.route)
+                navController.navigate(Destination.Login)
+            }
+        }
+
+        ObserveAsEvents(flow = navigator.navigationAction) { action ->
+            when(action) {
+                is NavigationAction.Navigate -> navController.navigate(
+                    action.destination
+                ) {
+                    action.navOptions(this)
+                }
+                NavigationAction.NavigateUp -> navController.navigateUp()
             }
         }
 
         NavHost(
             navController = navController,
-            startDestination = if (isAuthenticated) Screen.NoteList.route else Screen.Start.route,
+//            startDestination = if (isAuthenticated) Screen.NoteList.route else Screen.Start.route,
+            startDestination = navigator.startDestination,
             modifier = modifier
         ) {
-            authGraph(navController, modifier = modifier)
-            noteGraph(navController, modifier = modifier)
+            navigation<Destination.AuthGraph>(
+                startDestination = Destination.StartScreen
+            ) {
+                authGraph(
+                    navController,
+                    navigator = navigator,
+                    modifier = modifier
+                )
+            }
+            navigation<Destination.NoteGraph>(
+                startDestination = Destination.NoteList
+            ) {
+                noteGraph(
+                    navController,
+                    navigator = navigator,
+                    modifier = modifier
+                )
+            }
         }
     }
 
-    private fun NavGraphBuilder.noteGraph(navController: NavController, modifier: Modifier) {
-        composable(Screen.NoteList.route) {
+    private fun NavGraphBuilder.noteGraph(
+        navController: NavController,
+        navigator: Navigator,
+        modifier: Modifier) {
+        composable<Destination.NoteList> {
             NoteListScreenRoot(
                 modifier = modifier,
                 onAddNoteClick = {
-                    navController.navigate(Screen.AddNote.route)
+                    navController.navigate(Destination.AddNote)
                 },
                 onSettingsClick = {
-                    navController.navigate(Screen.Settings.route)
+                    navController.navigate(Destination.Settings)
                 },
                 onNavigateToEdit = { id ->
                     navController.navigate(
-                        Screen.AddNote.route + "?noteId=${id}"
+                        Destination.AddNote.toString() + "?noteId=${id}"
                     )
                 }
             )
         }
 
         composable(
-            Screen.AddNote.route + "?noteId={noteId}",
+            Destination.AddNote.toString() + "?noteId={noteId}",
             arguments = listOf(
                 navArgument(name = "noteId") {
                     type = NavType.IntType
@@ -99,9 +138,7 @@ class MainActivity : ComponentActivity() {
             )
         }
 
-        composable(
-            Screen.Settings.route
-        ) {
+        composable<Destination.Settings> {
             SettingsScreenRoot(
                 modifier = modifier,
                 navigateBack = {
@@ -110,52 +147,49 @@ class MainActivity : ComponentActivity() {
             )
         }
 
-        composable(Screen.NoteDetail.route) {
+        composable<Destination.NoteDetail>() {
             NoteDetailScreenRoot(
                 modifier = modifier,
             )
         }
     }
 
-    private fun NavGraphBuilder.authGraph(navController: NavController, modifier: Modifier) {
-        composable(Screen.Start.route) {
-            GettingStartedScreen(
+    private fun NavGraphBuilder.authGraph(
+        navController: NavController,
+        navigator: Navigator,
+        modifier: Modifier) {
+        composable<Destination.StartScreen> {
+            GettingStartedScreenRoot(
                 modifier = modifier,
-                onCreateAccountClick = {
-                    navController.navigate(Screen.Register.route)
-                },
-                onLoginClick = {
-                    navController.navigate(Screen.Login.route)
-                }
             )
         }
-        composable(Screen.Register.route) {
+        composable<Destination.Registration>() {
             RegistrationScreenRoot(
                 modifier = modifier,
                 onRegistrationSuccess = {
-                    navController.navigate(Screen.Login.route)
+                    navController.navigate(Destination.Login)
                 },
                 onAlreadyAccountClick = {
-                    navController.navigate(Screen.Login.route) {
-                        popUpTo(Screen.Start.route)
+                    navController.navigate(Destination.Login) {
+                        popUpTo(Destination.StartScreen)
                     }
                 }
             )
         }
 
-        composable(Screen.Login.route) {
+        composable<Destination.Login> {
             LoginScreenRoot(
                 modifier = modifier,
                 onLoginSuccess = {
-                    navController.navigate(Screen.NoteList.route) {
-                        popUpTo(Screen.Start.route) {
+                    navController.navigate(Destination.NoteList) {
+                        popUpTo(Destination.StartScreen) {
                             inclusive = true
                         }
                     }
                 },
                 onDontHaveAccount = {
-                    navController.navigate(Screen.Register.route) {
-                        popUpTo(Screen.Start.route)
+                    navController.navigate(Destination.Registration) {
+                        popUpTo(Destination.StartScreen)
                     }
                 }
             )
@@ -173,11 +207,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             NoteMarkTheme {
                 val navController = rememberNavController()
+                val navigator = koinInject<Navigator>()
                 Surface(modifier = Modifier.fillMaxSize()) {
                     // NOTE: There is a flash without this:
                     if (!viewModel.state.isCheckingSession)
                     {
                         MyNavigation(
+                            navigator = navigator,
                             modifier = Modifier.fillMaxSize()
                             .windowInsetsPadding(WindowInsets.safeDrawing),
                             navController = navController,

@@ -19,6 +19,9 @@ import com.joshayoung.notemark.note.data.database.RoomLocalDataSource
 import com.joshayoung.notemark.note.data.database.NoteDatabase
 import com.joshayoung.notemark.auth.data.use_cases.EmailValidator
 import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.core.navigation.DefaultNavigator
+import com.joshayoung.notemark.core.navigation.Destination
+import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
 import com.joshayoung.notemark.note.data.repository.NoteRepositoryImpl
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
@@ -32,15 +35,22 @@ import com.joshayoung.notemark.note.presentation.add_note.AddNoteViewModel
 import com.joshayoung.notemark.note.presentation.note_detail.NoteDetailViewModel
 import com.joshayoung.notemark.note.presentation.note_list.NoteListViewModel
 import com.joshayoung.notemark.note.presentation.settings.SettingsViewModel
+import com.joshayoung.notemark.note.presentation.start.GettingStartedViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidApplication
 
 var appModule = module {
+
+    single<Navigator> {
+        DefaultNavigator(startDestination = Destination.AuthGraph)
+    }
+
     viewModelOf(::MainViewModel)
     viewModelOf(::RegistrationViewModel)
     viewModelOf(::LoginViewModel)
+    viewModelOf(::GettingStartedViewModel)
 
     single {
         HttpClientProvider(get()).provide()
