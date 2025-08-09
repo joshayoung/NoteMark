@@ -4,7 +4,7 @@ sealed class Screen(val route: String) {
     object Start: Screen(START)
     object Register: Screen(REGISTER)
     object Login: Screen(LOGIN)
-    object Landing: Screen(NOTES_LANDING)
+    object NoteList: Screen(NOTE_LIST)
     object AddNote: Screen(ADD_NOTE)
     object Settings: Screen(SETTINGS)
 
@@ -14,7 +14,7 @@ sealed class Screen(val route: String) {
         const val REGISTER = "register"
         const val SETTINGS = "settings"
         const val ADD_NOTE = "add_note"
-        const val NOTES_LANDING = "notes_landing"
+        const val NOTE_LIST = "note_list"
 
         val authRoutes = listOf(
             LOGIN,

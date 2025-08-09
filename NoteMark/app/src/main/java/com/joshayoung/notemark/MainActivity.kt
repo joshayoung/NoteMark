@@ -7,13 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -28,7 +26,7 @@ import com.joshayoung.notemark.core.Screen
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.note.presentation.add_note.AddNoteScreenRoot
-import com.joshayoung.notemark.note.presentation.note_landing.NoteLandingScreenRoot
+import com.joshayoung.notemark.note.presentation.note_list.NoteListScreenRoot
 import com.joshayoung.notemark.note.presentation.settings.SettingsScreenRoot
 import com.joshayoung.notemark.note.presentation.start.GettingStartedScreen
 import kotlinx.coroutines.flow.combine
@@ -54,7 +52,7 @@ class MainActivity : ComponentActivity() {
 
         NavHost(
             navController = navController,
-            startDestination = if (isAuthenticated) Screen.Landing.route else Screen.Start.route,
+            startDestination = if (isAuthenticated) Screen.NoteList.route else Screen.Start.route,
             modifier = modifier
         ) {
             authGraph(navController, modifier = modifier)
@@ -63,8 +61,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun NavGraphBuilder.noteGraph(navController: NavController, modifier: Modifier) {
-        composable(Screen.Landing.route) {
-            NoteLandingScreenRoot(
+        composable(Screen.NoteList.route) {
+            NoteListScreenRoot(
                 modifier = modifier,
                 onAddNoteClick = {
                     navController.navigate(Screen.AddNote.route)
@@ -142,7 +140,7 @@ class MainActivity : ComponentActivity() {
             LoginScreenRoot(
                 modifier = modifier,
                 onLoginSuccess = {
-                    navController.navigate(Screen.Landing.route) {
+                    navController.navigate(Screen.NoteList.route) {
                         popUpTo(Screen.Start.route) {
                             inclusive = true
                         }

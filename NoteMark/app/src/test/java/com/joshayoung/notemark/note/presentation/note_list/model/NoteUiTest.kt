@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.note.presentation.note_landing.model
+package com.joshayoung.notemark.note.presentation.note_list.model
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo

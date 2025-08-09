@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.core.domain.DataStorage
-import com.joshayoung.notemark.note.presentation.note_landing.NoteLandingAction
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(

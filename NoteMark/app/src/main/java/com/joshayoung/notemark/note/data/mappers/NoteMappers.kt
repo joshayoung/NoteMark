@@ -3,7 +3,7 @@ package com.joshayoung.notemark.note.data.mappers
 import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.network.NoteDto
-import com.joshayoung.notemark.note.presentation.note_landing.model.NoteUi
+import com.joshayoung.notemark.note.presentation.note_list.model.NoteUi
 
 fun Note.toNoteEntity() : NoteEntity {
     return NoteEntity(

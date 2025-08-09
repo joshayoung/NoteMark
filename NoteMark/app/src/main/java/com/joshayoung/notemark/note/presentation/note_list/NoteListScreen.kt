@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.note.presentation.note_landing
+package com.joshayoung.notemark.note.presentation.note_list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,19 +41,19 @@ import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.PlusIcon
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
-import com.joshayoung.notemark.note.presentation.note_landing.model.NoteUi
+import com.joshayoung.notemark.note.presentation.note_list.model.NoteUi
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun NoteLandingScreenRoot(
+fun NoteListScreenRoot(
     modifier: Modifier,
-    viewModel: NoteLandingViewModel = koinViewModel(),
+    viewModel: NoteListViewModel = koinViewModel(),
     onAddNoteClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onNavigateToEdit: (id: Int) -> Unit
 ) {
-    NoteLandingScreen(
+    NoteListScreen(
        modifier = modifier,
        state = viewModel.state.collectAsStateWithLifecycle().value,
        onAction = { action ->
@@ -67,10 +66,10 @@ fun NoteLandingScreenRoot(
 }
 
 @Composable
-fun NoteLandingScreen(
+fun NoteListScreen(
     modifier: Modifier,
-    state: NoteLandingState,
-    onAction: (NoteLandingAction) -> Unit,
+    state: NoteListState,
+    onAction: (NoteListAction) -> Unit,
     onAddNoteClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onNavigateToEdit: (id: Int) -> Unit
@@ -164,7 +163,7 @@ fun NoteLandingScreen(
 @Composable
 fun NoteItem(
     note: NoteUi,
-    onAction: (NoteLandingAction)-> Unit,
+    onAction: (NoteListAction)-> Unit,
     onNavigateToEdit: (id: Int) -> Unit
     ) {
     var showConfirmDeleteDialog by remember { mutableStateOf(false) }
@@ -180,7 +179,7 @@ fun NoteItem(
                 TextButton(onClick = {
                     showConfirmDeleteDialog = false
                     note.id?.let{
-                        onAction(NoteLandingAction.OnDeleteClick(note))
+                        onAction(NoteListAction.OnDeleteClick(note))
                     }
                 }) {
                     Text("Delete")
@@ -233,10 +232,10 @@ fun NoteItem(
 
 @Preview(showBackground = true)
 @Composable
-fun NoteLandingScreenPreview() {
+fun NoteListScreenPreview() {
     NoteMarkTheme {
-        NoteLandingScreen(
-            state = NoteLandingState(
+        NoteListScreen(
+            state = NoteListState(
                 userAbbreviation = "NM",
                 hasItems = true,
                 notes = listOf(

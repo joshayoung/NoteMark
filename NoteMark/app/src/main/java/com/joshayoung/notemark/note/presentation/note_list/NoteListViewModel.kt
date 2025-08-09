@@ -1,13 +1,12 @@
-package com.joshayoung.notemark.note.presentation.note_landing
+package com.joshayoung.notemark.note.presentation.note_list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
-import com.joshayoung.notemark.note.presentation.note_landing.mappers.toNoteUi
+import com.joshayoung.notemark.note.presentation.note_list.mappers.toNoteUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
@@ -17,20 +16,20 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class NoteLandingViewModel(
+class NoteListViewModel(
     private val noteRepository: NoteRepository,
     private val dataStorage: DataStorage,
     private val localDataSource: LocalDataSource
 ) : ViewModel() {
 
-    private var _state = MutableStateFlow(NoteLandingState(notes = emptyList()))
+    private var _state = MutableStateFlow(NoteListState(notes = emptyList()))
     val state = _state
         .onStart {
             loadData()
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(1000L),
-            NoteLandingState(notes = emptyList())
+            NoteListState(notes = emptyList())
         )
 
     init {
@@ -56,9 +55,9 @@ class NoteLandingViewModel(
         return user.uppercase()
     }
 
-    fun onAction(action: NoteLandingAction) {
+    fun onAction(action: NoteListAction) {
         when (action) {
-            is NoteLandingAction.OnDeleteClick -> {
+            is NoteListAction.OnDeleteClick -> {
                 viewModelScope.launch {
                     noteRepository.deleteNote(
                         note = action.noteUi.toNote()

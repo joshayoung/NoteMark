@@ -2,17 +2,12 @@ package com.joshayoung.notemark.note.data.database
 
 import android.database.sqlite.SQLiteFullException
 import com.joshayoung.notemark.core.domain.util.DataError
-import com.joshayoung.notemark.core.domain.util.EmptyDataResult
-import com.joshayoung.notemark.core.domain.util.EmptyResult
 import com.joshayoung.notemark.core.domain.util.Result
-import com.joshayoung.notemark.core.utils.getTimeStampForInsert
 import com.joshayoung.notemark.note.data.database.dao.NoteDao
-import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.data.mappers.toNoteEntity
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.models.Note
-import com.joshayoung.notemark.note.presentation.note_landing.mappers.toNoteUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

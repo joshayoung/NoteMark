@@ -29,7 +29,7 @@ import com.joshayoung.notemark.note.domain.use_cases.ValidatePassword
 import com.joshayoung.notemark.note.domain.use_cases.ValidateUsername
 import com.joshayoung.notemark.note.network.RemoteDataSource
 import com.joshayoung.notemark.note.presentation.add_note.AddNoteViewModel
-import com.joshayoung.notemark.note.presentation.note_landing.NoteLandingViewModel
+import com.joshayoung.notemark.note.presentation.note_list.NoteListViewModel
 import com.joshayoung.notemark.note.presentation.settings.SettingsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +64,7 @@ var appModule = module {
 
     singleOf(::DataStorageImpl).bind<DataStorage>()
 
-    viewModelOf(::NoteLandingViewModel)
+    viewModelOf(::NoteListViewModel)
     viewModelOf(::AddNoteViewModel)
     viewModelOf(::SettingsViewModel)
 
