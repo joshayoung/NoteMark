@@ -17,12 +17,13 @@ import androidx.compose.ui.Alignment
 fun NoteMarkScaffold(
     topAppBar: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
+    fabPosition: FabPosition = FabPosition.End,
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
         topBar = topAppBar,
         floatingActionButton = floatingActionButton,
-        floatingActionButtonPosition = FabPosition.End
+        floatingActionButtonPosition = fabPosition,
     ) { innerPadding ->
         content(innerPadding)
     }

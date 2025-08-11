@@ -8,13 +8,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.joshayoung.notemark.core.navigation.Destination
+import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.presentation.note_list.mappers.toNoteUi
 import kotlinx.coroutines.launch
 
 class NoteDetailViewModel(
     private val savedStateHandle: SavedStateHandle,
-    private val noteRepository: NoteRepository
+    private val noteRepository: NoteRepository,
+    private val navigator: Navigator
 ) : ViewModel() {
     var state by mutableStateOf(NoteDetailState())
         private set
@@ -28,6 +30,7 @@ class NoteDetailViewModel(
                 state = state.copy(
                     dataCreated = noteUi.createdAt,
                     lastEdited = noteUi.lastEditedAt.toString(),
+                    title = noteUi.title,
                     body = noteUi.content,
                     viewMode = NoteViewMode.DISPLAY
                 )
@@ -36,6 +39,12 @@ class NoteDetailViewModel(
     }
 
     fun onAction(action: NoteDetailAction) {
-
+        when(action) {
+            NoteDetailAction.GoBack -> {
+                viewModelScope.launch {
+                    navigator.navigateUp()
+                }
+            }
+        }
     }
 }
