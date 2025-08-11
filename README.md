@@ -10,6 +10,8 @@
 ### Add Test
 * Select class name and press `ALT` + `ENTER`.
 
+### Linting
+* `./gradlew lint`
 
 ### To Do
 * Test refresh logic once you start getting notes

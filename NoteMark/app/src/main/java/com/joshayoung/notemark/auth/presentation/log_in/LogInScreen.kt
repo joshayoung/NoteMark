@@ -143,10 +143,10 @@ fun LoginContent(
     state: LoginState,
     onAction: (LoginAction) -> Unit,
     modifier: Modifier = Modifier
-        .fillMaxSize()
 ) {
     Column(
         modifier = modifier
+            .fillMaxSize()
     ) {
     NoteMarkTextField(state = state.username, label = "Username", hint = "john.doe@example.com")
     NoteMarkTextField(

@@ -1,6 +1,5 @@
 package com.joshayoung.notemark.note.presentation.add_note
 
-import android.R
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,7 +18,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -44,13 +42,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.devtools.ksp.symbol.impl.modifierMap
 import com.joshayoung.notemark.core.design.theme.CloseIcon
-import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
-import com.joshayoung.notemark.core.presentation.components.NoteMarkTextField
+import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import org.koin.androidx.compose.koinViewModel
-
 
 
 @Composable
