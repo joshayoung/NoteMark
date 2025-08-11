@@ -28,5 +28,5 @@ sealed interface Destination {
     data object Settings: Destination
 
     @Serializable
-    data object NoteDetail: Destination
+    data class NoteDetail(val id: Int): Destination
 }

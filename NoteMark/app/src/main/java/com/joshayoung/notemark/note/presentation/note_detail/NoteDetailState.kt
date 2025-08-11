@@ -1,5 +1,8 @@
 package com.joshayoung.notemark.note.presentation.note_detail
 
 data class NoteDetailState(
-    var first: Boolean = false
+    val dataCreated: String = "",
+    val lastEdited: String = "",
+    val body: String = "",
+    val viewMode: NoteViewMode? = null
 )

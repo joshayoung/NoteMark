@@ -7,6 +7,7 @@ import androidx.navigation.navOptions
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.Destination
+import com.joshayoung.notemark.core.navigation.Destination.*
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
@@ -72,14 +73,22 @@ class NoteListViewModel(
 
             is NoteListAction.AddNoteClick -> {
                 viewModelScope.launch {
-                    navigator.navigate(Destination.AddNote(null))
+                    navigator.navigate(AddNote(null))
+                }
+            }
+
+            is NoteListAction.GoToDetail -> {
+                viewModelScope.launch {
+                    navigator.navigate(
+                        NoteDetail(id = action.id)
+                    )
                 }
             }
 
             is NoteListAction.GoToEdit -> {
                 viewModelScope.launch {
                     navigator.navigate(
-                        Destination.AddNote(id = action.id)
+                        AddNote(id = action.id)
                     )
                 }
             }

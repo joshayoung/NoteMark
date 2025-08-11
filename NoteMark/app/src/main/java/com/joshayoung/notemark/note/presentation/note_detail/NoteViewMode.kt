@@ -1,6 +1,7 @@
 package com.joshayoung.notemark.note.presentation.note_detail
 
-
-sealed interface NoteDetailAction {
-
+enum class NoteViewMode {
+    EDIT,
+    READER,
+    DISPLAY
 }

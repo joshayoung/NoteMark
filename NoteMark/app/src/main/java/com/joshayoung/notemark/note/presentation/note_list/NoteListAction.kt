@@ -7,5 +7,6 @@ sealed interface NoteListAction {
     data class OnDeleteClick(val noteUi: NoteUi): NoteListAction
     data object AddNoteClick: NoteListAction
     data class GoToEdit(val id: Int?) : NoteListAction
+    data class GoToDetail(val id: Int) : NoteListAction
     data object OnSettingsClick: NoteListAction
 }

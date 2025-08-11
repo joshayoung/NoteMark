@@ -51,6 +51,7 @@ class AddNoteViewModel (
                 )
             )
 
+            // TODO: Setup auto-saving
             combine(state.noteTitle.textAsFlow(), state.noteBody.textAsFlow()) { title, body ->
                 if (title != initialTitle || body != initialBody) {
                     state = state.copy(

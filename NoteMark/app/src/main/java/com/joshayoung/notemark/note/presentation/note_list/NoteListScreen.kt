@@ -146,7 +146,7 @@ fun NoteListScreen(
                             item,
                             onAction = onAction,
                             onNavigateToEdit = {
-                                onAction(NoteListAction.GoToEdit(item.id))
+                                onAction(NoteListAction.GoToDetail(item.id ?: 0))
                             }
                         )
                     }
