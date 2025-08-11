@@ -56,24 +56,19 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun AddNoteScreenRoot(
     modifier: Modifier,
-    viewModel: AddNoteViewModel = koinViewModel(),
-    redirectBack: () -> Unit,
-    navigateBack: () -> Unit,
+    viewModel: AddNoteViewModel = koinViewModel()
 ) {
     AddNoteScreen(
         modifier = modifier,
         state = viewModel.state,
         onAction = { action ->
-            when(action) {
-                AddNoteAction.OnSaveClick -> {
-                    redirectBack()
-                }
-
+            when (action) {
                 AddNoteAction.OnCloseClick -> TODO()
+                else -> {
+                    viewModel.onAction(action)
+                }
             }
-            viewModel.onAction(action)
-        },
-        navigateBack = navigateBack
+        }
     )
 }
 
@@ -81,8 +76,7 @@ fun AddNoteScreenRoot(
 fun AddNoteScreen(
     modifier: Modifier,
     state: AddNoteState,
-    onAction: (AddNoteAction)-> Unit,
-    navigateBack: () -> Unit
+    onAction: (AddNoteAction)-> Unit
 ) {
     var showNonSavePrompt by remember { mutableStateOf(false) }
 
@@ -96,7 +90,7 @@ fun AddNoteScreen(
             confirmButton = {
                 Button(onClick = {
                     showNonSavePrompt = false
-                    navigateBack()
+                    onAction(AddNoteAction.NavigateBack)
                 }) {
                     Text("Discard")
                 }
@@ -128,7 +122,7 @@ fun AddNoteScreen(
                         if (state.hasChangeInitialContent) {
                             showNonSavePrompt = true
                         } else {
-                        navigateBack()
+                            onAction(AddNoteAction.NavigateBack)
                         }
                     },
                     tint = MaterialTheme.colorScheme.primary
@@ -235,12 +229,6 @@ fun NoteTextFieldMultiline(
     }
 
     Column() {
-//        NoteMarkTextField(
-//            state = state,
-//            hint = "test",
-//            helperText = "test",
-//            label ="test",
-//            keyboardType = KeyboardType.Text)
         BasicTextField(
             state = state,
             textStyle = LocalTextStyle.current.copy(
@@ -284,8 +272,7 @@ fun AddNoteScreenPreview() {
         AddNoteScreen(
             state = AddNoteState(),
             onAction = {},
-            modifier = Modifier,
-            navigateBack = {}
+            modifier = Modifier
         )
     }
 }

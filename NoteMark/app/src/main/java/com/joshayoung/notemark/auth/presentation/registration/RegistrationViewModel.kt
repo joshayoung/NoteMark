@@ -7,8 +7,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.navOptions
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.core.domain.util.Result
+import com.joshayoung.notemark.core.navigation.Destination
+import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.core.utils.textAsFlow
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
 import com.joshayoung.notemark.note.domain.use_cases.ValidatePassword
@@ -25,7 +28,8 @@ class RegistrationViewModel(
     private val authRepository: AuthRepository,
     private val validateUsername: ValidateUsername,
     private val validatePassword: ValidatePassword,
-    private val validateEmail: ValidateEmail
+    private val validateEmail: ValidateEmail,
+    private val navigator: Navigator
 ) : ViewModel() {
     var state by mutableStateOf(RegistrationState())
         private set
@@ -99,6 +103,23 @@ class RegistrationViewModel(
                 }
 
                 register()
+            }
+
+            RegistrationAction.AlreadyAccount -> {
+                viewModelScope.launch {
+                    navigator.navigate(
+                        destination = Destination.Login,
+                        navOptions = {
+                            popUpTo(Destination.StartScreen)
+                        }
+                    )
+                }
+            }
+
+            RegistrationAction.RegisterSuccess -> {
+                viewModelScope.launch {
+                    navigator.navigate(Destination.Login)
+                }
             }
         }
     }

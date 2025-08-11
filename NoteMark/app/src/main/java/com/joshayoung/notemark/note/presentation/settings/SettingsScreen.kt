@@ -31,13 +31,11 @@ import java.nio.file.WatchEvent
 @Composable
 fun SettingsScreenRoot(
     modifier: Modifier,
-    viewModel: SettingsViewModel = koinViewModel(),
-    navigateBack: () -> Unit,
+    viewModel: SettingsViewModel = koinViewModel()
 ) {
     SettingsScreen(
         modifier = modifier,
         state = viewModel.state,
-        goBack = navigateBack,
         onAction = { action ->
             viewModel.onAction(action)
         }
@@ -48,13 +46,14 @@ fun SettingsScreenRoot(
 fun SettingsScreen(
     modifier: Modifier,
     state: SettingsState,
-    onAction: (SettingsAction) -> Unit,
-    goBack: () -> Unit
+    onAction: (SettingsAction) -> Unit
 ) {
     NoteMarkScaffold(
         topAppBar = {
             NoteMarkToolbar(
-                goBack = goBack,
+                goBack = {
+                    onAction(SettingsAction.NavigateBack)
+                },
                 title = "Settings",
                 hasBackButton = true
             )
@@ -105,8 +104,7 @@ fun SettingsScreenPreview() {
         SettingsScreen(
             modifier = Modifier,
             state = SettingsState(),
-            onAction = {},
-            goBack = {}
+            onAction = {}
         )
     }
 }

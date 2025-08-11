@@ -7,9 +7,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.navOptions
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.core.data.DataStorageImpl
 import com.joshayoung.notemark.core.domain.util.Result
+import com.joshayoung.notemark.core.navigation.Destination
+import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +23,8 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
-    private val validateEmail: ValidateEmail
+    private val validateEmail: ValidateEmail,
+    private val navigator: Navigator
 ) : ViewModel() {
     var state by mutableStateOf(LoginState())
         private set
@@ -61,6 +65,30 @@ class LoginViewModel(
                         }
                     }
                 }
+            }
+            LoginAction.DontHaveAccount -> {
+                viewModelScope.launch {
+                    navigator.navigate(
+                        destination = Destination.Registration,
+                        navOptions = {
+                            popUpTo(Destination.StartScreen)
+                        }
+                    )
+                }
+            }
+
+            LoginAction.LoginSuccess -> {
+                viewModelScope.launch {
+                    navigator.navigate(
+                        destination = Destination.NoteList,
+                        navOptions = {
+                            popUpTo(Destination.StartScreen) {
+                                inclusive = true
+                            }
+                        }
+                    )
+                }
+
             }
         }
     }

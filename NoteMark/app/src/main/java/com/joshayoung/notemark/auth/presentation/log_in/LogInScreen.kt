@@ -35,16 +35,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LoginScreenRoot(
     modifier: Modifier,
-    viewModel: LoginViewModel = koinViewModel(),
-    onLoginSuccess: () -> Unit,
-    onDontHaveAccount: () -> Unit
+    viewModel: LoginViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     ObserveAsEvents(viewModel.events) { event ->
         when(event) {
             is LoginEvent.Success -> {
-                onLoginSuccess()
+                viewModel.onAction(LoginAction.LoginSuccess)
             }
 
             LoginEvent.Failure -> {
@@ -61,7 +59,6 @@ fun LoginScreenRoot(
     LoginScreen(
         modifier = modifier,
         state = viewModel.state,
-        onDontHaveAccount = onDontHaveAccount,
         onAction = { action ->
             viewModel.onAction(action)
         }
@@ -86,7 +83,6 @@ fun LoginHeader(
 fun LoginScreen(
     modifier: Modifier,
     state: LoginState,
-    onDontHaveAccount: () -> Unit,
     onAction: (LoginAction) -> Unit
 ) {
     val configuration = LocalConfiguration.current
@@ -113,8 +109,7 @@ fun LoginScreen(
                 )
                 LoginContent(
                     state = state,
-                    onAction = onAction,
-                    onDontHaveAccount = onDontHaveAccount
+                    onAction = onAction
                 )
             }
         }
@@ -137,7 +132,6 @@ fun LoginScreen(
             LoginContent(
                 state = state,
                 onAction = onAction,
-                onDontHaveAccount = onDontHaveAccount,
                 modifier = Modifier
                     .size(400.dp)
                     .padding(20.dp)
@@ -151,7 +145,6 @@ fun LoginScreen(
 fun LoginContent(
     state: LoginState,
     onAction: (LoginAction) -> Unit,
-    onDontHaveAccount: () -> Unit,
     modifier: Modifier = Modifier
         .fillMaxSize()
 ) {
@@ -176,7 +169,7 @@ fun LoginContent(
         "Don't have an account?", modifier = Modifier
         .fillMaxWidth()
         .clickable {
-            onDontHaveAccount()
+            onAction(LoginAction.DontHaveAccount)
         }, textAlign = TextAlign.Center
     )
 }
@@ -190,7 +183,6 @@ fun LoginContent(
 fun LoginScreenPreview() {
     NoteMarkTheme {
         LoginScreen(state = LoginState(),
-            onDontHaveAccount = {},
             onAction = {},
             modifier = Modifier
         )

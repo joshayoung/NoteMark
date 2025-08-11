@@ -7,10 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.auth.data.repository.AuthRepositoryImpl
 import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.core.navigation.Navigator
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    val authRepositoryImpl: AuthRepositoryImpl
+    val authRepositoryImpl: AuthRepositoryImpl,
+    val navigator: Navigator
 ) : ViewModel() {
     var state by mutableStateOf(SettingsState())
         private set
@@ -20,6 +22,12 @@ class SettingsViewModel(
             SettingsAction.OnLogoutClick -> {
                 viewModelScope.launch {
                     authRepositoryImpl.logout()
+                }
+            }
+
+            SettingsAction.NavigateBack -> {
+                viewModelScope.launch {
+                    navigator.navigateUp()
                 }
             }
         }

@@ -38,8 +38,6 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun RegistrationScreenRoot(
     modifier: Modifier,
-    onRegistrationSuccess: () -> Unit,
-    onAlreadyAccountClick: () -> Unit,
     viewModel: RegistrationViewModel = koinViewModel()
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -48,7 +46,7 @@ fun RegistrationScreenRoot(
     ObserveAsEvents(viewModel.events) { event ->
         when(event) {
             is RegistrationEvent.RegistrationSuccess -> {
-                onRegistrationSuccess()
+                viewModel.onAction(RegistrationAction.RegisterSuccess)
             }
             is RegistrationEvent.Error -> {
                 keyboardController?.hide()
@@ -63,7 +61,6 @@ fun RegistrationScreenRoot(
     RegistrationScreen(
         modifier = modifier,
         state = viewModel.state,
-        onAlreadyAccountClick = onAlreadyAccountClick,
         errorMessage = errorMessage,
         onnAction = { action ->
             viewModel.onAction(action)
@@ -75,7 +72,6 @@ fun RegistrationScreenRoot(
 fun RegistrationScreen(
     modifier: Modifier,
     state: RegistrationState,
-    onAlreadyAccountClick: () -> Unit,
     errorMessage: List<String?>?,
     onnAction: (RegistrationAction) -> Unit
 ) {
@@ -89,7 +85,6 @@ fun RegistrationScreen(
             Header(modifier = Modifier.weight(1f))
             Form(
                 errorMessage,
-                onAlreadyAccountClick = onAlreadyAccountClick,
                 state,
                 onnAction,
                         modifier = Modifier.weight(1f),
@@ -101,7 +96,6 @@ fun RegistrationScreen(
         ) {
             Header()
             Form(errorMessage,
-                onAlreadyAccountClick = onAlreadyAccountClick,
                 state, onnAction)
         }
     }
@@ -110,7 +104,6 @@ fun RegistrationScreen(
 @Composable
 private fun Form(
     errorMessage: List<String?>?,
-    onAlreadyAccountClick: () -> Unit,
     state: RegistrationState,
     onnAction: (RegistrationAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -172,7 +165,7 @@ private fun Form(
         Text(
             stringResource(R.string.have_account), modifier = Modifier
                 .clickable {
-                    onAlreadyAccountClick()
+                    onnAction(RegistrationAction.AlreadyAccount)
                 }
                 .fillMaxWidth(), textAlign = TextAlign.Center
         )
@@ -207,7 +200,6 @@ fun RegistrationScreenPreview() {
     NoteMarkTheme {
         RegistrationScreen(
             state = RegistrationState(),
-            onAlreadyAccountClick = {},
             errorMessage = null,
             onnAction = {},
             modifier = Modifier

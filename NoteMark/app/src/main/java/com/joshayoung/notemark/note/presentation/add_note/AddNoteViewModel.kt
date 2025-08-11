@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.joshayoung.notemark.core.navigation.Destination
+import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.core.utils.textAsFlow
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class AddNoteViewModel (
     val noteRepository: NoteRepository,
+    private val navigator: Navigator,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     var state by mutableStateOf(AddNoteState())
@@ -74,11 +76,19 @@ class AddNoteViewModel (
                         title = state.noteTitle.text.toString(),
                         body = state.noteBody.text.toString()
                     )
+
+                    navigator.navigateUp()
                 }
             }
 
             AddNoteAction.OnCloseClick -> {
 
+            }
+
+            AddNoteAction.NavigateBack -> {
+                viewModelScope.launch {
+                    navigator.navigateUp()
+                }
             }
         }
     }

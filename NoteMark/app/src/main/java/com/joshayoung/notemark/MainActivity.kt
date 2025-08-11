@@ -15,13 +15,10 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import androidx.navigation.toRoute
 import com.joshayoung.notemark.auth.presentation.log_in.LoginScreenRoot
 import com.joshayoung.notemark.auth.presentation.registration.RegistrationScreenRoot
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
@@ -33,16 +30,12 @@ import com.joshayoung.notemark.note.presentation.add_note.AddNoteScreenRoot
 import com.joshayoung.notemark.note.presentation.note_detail.NoteDetailScreenRoot
 import com.joshayoung.notemark.note.presentation.note_list.NoteListScreenRoot
 import com.joshayoung.notemark.note.presentation.settings.SettingsScreenRoot
-import com.joshayoung.notemark.note.presentation.start.GettingStartedScreen
 import com.joshayoung.notemark.note.presentation.start.GettingStartedScreenRoot
 import kotlinx.coroutines.flow.combine
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.compose.koinInject
 
 class MainActivity : ComponentActivity() {
-
-
-
     @Composable
     fun MyNavigation(
         navigator: Navigator,
@@ -79,97 +72,45 @@ class MainActivity : ComponentActivity() {
             navigation<Destination.AuthGraph>(
                 startDestination = Destination.StartScreen
             ) {
-                authGraph(
-                    navController,
-                    navigator = navigator,
-                    modifier = modifier
-                )
+                authGraph(modifier = modifier)
             }
             navigation<Destination.NoteGraph>(
                 startDestination = Destination.NoteList
             ) {
-                noteGraph(
-                    navController,
-                    modifier = modifier
-                )
+                noteGraph(modifier = modifier)
             }
         }
     }
 
-    private fun NavGraphBuilder.noteGraph(
-        navController: NavController,
-        modifier: Modifier) {
+    private fun NavGraphBuilder.noteGraph(modifier: Modifier) {
         composable<Destination.NoteList> {
             NoteListScreenRoot(modifier = modifier)
         }
 
         composable<Destination.AddNote> {
-            AddNoteScreenRoot(
-                modifier = modifier,
-                redirectBack = {
-                    navController.navigateUp()
-                },
-                navigateBack = {
-                    navController.navigateUp()
-                }
-            )
+            AddNoteScreenRoot(modifier = modifier)
         }
 
         composable<Destination.Settings> {
-            SettingsScreenRoot(
-                modifier = modifier,
-                navigateBack = {
-                    navController.navigateUp()
-                }
-            )
+            SettingsScreenRoot(modifier = modifier)
         }
 
         composable<Destination.NoteDetail>() {
-            NoteDetailScreenRoot(
-                modifier = modifier,
-            )
+            NoteDetailScreenRoot(modifier = modifier)
         }
     }
 
-    private fun NavGraphBuilder.authGraph(
-        navController: NavController,
-        navigator: Navigator,
-        modifier: Modifier) {
+    private fun NavGraphBuilder.authGraph(modifier: Modifier) {
         composable<Destination.StartScreen> {
-            GettingStartedScreenRoot(
-                modifier = modifier,
-            )
+            GettingStartedScreenRoot(modifier = modifier)
         }
-        composable<Destination.Registration>() {
-            RegistrationScreenRoot(
-                modifier = modifier,
-                onRegistrationSuccess = {
-                    navController.navigate(Destination.Login)
-                },
-                onAlreadyAccountClick = {
-                    navController.navigate(Destination.Login) {
-                        popUpTo(Destination.StartScreen)
-                    }
-                }
-            )
+
+        composable<Destination.Registration> {
+            RegistrationScreenRoot(modifier = modifier)
         }
 
         composable<Destination.Login> {
-            LoginScreenRoot(
-                modifier = modifier,
-                onLoginSuccess = {
-                    navController.navigate(Destination.NoteList) {
-                        popUpTo(Destination.StartScreen) {
-                            inclusive = true
-                        }
-                    }
-                },
-                onDontHaveAccount = {
-                    navController.navigate(Destination.Registration) {
-                        popUpTo(Destination.StartScreen)
-                    }
-                }
-            )
+            LoginScreenRoot(modifier = modifier)
         }
     }
 
