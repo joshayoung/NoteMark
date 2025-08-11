@@ -37,7 +37,6 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RegistrationScreenRoot(
-    modifier: Modifier,
     viewModel: RegistrationViewModel = koinViewModel()
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -59,7 +58,6 @@ fun RegistrationScreenRoot(
     }
 
     RegistrationScreen(
-        modifier = modifier,
         state = viewModel.state,
         errorMessage = errorMessage,
         onnAction = { action ->
@@ -70,7 +68,6 @@ fun RegistrationScreenRoot(
 
 @Composable
 fun RegistrationScreen(
-    modifier: Modifier,
     state: RegistrationState,
     errorMessage: List<String?>?,
     onnAction: (RegistrationAction) -> Unit
@@ -79,7 +76,7 @@ fun RegistrationScreen(
     val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 
     if (!isPortrait) {
-        Row(modifier = modifier
+        Row(modifier = Modifier
             .fillMaxSize()
         ) {
             Header(modifier = Modifier.weight(1f))
@@ -91,9 +88,7 @@ fun RegistrationScreen(
             )
         }
     } else {
-        Column(
-            modifier = modifier
-        ) {
+        Column() {
             Header()
             Form(errorMessage,
                 state, onnAction)
@@ -201,8 +196,7 @@ fun RegistrationScreenPreview() {
         RegistrationScreen(
             state = RegistrationState(),
             errorMessage = null,
-            onnAction = {},
-            modifier = Modifier
+            onnAction = {}
         )
     }
 }

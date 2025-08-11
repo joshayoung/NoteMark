@@ -55,11 +55,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AddNoteScreenRoot(
-    modifier: Modifier,
     viewModel: AddNoteViewModel = koinViewModel()
 ) {
     AddNoteScreen(
-        modifier = modifier,
         state = viewModel.state,
         onAction = { action ->
             when (action) {
@@ -74,7 +72,6 @@ fun AddNoteScreenRoot(
 
 @Composable
 fun AddNoteScreen(
-    modifier: Modifier,
     state: AddNoteState,
     onAction: (AddNoteAction)-> Unit
 ) {
@@ -143,7 +140,7 @@ fun AddNoteScreen(
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
@@ -271,8 +268,7 @@ fun AddNoteScreenPreview() {
     NoteMarkTheme {
         AddNoteScreen(
             state = AddNoteState(),
-            onAction = {},
-            modifier = Modifier
+            onAction = {}
         )
     }
 }

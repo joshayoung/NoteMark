@@ -38,10 +38,10 @@ import org.koin.compose.koinInject
 class MainActivity : ComponentActivity() {
     @Composable
     fun MyNavigation(
+        modifier: Modifier,
         navigator: Navigator,
         navController: NavHostController,
-        isAuthenticated: Boolean,
-        modifier: Modifier
+        isAuthenticated: Boolean
     ) {
         val tokenWithBackstack = combine(viewModel.authData, navController.currentBackStackEntryFlow) { auth, backStack ->
             DataStorageWithBackstack(auth, backStack)
@@ -65,52 +65,52 @@ class MainActivity : ComponentActivity() {
         }
 
         NavHost(
+            modifier = modifier,
             navController = navController,
-            startDestination = if (isAuthenticated) Destination.NoteGraph  else Destination.AuthGraph,
-            modifier = modifier
+            startDestination = if (isAuthenticated) Destination.NoteGraph  else Destination.AuthGraph
         ) {
             navigation<Destination.AuthGraph>(
                 startDestination = Destination.StartScreen
             ) {
-                authGraph(modifier = modifier)
+                authGraph()
             }
             navigation<Destination.NoteGraph>(
                 startDestination = Destination.NoteList
             ) {
-                noteGraph(modifier = modifier)
+                noteGraph()
             }
         }
     }
 
-    private fun NavGraphBuilder.noteGraph(modifier: Modifier) {
+    private fun NavGraphBuilder.noteGraph() {
         composable<Destination.NoteList> {
-            NoteListScreenRoot(modifier = modifier)
+            NoteListScreenRoot()
         }
 
         composable<Destination.AddNote> {
-            AddNoteScreenRoot(modifier = modifier)
+            AddNoteScreenRoot()
         }
 
         composable<Destination.Settings> {
-            SettingsScreenRoot(modifier = modifier)
+            SettingsScreenRoot()
         }
 
         composable<Destination.NoteDetail>() {
-            NoteDetailScreenRoot(modifier = modifier)
+            NoteDetailScreenRoot()
         }
     }
 
-    private fun NavGraphBuilder.authGraph(modifier: Modifier) {
+    private fun NavGraphBuilder.authGraph() {
         composable<Destination.StartScreen> {
-            GettingStartedScreenRoot(modifier = modifier)
+            GettingStartedScreenRoot()
         }
 
         composable<Destination.Registration> {
-            RegistrationScreenRoot(modifier = modifier)
+            RegistrationScreenRoot()
         }
 
         composable<Destination.Login> {
-            LoginScreenRoot(modifier = modifier)
+            LoginScreenRoot()
         }
     }
 

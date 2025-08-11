@@ -34,7 +34,6 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreenRoot(
-    modifier: Modifier,
     viewModel: LoginViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -57,7 +56,6 @@ fun LoginScreenRoot(
     }
 
     LoginScreen(
-        modifier = modifier,
         state = viewModel.state,
         onAction = { action ->
             viewModel.onAction(action)
@@ -81,7 +79,6 @@ fun LoginHeader(
 
 @Composable
 fun LoginScreen(
-    modifier: Modifier,
     state: LoginState,
     onAction: (LoginAction) -> Unit
 ) {
@@ -90,7 +87,7 @@ fun LoginScreen(
 
     if (isPortrait) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .background(color = MaterialTheme.colorScheme.primary)
                 .padding(top =10.dp)
                 .fillMaxSize(),
@@ -98,7 +95,7 @@ fun LoginScreen(
         )
         {
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                     .background(Color.White)
                     .padding(20.dp)
@@ -183,8 +180,7 @@ fun LoginContent(
 fun LoginScreenPreview() {
     NoteMarkTheme {
         LoginScreen(state = LoginState(),
-            onAction = {},
-            modifier = Modifier
+            onAction = {}
         )
     }
 }

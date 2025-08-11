@@ -47,11 +47,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun NoteListScreenRoot(
-    modifier: Modifier,
     viewModel: NoteListViewModel = koinViewModel()
 ) {
     NoteListScreen(
-       modifier = modifier,
        state = viewModel.state.collectAsStateWithLifecycle().value,
        onAction = { action ->
             viewModel.onAction(action)
@@ -61,7 +59,6 @@ fun NoteListScreenRoot(
 
 @Composable
 fun NoteListScreen(
-    modifier: Modifier,
     state: NoteListState,
     onAction: (NoteListAction) -> Unit
 ) {
@@ -113,7 +110,7 @@ fun NoteListScreen(
 
     ) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .background(
                     brush = Brush.radialGradient(
                         colors = listOf(
@@ -261,8 +258,7 @@ fun NoteListScreenPreview() {
                     )
                 )
             ),
-            onAction = {},
-            modifier = Modifier
+            onAction = {}
         )
     }
 }

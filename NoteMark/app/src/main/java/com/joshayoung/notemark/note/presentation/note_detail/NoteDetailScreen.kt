@@ -11,21 +11,17 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun NoteDetailScreenRoot(
     viewModel: NoteDetailViewModel = koinViewModel(),
-    modifier: Modifier
 ) {
     NoteDetailScreen(
-        modifier = modifier,
         state = viewModel.state
     )
 }
 
 @Composable
 fun NoteDetailScreen(
-    modifier: Modifier,
     state: NoteDetailState
 ) {
     Column(
-        modifier = modifier
     ) {
         Text(text = "test")
     }

@@ -30,11 +30,9 @@ import java.nio.file.WatchEvent
 
 @Composable
 fun SettingsScreenRoot(
-    modifier: Modifier,
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     SettingsScreen(
-        modifier = modifier,
         state = viewModel.state,
         onAction = { action ->
             viewModel.onAction(action)
@@ -44,7 +42,6 @@ fun SettingsScreenRoot(
 
 @Composable
 fun SettingsScreen(
-    modifier: Modifier,
     state: SettingsState,
     onAction: (SettingsAction) -> Unit
 ) {
@@ -60,7 +57,7 @@ fun SettingsScreen(
         }
     ) { innerPadding ->
     Column(
-        modifier
+        Modifier
             .padding(innerPadding)
             .padding(20.dp)
             .fillMaxSize()
@@ -102,7 +99,6 @@ fun SettingsScreen(
 fun SettingsScreenPreview() {
     NoteMarkTheme {
         SettingsScreen(
-            modifier = Modifier,
             state = SettingsState(),
             onAction = {}
         )

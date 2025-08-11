@@ -35,10 +35,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun GettingStartedScreenRoot(
     viewModel: GettingStartedViewModel = koinViewModel(),
-    modifier: Modifier
 ) {
     GettingStartedScreen(
-        modifier = modifier,
         onAction = { action ->
             viewModel.onAction(action)
         }
@@ -48,22 +46,22 @@ fun GettingStartedScreenRoot(
 @Composable
 fun GettingStartedScreen(
     onAction: (StartAction) -> Unit,
-    modifier: Modifier
 ) {
     val configuration = LocalConfiguration.current
     val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
     if (isPortrait) {
         PortraitOrientation(
-            modifier = modifier, onAction = onAction)
+            onAction = onAction)
     } else {
-        LandscapeOrientation(modifier = modifier, onAction = onAction)
+        LandscapeOrientation(
+            onAction = onAction)
     }
 }
 
 @Composable
-fun LandscapeOrientation(modifier: Modifier, onAction: (StartAction) -> Unit) {
+fun LandscapeOrientation(onAction: (StartAction) -> Unit) {
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .background( Color(0xFFE0EAFF))
                 .fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -86,9 +84,10 @@ fun LandscapeOrientation(modifier: Modifier, onAction: (StartAction) -> Unit) {
 }
 
 @Composable
-private fun PortraitOrientation(modifier: Modifier, onAction: (StartAction) -> Unit) {
+private fun PortraitOrientation(
+    onAction: (StartAction) -> Unit) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .background( Color(0xFFE0EAFF))
         ,verticalArrangement = Arrangement.Bottom
     ) {
@@ -166,7 +165,6 @@ private fun NoteIntroCard(
 private fun GettingStartedScreenPreview() {
     NoteMarkTheme {
         GettingStartedScreen(
-            modifier = Modifier,
             onAction = {}
         )
     }
