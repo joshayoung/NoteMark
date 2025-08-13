@@ -16,6 +16,8 @@ interface Navigator {
         navOptions: NavOptionsBuilder.() -> Unit = {}
     )
 
+    suspend fun previousBackStackEntry(key: String, id: String)
+
     suspend fun navigateUp()
 }
 
@@ -34,6 +36,12 @@ class DefaultNavigator(
             destination,
             navOptions
         ))
+    }
+
+    override suspend fun previousBackStackEntry(key: String, id: String) {
+        _navigationActions.send(
+            NavigationAction.NavigateUpWithBackStack(key, id)
+        )
     }
 
     override suspend fun navigateUp() {

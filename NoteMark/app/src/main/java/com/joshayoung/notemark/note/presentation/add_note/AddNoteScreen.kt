@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.joshayoung.notemark.core.design.theme.CloseIcon
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.presentation.components.DashedDivider
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import org.koin.androidx.compose.koinViewModel
 
@@ -129,7 +130,6 @@ fun AddNoteScreen(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.titleSmall
-
                 )
             }
         }
@@ -185,31 +185,6 @@ fun NoteTextFieldSingleLine(
         )
     }
     DashedDivider(MaterialTheme.colorScheme.primary)
-}
-
-@Composable
-fun DashedDivider(color: Color) {
-    Canvas(modifier = Modifier
-        .fillMaxWidth()
-        .height(1.dp)) {
-        val width = size.width
-        val y = size.height / 2
-
-        val dashLength = 18f
-        val gapLength = 9f
-        val thickness = 2f
-
-        var x = 0f
-        while (x < width) {
-            drawLine(
-                start = Offset(x, y),
-                color = color,
-                end = Offset(x + dashLength, y),
-                strokeWidth = thickness
-            )
-            x += dashLength + gapLength
-        }
-    }
 }
 
 @Composable

@@ -6,11 +6,19 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.toRoute
 import com.joshayoung.notemark.core.navigation.Destination
+import com.joshayoung.notemark.core.navigation.Destination.AddNote
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
+import com.joshayoung.notemark.note.presentation.note_list.NoteListState
 import com.joshayoung.notemark.note.presentation.note_list.mappers.toNoteUi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class NoteDetailViewModel(
@@ -18,22 +26,34 @@ class NoteDetailViewModel(
     private val noteRepository: NoteRepository,
     private val navigator: Navigator
 ) : ViewModel() {
-    var state by mutableStateOf(NoteDetailState())
-        private set
+    private var _state = MutableStateFlow(NoteDetailState())
+    val state = _state
+        .onStart {
+            loadData()
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(1000L),
+            NoteDetailState()
+        )
 
-    init {
+    fun loadData() {
         val noteId = savedStateHandle.toRoute<Destination.NoteDetail>().id
-
+//        var t = savedStateHandle.get<String>("noteId")
+//        var tt = savedStateHandle.get<String>("changedNote")
+//        var ttt = savedStateHandle.get<String>("bla")
         viewModelScope.launch {
             noteRepository.getNote(noteId)?.let { note ->
-                var noteUi = note.toNoteUi()
-                state = state.copy(
-                    dataCreated = noteUi.createdAt,
-                    lastEdited = noteUi.lastEditedAt.toString(),
-                    title = noteUi.title,
-                    body = noteUi.content,
-                    viewMode = NoteViewMode.DISPLAY
-                )
+                val noteUi = note.toNoteUi()
+                _state.update {
+                    it.copy(
+                        noteId = noteUi.id,
+                        dataCreated = noteUi.dateCreated,
+                        lastEdited = noteUi.dateLastEdited,
+                        title = noteUi.title,
+                        body = noteUi.content,
+                        viewMode = NoteViewMode.DISPLAY
+                    )
+                }
             }
         }
     }
@@ -43,6 +63,14 @@ class NoteDetailViewModel(
             NoteDetailAction.GoBack -> {
                 viewModelScope.launch {
                     navigator.navigateUp()
+                }
+            }
+
+            is NoteDetailAction.GoToEdit -> {
+                viewModelScope.launch {
+                    navigator.navigate(
+                        AddNote(id = action.id)
+                    )
                 }
             }
         }

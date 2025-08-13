@@ -9,4 +9,5 @@ sealed interface NavigationAction {
     ): NavigationAction
 
     data object NavigateUp: NavigationAction
+    data class NavigateUpWithBackStack(var key: String, var id: String): NavigationAction
 }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.toRoute
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
@@ -70,6 +71,8 @@ class AddNoteViewModel (
 
                         noteRepository.updateNote(currentNote, state.noteTitle.text.toString(), state.noteBody.text.toString())
 
+                        //navigator.previousBackStackEntry("changedNote", "9")
+                        navigator.navigateUp()
                         return@launch
                     }
 

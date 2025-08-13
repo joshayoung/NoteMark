@@ -1,8 +1,10 @@
 package com.joshayoung.notemark.note.presentation.note_list.model
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 data class NoteUi(
@@ -13,6 +15,8 @@ data class NoteUi(
     val createdAt: String,
     val lastEditedAt: String? = null
 ) {
+    val dateCreated: String get() = formatDate(createdAt)
+    val dateLastEdited: String get() = formatDate(lastEditedAt)
 
     val date: String get() {
         val dateTime = OffsetDateTime.parse(createdAt)
@@ -27,5 +31,25 @@ data class NoteUi(
         val formatted =  dateTime.format(formatter)
 
         return formatted.uppercase()
+    }
+
+    private fun formatDate(date: String?): String {
+        if (date == null)
+        {
+            return ""
+        }
+
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm")
+        val d = OffsetDateTime.parse(date)
+
+        val now = OffsetDateTime.now()
+        val difference = ChronoUnit.MINUTES.between(d, now)
+
+        if (difference < 5) {
+            return "Just now"
+        }
+
+
+        return d.format(formatter)
     }
 }

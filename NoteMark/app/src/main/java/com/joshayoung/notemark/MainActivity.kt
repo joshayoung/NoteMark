@@ -61,6 +61,12 @@ class MainActivity : ComponentActivity() {
                     action.navOptions(this)
                 }
                 NavigationAction.NavigateUp -> navController.navigateUp()
+                is NavigationAction.NavigateUpWithBackStack -> {
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set(action.key, action.id)
+                    navController.popBackStack()
+                }
             }
         }
 

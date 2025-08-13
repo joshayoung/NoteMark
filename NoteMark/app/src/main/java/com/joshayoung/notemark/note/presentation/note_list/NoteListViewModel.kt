@@ -85,13 +85,6 @@ class NoteListViewModel(
                 }
             }
 
-            is NoteListAction.GoToEdit -> {
-                viewModelScope.launch {
-                    navigator.navigate(
-                        AddNote(id = action.id)
-                    )
-                }
-            }
             NoteListAction.OnSettingsClick -> {
                 viewModelScope.launch {
                     navigator.navigate(Destination.Settings)
