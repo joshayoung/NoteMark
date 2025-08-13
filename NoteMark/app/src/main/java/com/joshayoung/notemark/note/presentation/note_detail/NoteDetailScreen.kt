@@ -1,9 +1,16 @@
 package com.joshayoung.notemark.note.presentation.note_detail
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,7 +23,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -37,6 +47,7 @@ import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.presentation.components.DashedDivider
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -57,42 +68,87 @@ fun NoteDetailScreen(
     state: NoteDetailState,
     onAction: (NoteDetailAction) -> Unit
 ) {
-    Column {
+    var inReaderMode by remember { mutableStateOf(false) }
+    var tappedToCloseReaderMode by remember { mutableStateOf(false) }
+    var timer by remember { mutableStateOf(0) }
+
+    LaunchedEffect(tappedToCloseReaderMode) {
+        if (!tappedToCloseReaderMode) {
+            return@LaunchedEffect
+        }
+
+        while(timer < 5) {
+            delay(1000)
+            timer += 1
+        }
+
+        if (timer == 5) {
+            inReaderMode = true
+            tappedToCloseReaderMode = false
+            timer = 0
+        }
+    }
         NoteMarkScaffold(
             topAppBar = {
-                NoteMarkToolbar(
-                    title = "All Notes".uppercase(),
-                    hasBackButton = true,
-                    goBack = {
-                        onAction(NoteDetailAction.GoBack)
-                    }
-                )
+                AnimatedVisibility(
+                    visible = !inReaderMode,
+                    enter = fadeIn(),
+                    exit = fadeOut(
+                        animationSpec = tween(durationMillis = 1000))
+                ) {
+                    NoteMarkToolbar(
+                        title = "All Notes".uppercase(),
+                        hasBackButton = true,
+                        goBack = {
+                            onAction(NoteDetailAction.GoBack)
+                        }
+                    )
+                }
             },
             floatingActionButton = {
-                Row(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(color = MaterialTheme.colorScheme.surface)
-                        .shadow(100.dp)
-
+                AnimatedVisibility(
+                    visible = !inReaderMode,
+                    enter = fadeIn(),
+                    exit = fadeOut(
+                        animationSpec = tween(durationMillis = 1000))
                 ) {
-                    IconButton(onClick = {
-                        onAction(NoteDetailAction.GoToEdit(state.noteId))
-                    }) {
-                        Icon(
-                            imageVector = EditIcon,
-                            contentDescription = null,
+                    Row(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(color = MaterialTheme.colorScheme.surface)
+                            .shadow(100.dp)
+
+                    ) {
+                        IconButton(onClick = {
+                            onAction(NoteDetailAction.GoToEdit(state.noteId))
+                        }) {
+                            Icon(
+                                imageVector = EditIcon,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp)
+                            )
+                        }
+
+                        val readerColor = if (inReaderMode) {
+                            MaterialTheme.colorScheme.surface
+                        } else {
+                            Color.Transparent
+                        }
+
+                        IconButton(
                             modifier = Modifier
-                                .size(20.dp)
-                        )
-                    }
-                    IconButton(onClick = {}) {
-                        Icon(
-                            imageVector = BookIcon,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(20.dp)
-                        )
+                                .background(readerColor),
+                            onClick = {
+                                inReaderMode = !inReaderMode
+                            }) {
+                            Icon(
+                                imageVector = BookIcon,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp)
+                            )
+                        }
                     }
                 }
             },
@@ -101,6 +157,13 @@ fun NoteDetailScreen(
             val contentPadding : Dp = 20.dp
             Column(
                 modifier = Modifier
+                    .clickable(onClick = {
+                        if (inReaderMode) {
+                            inReaderMode = false
+                            tappedToCloseReaderMode = true
+                        }
+                    })
+                    .fillMaxSize()
                     .padding(innerPadding)
             ) {
                 Text(text = state.title,
@@ -135,7 +198,6 @@ fun NoteDetailScreen(
                 )
             }
         }
-    }
 }
 
 @Preview
