@@ -2,6 +2,8 @@ package com.joshayoung.notemark.note.presentation.note_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joshayoung.notemark.core.AndroidConnectivityObserver
+import com.joshayoung.notemark.core.ConnectivityObserver
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.Destination
@@ -12,6 +14,7 @@ import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.presentation.mappers.toNoteUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -22,6 +25,7 @@ import kotlinx.coroutines.launch
 class NoteListViewModel(
     private val noteRepository: NoteRepository,
     private val dataStorage: DataStorage,
+    private val connectivityObserver: ConnectivityObserver,
     private val localDataSource: LocalDataSource,
     private val navigator: Navigator
 ) : ViewModel() {
@@ -34,6 +38,14 @@ class NoteListViewModel(
             viewModelScope,
             SharingStarted.WhileSubscribed(1000L),
             NoteListState(notes = emptyList())
+        )
+
+    val isConnected = connectivityObserver
+        .isConnected
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            false
         )
 
     init {

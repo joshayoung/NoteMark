@@ -18,6 +18,8 @@ import com.joshayoung.notemark.core.data.networking.HttpClientProvider
 import com.joshayoung.notemark.note.data.database.RoomLocalDataSource
 import com.joshayoung.notemark.note.data.database.NoteDatabase
 import com.joshayoung.notemark.auth.data.use_cases.EmailValidator
+import com.joshayoung.notemark.core.AndroidConnectivityObserver
+import com.joshayoung.notemark.core.ConnectivityObserver
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.DefaultNavigator
 import com.joshayoung.notemark.core.navigation.Destination
@@ -96,4 +98,6 @@ var appModule = module {
     single<CoroutineScope> {
         (androidApplication() as NoteMarkApp).applicationScope
     }
+
+    singleOf(::AndroidConnectivityObserver).bind<ConnectivityObserver>()
 }

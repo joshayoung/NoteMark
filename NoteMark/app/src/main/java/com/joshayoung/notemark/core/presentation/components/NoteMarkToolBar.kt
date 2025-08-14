@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joshayoung.notemark.core.design.theme.BackIcon
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.design.theme.OfflineIcon
 import com.joshayoung.notemark.core.design.theme.SettingsIcon
 
 
@@ -29,6 +30,7 @@ import com.joshayoung.notemark.core.design.theme.SettingsIcon
 fun NoteMarkToolbar(
     title: String,
     goBack: () -> Unit = {},
+    isOffline: Boolean = false,
     hasBackButton: Boolean = false,
     hasActions: Boolean = false,
     userAbbreviation: String? = null,
@@ -37,12 +39,23 @@ fun NoteMarkToolbar(
     TopAppBar(
         title = {
             Row(
-                modifier = Modifier
+                modifier = Modifier,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium
                 )
+                if (isOffline) {
+                    Icon(
+                        imageVector = OfflineIcon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.surfaceVariant,
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                            .size(20.dp)
+                    )
+                }
             }
         },
         navigationIcon = {
@@ -109,6 +122,7 @@ fun NoteMarkToolbarPreview() {
         NoteMarkToolbar(
             title = "Home",
             goBack = {},
+            isOffline = true,
             hasActions = true,
             navigateToSettings = {},
             userAbbreviation = "NM"

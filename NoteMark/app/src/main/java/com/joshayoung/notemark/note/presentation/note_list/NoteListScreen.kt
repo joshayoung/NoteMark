@@ -49,8 +49,12 @@ import org.koin.androidx.compose.koinViewModel
 fun NoteListScreenRoot(
     viewModel: NoteListViewModel = koinViewModel()
 ) {
+
+    val isConnected by viewModel.isConnected.collectAsStateWithLifecycle()
+
     NoteListScreen(
        state = viewModel.state.collectAsStateWithLifecycle().value,
+        isOffline = !isConnected,
        onAction = { action ->
             viewModel.onAction(action)
        }
@@ -60,6 +64,7 @@ fun NoteListScreenRoot(
 @Composable
 fun NoteListScreen(
     state: NoteListState,
+    isOffline: Boolean,
     onAction: (NoteListAction) -> Unit
 ) {
     NoteMarkScaffold(
@@ -68,6 +73,7 @@ fun NoteListScreen(
                 title = "Note Mark",
                 hasBackButton = false,
                 hasActions = true,
+                isOffline = isOffline,
                 userAbbreviation = state.userAbbreviation,
                 navigateToSettings = {
                     onAction(NoteListAction.OnSettingsClick)
@@ -258,6 +264,7 @@ fun NoteListScreenPreview() {
                     )
                 )
             ),
+            isOffline = true,
             onAction = {}
         )
     }

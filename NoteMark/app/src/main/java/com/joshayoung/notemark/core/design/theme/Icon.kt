@@ -5,6 +5,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.joshayoung.notemark.R
 
+val OfflineIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(R.drawable.offline)
+
+
 val CopyIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(R.drawable.copy)
