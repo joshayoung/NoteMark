@@ -27,9 +27,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMap
 import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.json.Json
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.UUID
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 
+@OptIn(ExperimentalTime::class)
 class NoteRepositoryImpl (
     private val localDataSource: LocalDataSource,
     private val applicationScope: CoroutineScope,
@@ -61,11 +68,15 @@ class NoteRepositoryImpl (
     }
 
     override suspend fun updateNote(note: Note?, title: String, body: String): EmptyResult<DataError> {
+        // TODO: Move these to mapper:
+        val currentDateTime = LocalDateTime.now(ZoneOffset.UTC)
+        val currentInstant = currentDateTime.toInstant(ZoneOffset.UTC)
         val localNoteForUpdate = Note(
             id = note?.id,
             title = title,
             content = body,
             createdAt = note!!.createdAt,
+            lastEditedAt = DateTimeFormatter.ISO_INSTANT.format(currentInstant),
             remoteId = note.remoteId
         )
         val result = localDataSource.upsertNote(localNoteForUpdate)
