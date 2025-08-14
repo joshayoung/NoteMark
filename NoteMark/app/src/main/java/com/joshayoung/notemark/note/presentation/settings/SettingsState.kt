@@ -1,5 +1,7 @@
 package com.joshayoung.notemark.note.presentation.settings
 
+import com.joshayoung.notemark.note.domain.models.SyncInterval
+
 data class SettingsState(
-    val start: Boolean = false
+    val interval: SyncInterval = SyncInterval.MANUAL
 )

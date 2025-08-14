@@ -12,10 +12,20 @@ import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     val authRepositoryImpl: AuthRepositoryImpl,
+    val dataStorage: DataStorage,
     val navigator: Navigator
 ) : ViewModel() {
     var state by mutableStateOf(SettingsState())
         private set
+
+    init {
+        viewModelScope.launch {
+            var interval = dataStorage.getSyncInterval()
+            state = state.copy(
+                interval = interval
+            )
+        }
+    }
 
     fun onAction(action : SettingsAction) {
         when(action) {
@@ -28,6 +38,15 @@ class SettingsViewModel(
             SettingsAction.NavigateBack -> {
                 viewModelScope.launch {
                     navigator.navigateUp()
+                }
+            }
+
+            is SettingsAction.SetSyncInterval -> { action
+                viewModelScope.launch {
+                    dataStorage.saveSyncInterval(action.interval)
+                    state = state.copy(
+                        interval = action.interval
+                    )
                 }
             }
         }

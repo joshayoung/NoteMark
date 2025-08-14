@@ -6,13 +6,19 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.joshayoung.notemark.note.domain.models.SyncInterval
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 private object AuthPreferenceValues {
     val ACCESS_TOKEN = stringPreferencesKey("access_token")
     val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
     val USERNAME = stringPreferencesKey("username")
+}
+
+private object SettingValues {
+    val SYNC_INTERVAL = stringPreferencesKey("sync_interval")
 }
 
 class DataStorageImpl(
@@ -55,6 +61,23 @@ class DataStorageImpl(
             if (settings.username != null) {
                 preferences[AuthPreferenceValues.USERNAME] = settings.username
             }
+        }
+    }
+
+    override suspend fun saveSyncInterval(interval: SyncInterval) {
+        dataStore.edit { preferences ->
+            preferences[SettingValues.SYNC_INTERVAL] = interval.text
+        }
+    }
+
+    override suspend fun getSyncInterval(): SyncInterval {
+        val value = dataStore.data.first()
+        val interval = value[SettingValues.SYNC_INTERVAL] ?: ""
+
+        return try {
+            SyncInterval.findByTextValue(interval)
+        } catch (e: Exception) {
+            SyncInterval.MANUAL
         }
     }
 }
