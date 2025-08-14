@@ -5,6 +5,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.joshayoung.notemark.R
 
+val RefreshIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(R.drawable.refresh)
+
 val RightArrowIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(R.drawable.right_arrow)

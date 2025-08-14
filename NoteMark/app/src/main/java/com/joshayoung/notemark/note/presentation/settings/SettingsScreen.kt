@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -22,6 +24,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,11 +39,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joshayoung.notemark.core.design.theme.LogoutIcon
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.design.theme.RefreshIcon
 import com.joshayoung.notemark.core.design.theme.RightArrowIcon
 import com.joshayoung.notemark.core.design.theme.TimeIcon
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
@@ -91,20 +96,18 @@ fun SettingsScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row {
-                IconButton(
-                modifier = Modifier
-                    .padding(end = 10.dp)
-                    .size(20.dp),
-                onClick = {
-                },
-
-                ) {
                 Icon(
                     imageVector = TimeIcon,
                     contentDescription = null,
                 )
-            }
-                Text(text = "Sync Interval")
+                Text(text = "Sync interval",
+
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+
+                    ,style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                    )
             }
 
             Row(modifier = Modifier,
@@ -158,9 +161,37 @@ fun SettingsScreen(
                     }
                 }
             }
-
         }
 
+        Spacer(Modifier.height(16.dp))
+        HorizontalDivider()
+        Spacer(Modifier.height(16.dp))
+        Row(modifier = Modifier
+            .fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = RefreshIcon,
+                contentDescription = null
+            )
+            Column(){
+                Text("Sync Data",
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                    ,fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.titleSmall
+                    )
+                Text("Last sync: 12 min ago",
+                    modifier = Modifier
+                        .padding(start = 10.dp),
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    style = MaterialTheme.typography.titleSmall
+                    )
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+        HorizontalDivider()
+        Spacer(Modifier.height(16.dp))
         Row(
             modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically
@@ -186,7 +217,7 @@ fun SettingsScreen(
                         onAction(SettingsAction.OnLogoutClick)
                     },
                 color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleSmall
             )
         }
     }
