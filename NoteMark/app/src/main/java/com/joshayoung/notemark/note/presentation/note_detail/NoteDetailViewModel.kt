@@ -1,19 +1,14 @@
 package com.joshayoung.notemark.note.presentation.note_detail
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.toRoute
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Destination.AddNote
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
-import com.joshayoung.notemark.note.presentation.note_list.NoteListState
-import com.joshayoung.notemark.note.presentation.note_list.mappers.toNoteUi
+import com.joshayoung.notemark.note.presentation.mappers.toNoteUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart

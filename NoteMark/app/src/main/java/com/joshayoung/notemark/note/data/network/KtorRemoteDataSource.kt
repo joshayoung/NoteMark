@@ -1,6 +1,5 @@
 package com.joshayoung.notemark.note.data.network
 
-import androidx.room.util.query
 import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.core.data.networking.catchErrors
 import com.joshayoung.notemark.core.domain.util.DataError
@@ -8,11 +7,11 @@ import com.joshayoung.notemark.core.domain.util.EmptyDataResult
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.domain.util.asEmptyDataResult
 import com.joshayoung.notemark.core.domain.util.map
+import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.data.mappers.toNoteDto
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.network.NoteDto
 import com.joshayoung.notemark.note.network.RemoteDataSource
-import com.joshayoung.notemark.note.network.toNote
 import io.ktor.client.HttpClient
 import io.ktor.client.request.delete
 import io.ktor.client.request.get

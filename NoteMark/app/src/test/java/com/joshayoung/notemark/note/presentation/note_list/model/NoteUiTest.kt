@@ -2,6 +2,7 @@ package com.joshayoung.notemark.note.presentation.note_list.model
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.joshayoung.notemark.note.presentation.model.NoteUi
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

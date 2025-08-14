@@ -41,7 +41,7 @@ import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.PlusIcon
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
-import com.joshayoung.notemark.note.presentation.note_list.model.NoteUi
+import com.joshayoung.notemark.note.presentation.model.NoteUi
 import org.koin.androidx.compose.koinViewModel
 
 

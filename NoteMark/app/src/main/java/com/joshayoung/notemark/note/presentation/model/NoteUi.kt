@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.note.presentation.note_list.model
+package com.joshayoung.notemark.note.presentation.model
 
 import java.time.LocalDate
 import java.time.LocalDateTime

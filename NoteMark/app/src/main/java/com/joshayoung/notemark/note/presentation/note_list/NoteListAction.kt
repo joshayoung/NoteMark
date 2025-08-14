@@ -1,6 +1,6 @@
 package com.joshayoung.notemark.note.presentation.note_list
 
-import com.joshayoung.notemark.note.presentation.note_list.model.NoteUi
+import com.joshayoung.notemark.note.presentation.model.NoteUi
 
 
 sealed interface NoteListAction {
