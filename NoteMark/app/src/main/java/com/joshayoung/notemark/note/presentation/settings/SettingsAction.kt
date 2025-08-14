@@ -7,4 +7,5 @@ sealed interface SettingsAction {
     data object OnLogoutClick: SettingsAction
     data object NavigateBack: SettingsAction
     data class SetSyncInterval(val interval: SyncInterval): SettingsAction
+    data object Sync: SettingsAction
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.auth.data.repository.AuthRepositoryImpl
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.Navigator
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
@@ -46,6 +47,18 @@ class SettingsViewModel(
                     dataStorage.saveSyncInterval(action.interval)
                     state = state.copy(
                         interval = action.interval
+                    )
+                }
+            }
+
+            SettingsAction.Sync -> {
+                viewModelScope.launch {
+                    state = state.copy(
+                        isSyncing = true
+                    )
+                    delay(2000)
+                    state = state.copy(
+                        isSyncing = false
                     )
                 }
             }

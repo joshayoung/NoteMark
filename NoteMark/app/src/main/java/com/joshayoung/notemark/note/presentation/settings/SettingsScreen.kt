@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -66,7 +68,6 @@ fun SettingsScreenRoot(
         }
     )
 }
-
 @Composable
 fun SettingsScreen(
     state: SettingsState,
@@ -83,142 +84,166 @@ fun SettingsScreen(
             )
         }
     ) { innerPadding ->
-    Column(
-        Modifier
-            .padding(innerPadding)
-            .padding(20.dp)
-            .fillMaxSize()
-    ) {
-        Row(
+        var isSyncing by remember { mutableStateOf(false) }
+        Box(
             modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                .fillMaxSize()
+                .background(Color(0x20000000))
         ) {
-            Row {
-                Icon(
-                    imageVector = TimeIcon,
-                    contentDescription = null,
-                )
-                Text(text = "Sync interval",
-
+            if (state.isSyncing) {
+                CircularProgressIndicator(
                     modifier = Modifier
-                        .padding(start = 10.dp)
-
-                    ,style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                        .align(Alignment.Center)
+                        .size(80.dp),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        Column(
+            Modifier
+                .padding(innerPadding)
+                .padding(20.dp)
+                .fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row {
+                    Icon(
+                        imageVector = TimeIcon,
+                        contentDescription = null,
                     )
+                    Text(
+                        text = "Sync interval",
+
+                        modifier = Modifier
+                            .padding(start = 10.dp), style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Row(
+                    modifier = Modifier,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    var expanded by remember { mutableStateOf(false) }
+
+                    Text(
+                        text = state.interval.text, modifier = Modifier
+                            .clickable {
+                                expanded = !expanded
+                            }
+                    )
+                    Box(
+                        modifier = Modifier
+                    ) {
+                        IconButton(onClick = { expanded = !expanded }) {
+                            Icon(RightArrowIcon, contentDescription = "More options")
+                        }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(SyncInterval.MANUAL.text) },
+                                onClick = {
+                                    expanded = false
+                                    onAction(SettingsAction.SetSyncInterval(SyncInterval.MANUAL))
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(SyncInterval.FIFTEEN.text) },
+                                onClick = {
+                                    expanded = false
+                                    onAction(SettingsAction.SetSyncInterval(SyncInterval.FIFTEEN))
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(SyncInterval.THIRTY.text) },
+                                onClick = {
+                                    expanded = false
+                                    onAction(SettingsAction.SetSyncInterval(SyncInterval.THIRTY))
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(SyncInterval.HOUR.text) },
+                                onClick = {
+                                    expanded = false
+                                    onAction(SettingsAction.SetSyncInterval(SyncInterval.HOUR))
+                                }
+                            )
+                        }
+                    }
+                }
             }
 
-            Row(modifier = Modifier,
-                verticalAlignment = Alignment.CenterVertically,
+            Spacer(Modifier.height(16.dp))
+            HorizontalDivider()
+            Spacer(Modifier.height(16.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
-                var expanded by remember { mutableStateOf(false) }
-
-                Text(text = state.interval.text, modifier = Modifier
+                Row(modifier = Modifier
                     .clickable {
-                        expanded = !expanded
+                        onAction(SettingsAction.Sync)
                     }
-                )
-                Box(
-                    modifier = Modifier
                 ) {
-                    IconButton(onClick = { expanded = !expanded }) {
-                        Icon(RightArrowIcon, contentDescription = "More options")
-                    }
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text(SyncInterval.MANUAL.text) },
-                            onClick = {
-                                expanded = false
-                                onAction(SettingsAction.SetSyncInterval(SyncInterval.MANUAL))
-                            }
+                    Icon(
+                        imageVector = RefreshIcon,
+                        contentDescription = null
+                    )
+                    Column() {
+                        Text(
+                            "Sync Data",
+                            modifier = Modifier
+                                .padding(start = 10.dp), fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleSmall
                         )
-                        DropdownMenuItem(
-                            text = { Text(SyncInterval.FIFTEEN.text) },
-                            onClick = {
-                                expanded = false
-                                onAction(SettingsAction.SetSyncInterval(SyncInterval.FIFTEEN))
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text(SyncInterval.THIRTY.text) },
-                            onClick = {
-                                expanded = false
-                                onAction(SettingsAction.SetSyncInterval(SyncInterval.THIRTY))
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text(SyncInterval.HOUR.text) },
-                            onClick = {
-                                expanded = false
-                                onAction(SettingsAction.SetSyncInterval(SyncInterval.HOUR))
-                            }
+                        Text(
+                            "Last sync: 12 min ago",
+                            modifier = Modifier
+                                .padding(start = 10.dp),
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            style = MaterialTheme.typography.titleSmall
                         )
                     }
                 }
             }
-        }
 
-        Spacer(Modifier.height(16.dp))
-        HorizontalDivider()
-        Spacer(Modifier.height(16.dp))
-        Row(modifier = Modifier
-            .fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = RefreshIcon,
-                contentDescription = null
-            )
-            Column(){
-                Text("Sync Data",
+            Spacer(Modifier.height(16.dp))
+            HorizontalDivider()
+            Spacer(Modifier.height(16.dp))
+            Row(
+                modifier = Modifier,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
                     modifier = Modifier
-                        .padding(start = 10.dp)
-                    ,fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleSmall
+                        .padding(end = 10.dp)
+                        .size(20.dp),
+                    onClick = {
+                    },
+
+                    ) {
+                    Icon(
+                        imageVector = LogoutIcon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error,
                     )
-                Text("Last sync: 12 min ago",
+                }
+                Text(
+                    "Log Out",
                     modifier = Modifier
-                        .padding(start = 10.dp),
-                    color = MaterialTheme.colorScheme.surfaceVariant,
+                        .clickable {
+                            onAction(SettingsAction.OnLogoutClick)
+                        },
+                    color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.titleSmall
-                    )
-            }
-        }
-
-        Spacer(Modifier.height(16.dp))
-        HorizontalDivider()
-        Spacer(Modifier.height(16.dp))
-        Row(
-            modifier = Modifier,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                modifier = Modifier
-                    .padding(end = 10.dp)
-                    .size(20.dp),
-                onClick = {
-                },
-
-                ) {
-                Icon(
-                    imageVector = LogoutIcon,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.error,
                 )
             }
-            Text(
-                "Log Out",
-                modifier = Modifier
-                    .clickable {
-                        onAction(SettingsAction.OnLogoutClick)
-                    },
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.titleSmall
-            )
         }
     }
 }
