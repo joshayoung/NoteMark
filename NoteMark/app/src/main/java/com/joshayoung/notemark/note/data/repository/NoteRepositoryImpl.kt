@@ -89,13 +89,13 @@ class NoteRepositoryImpl (
 
         if (result is Result.Success)
         {
-            applicationScope.async {
-                val remoteUpdate = remoteDataSource.updateNote(localNoteForUpdate)
-                if (remoteUpdate is Result.Success) {
-
-                    return@async Result.Success(Unit)
-                }
-            }.await()
+//            applicationScope.async {
+//                val remoteUpdate = remoteDataSource.updateNote(localNoteForUpdate)
+//                if (remoteUpdate is Result.Success) {
+//
+//                    return@async Result.Success(Unit)
+//                }
+//            }.await()
 
             return Result.Success(localNoteForUpdate)
         }

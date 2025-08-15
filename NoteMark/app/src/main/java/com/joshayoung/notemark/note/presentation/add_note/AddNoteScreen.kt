@@ -56,12 +56,7 @@ fun AddNoteScreenRoot(
     AddNoteScreen(
         state = viewModel.state,
         onAction = { action ->
-            when (action) {
-                AddNoteAction.OnCloseClick -> TODO()
-                else -> {
-                    viewModel.onAction(action)
-                }
-            }
+            viewModel.onAction(action)
         }
     )
 }
@@ -71,33 +66,6 @@ fun AddNoteScreen(
     state: AddNoteState,
     onAction: (AddNoteAction)-> Unit
 ) {
-    var showNonSavePrompt by remember { mutableStateOf(false) }
-
-    if (showNonSavePrompt && state.hasChangeInitialContent) {
-        AlertDialog(
-            onDismissRequest = {
-                showNonSavePrompt = false
-            },
-            title = { Text("Discard Changes?") },
-            text = { Text("You have unsaved changes. If you discard now, all changes will be lost.") },
-            confirmButton = {
-                Button(onClick = {
-                    showNonSavePrompt = false
-                    onAction(AddNoteAction.NavigateBack)
-                }) {
-                    Text("Discard")
-                }
-            },
-            dismissButton = {
-                Button(onClick = {
-                    showNonSavePrompt = false
-                }) {
-                    Text("Keep Editing")
-                }
-            }
-        )
-    }
-
     NoteMarkScaffold(
         topAppBar = {
             Row(
@@ -112,24 +80,9 @@ fun AddNoteScreen(
                 Icon(imageVector = CloseIcon, contentDescription = null, modifier = Modifier
                     .size(26.dp)
                     .clickable {
-                        if (state.hasChangeInitialContent) {
-                            showNonSavePrompt = true
-                        } else {
-                            onAction(AddNoteAction.NavigateBack)
-                        }
+                        onAction(AddNoteAction.NavigateBack)
                     },
                     tint = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    "Save Note".uppercase()
-                    , modifier = Modifier
-                        .padding(end = 10.dp)
-                    .clickable {
-                        onAction(AddNoteAction.OnSaveClick)
-                    },
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleSmall
                 )
             }
         }
