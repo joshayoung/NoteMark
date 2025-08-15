@@ -27,7 +27,7 @@ class RoomLocalDataSource(
     override suspend fun upsertNote(note: Note): Result<Int?, DataError.Local> {
         try {
             val noteEntity = note.toNoteEntity()
-            noteDao.upsertNote(noteEntity)
+            val id = noteDao.upsertNote(noteEntity)
             return Result.Success(data = noteEntity.id)
         } catch(e: SQLiteFullException) {
             return Result.Error(DataError.Local.DISK_FULL)
