@@ -8,7 +8,7 @@ import java.time.temporal.ChronoUnit
 
 
 data class NoteUi(
-    val id: Int? = null,
+    val id: Long? = null,
     val remoteId: String,
     val title: String,
     val content: String,

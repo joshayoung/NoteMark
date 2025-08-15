@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteFullException
 import com.joshayoung.notemark.core.domain.util.DataError
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.note.data.database.dao.NoteDao
+import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.data.mappers.toNoteEntity
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
@@ -24,23 +25,23 @@ class RoomLocalDataSource(
         }
     }
 
-    override suspend fun upsertNote(note: Note): Result<Int?, DataError.Local> {
+    override suspend fun upsertNote(note: Note): Result<NoteEntity, DataError.Local> {
         try {
             val noteEntity = note.toNoteEntity()
             val id = noteDao.upsertNote(noteEntity)
-            return Result.Success(data = noteEntity.id)
+            return Result.Success(data = noteEntity.copy(id = id))
         } catch(e: SQLiteFullException) {
             return Result.Error(DataError.Local.DISK_FULL)
         }
     }
 
-    override suspend fun getNote(id: Int) : Note? {
+    override suspend fun getNote(id: Long) : Note? {
         val noteEntity = noteDao.getNoteById(id)?.toNote()
 
         return noteEntity
     }
 
-    override suspend fun deleteNote(id: Int) : Boolean {
+    override suspend fun deleteNote(id: Long) : Boolean {
         val rows = noteDao.deleteNote(id)
 
         return rows == 1

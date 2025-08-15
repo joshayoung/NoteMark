@@ -1,7 +1,7 @@
 package com.joshayoung.notemark.note.presentation.note_detail
 
 data class NoteDetailState(
-    val noteId: Int? = null,
+    val noteId: Long? = null,
     val dataCreated: String = "",
     val lastEdited: String = "",
     val body: String = "",

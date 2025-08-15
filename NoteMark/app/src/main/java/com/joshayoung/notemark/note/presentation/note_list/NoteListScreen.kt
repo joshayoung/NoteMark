@@ -166,7 +166,7 @@ fun NoteListScreen(
 fun NoteItem(
     note: NoteUi,
     onAction: (NoteListAction)-> Unit,
-    onNavigateToEdit: (id: Int) -> Unit
+    onNavigateToEdit: (id: Long) -> Unit
     ) {
     var showConfirmDeleteDialog by remember { mutableStateOf(false) }
 

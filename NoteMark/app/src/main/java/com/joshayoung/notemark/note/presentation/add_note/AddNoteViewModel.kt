@@ -76,7 +76,7 @@ class AddNoteViewModel (
                         return@launch
                     }
 
-                    noteRepository.createNote(
+                    val note = noteRepository.createNote(
                         title = state.noteTitle.text.toString(),
                         body = state.noteBody.text.toString()
                     )

@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {
     fun getNotes(): Flow<List<Note>>
-     suspend fun upsertNote(note: Note): Result<Int?, DataError.Local>
-    suspend fun getNote(id: Int) : Note?
-    suspend fun deleteNote(id: Int) : Boolean
+    suspend fun upsertNote(note: Note): Result<NoteEntity, DataError.Local>
+    suspend fun getNote(id: Long) : Note?
+    suspend fun deleteNote(id: Long) : Boolean
     suspend fun removeAllNotes()
 }

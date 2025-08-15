@@ -9,6 +9,7 @@ import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.domain.util.asEmptyDataResult
 import com.joshayoung.notemark.core.utils.getTimeStampForInsert
 import com.joshayoung.notemark.note.data.database.entity.NoteEntity
+import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.models.Note
@@ -42,7 +43,7 @@ class NoteRepositoryImpl (
     private val applicationScope: CoroutineScope,
     private val remoteDataSource: KtorRemoteDataSource
 ) : NoteRepository {
-    override suspend fun createNote(title: String, body: String): EmptyDataResult<DataError> {
+    override suspend fun createNote(title: String, body: String): Result<Note, DataError> {
         val remoteId = UUID.randomUUID().toString()
         val note = Note(
             remoteId = remoteId,
@@ -53,18 +54,23 @@ class NoteRepositoryImpl (
         val localResult = localDataSource.upsertNote(note)
 
         // TODO: Is this right?
-        if (localResult is Result.Success)
-        {
-            applicationScope.async {
-                val noteSave = remoteDataSource.saveNote(note)
-                if (noteSave is Result.Success)
-                {
-                    return@async Result.Success(Unit)
-                }
-            }.await()
-        }
+//        if (localResult is Result.Success)
+//        {
+//            applicationScope.async {
+//                val noteSave = remoteDataSource.saveNote(note)
+//                if (noteSave is Result.Success)
+//                {
+//                    return@async Result.Success(Unit)
+//                }
+//            }.await()
+//        }
 
-        return localResult.asEmptyDataResult()
+        if (localResult is Result.Success) {
+            return Result.Success(data = localResult.data.toNote())
+        } else {
+            // NOTE: This might not be correct:
+            return Result.Error(error = DataError.Local.DISK_FULL)
+        }
     }
 
     override suspend fun updateNote(note: Note?, title: String, body: String): EmptyResult<DataError> {
@@ -120,7 +126,7 @@ class NoteRepositoryImpl (
         return Result.Success(Unit)
     }
 
-    override suspend fun getNote(id: Int) : Note? {
+    override suspend fun getNote(id: Long) : Note? {
         return localDataSource.getNote(id)
     }
 }

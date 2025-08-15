@@ -1,7 +1,7 @@
 package com.joshayoung.notemark.note.domain.models
 
 data class Note(
-    val id: Int? = null,
+    val id: Long? = null,
     val remoteId: String,
     val content: String,
     val createdAt: String,
