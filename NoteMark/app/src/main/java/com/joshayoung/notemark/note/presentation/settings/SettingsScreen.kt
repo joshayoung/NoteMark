@@ -4,6 +4,7 @@ package com.joshayoung.notemark.note.presentation.settings
 
 import android.R
 import android.graphics.drawable.Icon
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +52,7 @@ import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.RefreshIcon
 import com.joshayoung.notemark.core.design.theme.RightArrowIcon
 import com.joshayoung.notemark.core.design.theme.TimeIcon
+import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
 import com.joshayoung.notemark.note.domain.models.SyncInterval
@@ -61,6 +64,23 @@ import java.nio.file.WatchEvent
 fun SettingsScreenRoot(
     viewModel: SettingsViewModel = koinViewModel()
 ) {
+
+
+    val context = LocalContext.current
+    ObserveAsEvents(viewModel.events) { event ->
+        when(event) {
+            is SettingsEvent.InternetOfflineCannotLogout -> {
+                Toast.makeText(
+                    context,
+                    "You need an internet connection to log out",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
+    }
+
+
     SettingsScreen(
         state = viewModel.state,
         onAction = { action ->
