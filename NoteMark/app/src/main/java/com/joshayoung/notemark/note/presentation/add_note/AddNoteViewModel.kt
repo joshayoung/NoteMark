@@ -69,7 +69,7 @@ class AddNoteViewModel (
                 viewModelScope.launch {
                     if (currentNote != null) {
 
-                        noteRepository.updateNote(currentNote, state.noteTitle.text.toString(), state.noteBody.text.toString())
+                        val n = noteRepository.updateNote(currentNote, state.noteTitle.text.toString(), state.noteBody.text.toString())
 
                         //navigator.previousBackStackEntry("changedNote", "9")
                         navigator.navigateUp()

@@ -29,6 +29,9 @@ class RoomLocalDataSource(
         try {
             val noteEntity = note.toNoteEntity()
             val id = noteDao.upsertNote(noteEntity)
+            if (id == -1L) {
+                return Result.Success(data = noteEntity)
+            }
             return Result.Success(data = noteEntity.copy(id = id))
         } catch(e: SQLiteFullException) {
             return Result.Error(DataError.Local.DISK_FULL)

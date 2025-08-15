@@ -73,7 +73,7 @@ class NoteRepositoryImpl (
         }
     }
 
-    override suspend fun updateNote(note: Note?, title: String, body: String): EmptyResult<DataError> {
+    override suspend fun updateNote(note: Note?, title: String, body: String): Result<Note, DataError> {
         // TODO: Move these to mapper:
         val currentDateTime = LocalDateTime.now(ZoneOffset.UTC)
         val currentInstant = currentDateTime.toInstant(ZoneOffset.UTC)
@@ -97,10 +97,11 @@ class NoteRepositoryImpl (
                 }
             }.await()
 
-            return Result.Success(Unit)
+            return Result.Success(localNoteForUpdate)
         }
 
-        return result.asEmptyDataResult();
+        // TODO: Is this right?
+        return Result.Error(error = DataError.Network.UNKNOWN)
     }
 
     override suspend fun getNotes(): Flow<List<Note>> {

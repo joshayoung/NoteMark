@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
     suspend fun createNote(title: String, body: String): Result<Note, DataError>
-    suspend fun updateNote(note: Note?, title: String, body: String): EmptyResult<DataError>
+    suspend fun updateNote(note: Note?, title: String, body: String): Result<Note, DataError>
     suspend fun getNotes(): Flow<List<Note>>
     suspend fun getNote(id: Long) : Note?
     suspend fun deleteNote(note: Note) : EmptyResult<DataError>
