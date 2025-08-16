@@ -2,7 +2,7 @@ package com.joshayoung.notemark
 
 import com.joshayoung.notemark.core.navigation.Destination
 
-class AuthService {
+class AuthHelper {
     companion object Companion {
         fun notInAuthRoutes(path: String?): Boolean {
             val route = path?.split('.')?.lastOrNull()
