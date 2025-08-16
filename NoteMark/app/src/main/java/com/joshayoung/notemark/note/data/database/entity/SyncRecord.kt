@@ -8,7 +8,7 @@ import java.util.UUID
 data class SyncRecord(
     @PrimaryKey val id: Long? = null,
     val userId: String,
-    val noteId: String,
+    val noteId: String?,
     val operation: SyncOperation,
     val payload: String,
     val timestamp: Long

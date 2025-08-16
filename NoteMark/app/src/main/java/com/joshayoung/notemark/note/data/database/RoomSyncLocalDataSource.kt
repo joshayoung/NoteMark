@@ -4,7 +4,6 @@ import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.domain.util.DataError
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.note.data.database.dao.SyncDao
-import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.data.database.entity.SyncOperation
 import com.joshayoung.notemark.note.data.database.entity.SyncRecord
 import com.joshayoung.notemark.note.data.mappers.toNoteEntity
@@ -36,13 +35,20 @@ class RoomSyncLocalDataSource(
             payload = Json.encodeToString(noteEntity),
             timestamp = System.currentTimeMillis()
         )
-        val result = syncDao.upsertNote(syncRecord)
+
+        if (operation == SyncOperation.UPDATE)
+        {
+            // This way I only ever have i update per note.
+            // This should not be the remote id here:
+            syncDao.deleteAllSyncsForNoteId(note.remoteId.toString(), SyncOperation.UPDATE.name)
+        }
+        syncDao.upsertSync(syncRecord)
 
         // TODO: Re-evaluate this return value
         return Result.Success(Unit)
     }
 
-    override fun getAllPendingSyncs(): Flow<List<SyncRecord>> {
+    override fun getAllSyncs(): Flow<List<SyncRecord>> {
         val syncs = syncDao.getAllSyncs()
 
         return syncs
@@ -52,5 +58,9 @@ class RoomSyncLocalDataSource(
         val sync = syncDao.getSyncById(note.id)
 
         return sync
+    }
+
+    override suspend fun deleteSync(id: Long?) {
+        syncDao.deleteSync(id)
     }
 }

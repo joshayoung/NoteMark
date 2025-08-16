@@ -60,7 +60,6 @@ class NoteRepositoryImpl (
 
         if (result is Result.Success)
         {
-            // left off:
 //            val sync = localSyncDataSource.getSync(localNoteForUpdate)
 //            localSyncDataSource.addOrUpdateQueue(localNoteForUpdate, SyncOperation.UPDATE)
 

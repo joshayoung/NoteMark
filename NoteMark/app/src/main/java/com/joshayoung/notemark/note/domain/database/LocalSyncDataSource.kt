@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface LocalSyncDataSource {
     suspend fun clearSyncQueue()
     suspend fun addOrUpdateQueue(note: Note, operation: SyncOperation) : Result<Unit, DataError.Local>
-    fun getAllPendingSyncs() : Flow<List<SyncRecord>>
+    fun getAllSyncs() : Flow<List<SyncRecord>>
     suspend fun getSync(note: Note): SyncRecord?
+    suspend fun deleteSync(id: Long?)
 }

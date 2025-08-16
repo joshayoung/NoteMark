@@ -9,10 +9,10 @@ import java.time.temporal.ChronoUnit
 
 data class NoteUi(
     val id: Long? = null,
-    val remoteId: String,
+    val remoteId: String?,
     val title: String,
-    val content: String,
-    val createdAt: String,
+    val content: String?,
+    val createdAt: String?,
     val lastEditedAt: String? = null
 ) {
     val dateCreated: String get() = formatDate(createdAt)

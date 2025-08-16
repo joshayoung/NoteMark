@@ -9,9 +9,9 @@ import kotlinx.serialization.Serializable
 data class NoteEntity(
     @PrimaryKey val id: Long? = null,
 
-    val remoteId: String,
-    val content: String,
-    val createdAt: String,
+    val remoteId: String?,
+    val content: String?,
+    val createdAt: String?,
     val lastEditedAt: String? = null,
     val title: String,
 )

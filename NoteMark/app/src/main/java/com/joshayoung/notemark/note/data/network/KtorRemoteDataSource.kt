@@ -10,6 +10,7 @@ import com.joshayoung.notemark.core.domain.util.map
 import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.data.mappers.toNoteDto
 import com.joshayoung.notemark.note.domain.models.Note
+import com.joshayoung.notemark.note.domain.models.NotesData
 import com.joshayoung.notemark.note.network.NoteDto
 import com.joshayoung.notemark.note.network.RemoteDataSource
 import io.ktor.client.HttpClient
@@ -24,7 +25,7 @@ import io.ktor.client.request.url
 class KtorRemoteDataSource(
     private val client: HttpClient,
 ) : RemoteDataSource {
-    override suspend fun saveNote(note: Note): Result<Note, DataError.Network> {
+    override suspend fun createNote(note: Note): Result<Note, DataError.Network> {
         val noteDto = note.toNoteDto()
         val response = catchErrors<NoteDto> {
             client.post {
@@ -39,14 +40,16 @@ class KtorRemoteDataSource(
     }
 
     override suspend fun getNotes(): Result<List<Note>, DataError.Network> {
-        val response = catchErrors<List<NoteDto>> {
+        val response = catchErrors<NotesData> {
             client.get {
                 url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
             }
         }
 
-        return response.map { noteDto ->
-            noteDto.map { it.toNote() }
+        return response.map { noteData ->
+            noteData.notes.map {
+                it.toNote()
+            }
         }
     }
 
@@ -62,7 +65,7 @@ class KtorRemoteDataSource(
         return response.asEmptyDataResult()
     }
 
-    override suspend fun deleteNote(id: String): EmptyDataResult<DataError.Network> {
+    override suspend fun deleteNote(id: String?): EmptyDataResult<DataError.Network> {
         val response = catchErrors<Unit> {
             client.delete {
                 url("${BuildConfig.BASE_URL}${BuildConfig.NOTE_PATH}/${id}")

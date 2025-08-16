@@ -32,6 +32,7 @@ import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.use_cases.PatternValidator
+import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
 import com.joshayoung.notemark.note.domain.use_cases.ValidatePassword
 import com.joshayoung.notemark.note.domain.use_cases.ValidateUsername
@@ -73,10 +74,6 @@ var appModule = module {
 
     singleOf(::NoteRepositoryImpl).bind<NoteRepository>()
     singleOf(::AuthRepositoryImpl).bind<AuthRepository>()
-    singleOf(::EmailValidator).bind<PatternValidator>()
-    singleOf(::ValidateUsername)
-    singleOf(::ValidatePassword)
-    singleOf(::ValidateEmail)
 
     singleOf(::DataStorageImpl).bind<DataStorage>()
 
@@ -113,4 +110,11 @@ var appModule = module {
     }
 
     singleOf(::AndroidConnectivityObserver).bind<ConnectivityObserver>()
+
+    // Use Cases
+    singleOf(::SyncNotesUseCase)
+    singleOf(::EmailValidator).bind<PatternValidator>()
+    singleOf(::ValidateUsername)
+    singleOf(::ValidatePassword)
+    singleOf(::ValidateEmail)
 }

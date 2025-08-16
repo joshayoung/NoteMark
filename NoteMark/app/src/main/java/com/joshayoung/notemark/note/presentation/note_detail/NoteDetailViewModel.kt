@@ -45,7 +45,7 @@ class NoteDetailViewModel(
                         dataCreated = noteUi.dateCreated,
                         lastEdited = noteUi.dateLastEdited,
                         title = noteUi.title,
-                        body = noteUi.content,
+                        body = noteUi.content ?: "",
                         viewMode = NoteViewMode.DISPLAY
                     )
                 }

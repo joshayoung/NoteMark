@@ -225,7 +225,7 @@ fun NoteItem(
             fontWeight = FontWeight.Bold
             )
         Text(
-            text = note.content,
+            text = note.content ?: "",
             maxLines = 4,
             overflow = TextOverflow.Ellipsis
         )
