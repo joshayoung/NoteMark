@@ -77,7 +77,6 @@ class AuthRepositoryImpl (
 
             if (results is Result.Success) {
                 dataStorage.saveAuthData(null)
-                localDataSource.removeAllNotes()
 
             }
 

@@ -24,9 +24,12 @@ import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.DefaultNavigator
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
+import com.joshayoung.notemark.note.data.database.RoomSyncLocalDataSource
+import com.joshayoung.notemark.note.data.database.SyncDatabase
 import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
 import com.joshayoung.notemark.note.data.repository.NoteRepositoryImpl
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
+import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.use_cases.PatternValidator
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
@@ -90,9 +93,19 @@ var appModule = module {
         ).build()
     }
 
+    single {
+        Room.databaseBuilder(
+            androidApplication(),
+            SyncDatabase::class.java,
+            SyncDatabase.DATABASE_NAME
+        ).build()
+    }
+
     single { get<NoteDatabase>().noteDao }
+    single { get<SyncDatabase>().syncDao }
 
     singleOf(::RoomLocalDataSource).bind<LocalDataSource>()
+    singleOf(::RoomSyncLocalDataSource).bind<LocalSyncDataSource>()
     singleOf(::KtorRemoteDataSource).bind<RemoteDataSource>()
 
     single<CoroutineScope> {

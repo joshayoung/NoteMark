@@ -10,6 +10,8 @@ import com.joshayoung.notemark.auth.presentation.registration.RegistrationEvent
 import com.joshayoung.notemark.core.ConnectivityObserver
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.Navigator
+import com.joshayoung.notemark.note.domain.database.LocalDataSource
+import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +29,8 @@ class SettingsViewModel(
     val authRepositoryImpl: AuthRepositoryImpl,
     val dataStorage: DataStorage,
     val connectivityObserver: ConnectivityObserver,
+    val localDataSource: LocalDataSource,
+    val localSyncDataSource: LocalSyncDataSource,
     val navigator: Navigator
 ) : ViewModel() {
     var state by mutableStateOf(SettingsState())
@@ -91,6 +95,14 @@ class SettingsViewModel(
                     state = state.copy(
                         isSyncing = false
                     )
+                    // TODO: Make use case:
+                    // Sync with Backend.
+
+                    // Clear all the notes
+                    localDataSource.removeAllNotes()
+
+                    // Clear sync queue
+                    localSyncDataSource.clearSyncQueue()
                 }
             }
         }
