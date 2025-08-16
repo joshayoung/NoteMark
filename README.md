@@ -14,10 +14,13 @@
 * `./gradlew lint`
 
 ### To Do
-* Test refresh logic once you start getting notes
 * Add linting
-* Set notes to auto-save
-* Add back link for detail page
+* Add user id (UUID) after auth.
+* Create sync_queue table
+  * opereation field for CREATE, UPDATE, or DELETE
+  * remove from sync_queue after sync
+* Add work manager to run on sync schedule in settings or manually
+* Add sync prompt on log out.
 
 ### NoteMark Resources
 * https://jwt.io/
