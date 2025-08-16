@@ -2,7 +2,9 @@ package com.joshayoung.notemark.note.data.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(tableName = "notes")
 data class NoteEntity(
     @PrimaryKey val id: Long? = null,

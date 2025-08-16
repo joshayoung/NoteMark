@@ -6,7 +6,7 @@ import java.util.UUID
 
 @Entity(tableName = "sync_queue")
 data class SyncRecord(
-    @PrimaryKey val id: UUID,
+    @PrimaryKey val id: Long? = null,
     val userId: String,
     val noteId: String,
     val operation: SyncOperation,

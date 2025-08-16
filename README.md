@@ -21,6 +21,13 @@
   * remove from sync_queue after sync
 * Add work manager to run on sync schedule in settings or manually
 
+### Questions
+* If I close the app from the note page, how do i make sure I update the sync queue?
+
+### Open Local Database
+* View -> Tool Windows -> App Inspector
+* It seems you need to be in `Run` mode in Android Studio for the database inspector to work correctly (update the data, etc).
+
 ### NoteMark Resources
 * https://jwt.io/
 * https://icon.kitchen

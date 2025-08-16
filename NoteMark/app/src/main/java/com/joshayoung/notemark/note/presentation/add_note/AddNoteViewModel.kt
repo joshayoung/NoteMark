@@ -13,6 +13,8 @@ import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.core.presentation.DebounceNoteSave
 import com.joshayoung.notemark.core.utils.textAsFlow
+import com.joshayoung.notemark.note.data.database.entity.SyncOperation
+import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.combine
@@ -23,6 +25,7 @@ class AddNoteViewModel (
     val noteRepository: NoteRepository,
     private val navigator: Navigator,
     savedStateHandle: SavedStateHandle,
+    private val localSyncDataSource: LocalSyncDataSource
 ) : ViewModel() {
     var state by mutableStateOf(AddNoteState())
         private set
@@ -43,7 +46,8 @@ class AddNoteViewModel (
                     ),
                     noteBody = TextFieldState(
                         initialText = currentNote?.content ?: ""
-                    )
+                    ),
+                    inEditMode = true
                 )
             } ?: run {
                 var result = noteRepository.createNote( title = "", body = "" )
@@ -76,9 +80,25 @@ class AddNoteViewModel (
         when(action) {
             AddNoteAction.NavigateBack -> {
                 deleteBlankNote()
+                updateSyncQueue()
                 viewModelScope.launch {
                     navigator.navigateUp()
                 }
+            }
+        }
+    }
+
+    // TODO: Use case:
+    private fun updateSyncQueue() {
+        viewModelScope.launch {
+            currentNote?.let { note ->
+                if (state.inEditMode) {
+                    localSyncDataSource.addOrUpdateQueue(note, SyncOperation.UPDATE)
+
+                    return@launch
+                }
+
+                localSyncDataSource.addOrUpdateQueue(note, SyncOperation.CREATE)
             }
         }
     }
