@@ -1,22 +1,19 @@
 package com.joshayoung.notemark
 
-import androidx.navigation.NavBackStackEntry
 import com.joshayoung.notemark.core.navigation.Destination
 
-internal data class DataStorageWithBackstack(
-    val refreshToken: String,
-    val navBackStackEntry: NavBackStackEntry
-)
+class AuthService {
+    companion object Companion {
+        fun notInAuthRoutes(path: String?): Boolean {
+            val route = path?.split('.')?.lastOrNull()
+            val authRoutes = listOf(
+                null,
+                Destination.Login.toString(),
+                Destination.StartScreen.toString(),
+                Destination.Registration.toString()
+            )
 
-internal fun isNotInAuthGraph(backStack: NavBackStackEntry) : Boolean
-{
-    val route = backStack.destination.route
-
-    val authRoutes = listOf(
-        Destination.Login.toString(),
-        Destination.StartScreen.toString(),
-        Destination.Registration.toString()
-    )
-
-    return !authRoutes.contains(route)
+            return !authRoutes.contains(route)
+        }
+    }
 }

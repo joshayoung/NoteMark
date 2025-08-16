@@ -12,7 +12,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,7 +30,6 @@ import com.joshayoung.notemark.note.presentation.note_detail.NoteDetailScreenRoo
 import com.joshayoung.notemark.note.presentation.note_list.NoteListScreenRoot
 import com.joshayoung.notemark.note.presentation.settings.SettingsScreenRoot
 import com.joshayoung.notemark.note.presentation.start.GettingStartedScreenRoot
-import kotlinx.coroutines.flow.combine
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.compose.koinInject
 
@@ -43,13 +41,9 @@ class MainActivity : ComponentActivity() {
         navController: NavHostController,
         isAuthenticated: Boolean
     ) {
-        val tokenWithBackstack = combine(viewModel.authData, navController.currentBackStackEntryFlow) { auth, backStack ->
-            DataStorageWithBackstack(auth, backStack)
-        }
-
-        ObserveAsEvents(tokenWithBackstack) { tokenWithBackstack ->
-            if (tokenWithBackstack.refreshToken == "unset" && isNotInAuthGraph(tokenWithBackstack.navBackStackEntry)) {
-                navController.navigate(Destination.Login)
+        ObserveAsEvents(viewModel.authData) { refreshToken ->
+            if (refreshToken == "unset" && AuthService.notInAuthRoutes(navController.currentDestination?.route)) {
+                navController.navigate(Destination.StartScreen)
             }
         }
 
