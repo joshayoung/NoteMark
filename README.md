@@ -39,3 +39,4 @@
 * https://dev.to/theplebdev/android-notes-understanding-viewmodelscopelaunch-230f
 * [Navigation in ViewModels](https://www.youtube.com/watch?v=BFhVvAzC52w)
 * [Passing Data Back](https://www.youtube.com/watch?v=NhoV78E6yWo)
+* [The Full Jetpack Compose Responsive UI Crash Course](https://www.youtube.com/watch?v=jU_BAQI4DiM)

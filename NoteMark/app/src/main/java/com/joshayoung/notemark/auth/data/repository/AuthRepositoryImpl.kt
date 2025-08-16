@@ -22,11 +22,11 @@ import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import kotlinx.coroutines.flow.first
+import java.util.UUID
 
 class AuthRepositoryImpl (
     private val client: HttpClient,
-    private val dataStorage: DataStorage,
-    private val localDataSource: LocalDataSource
+    private val dataStorage: DataStorage
 ) : AuthRepository {
     override suspend fun register(username: String, email: String, password: String) : EmptyResult<DataError.Network> {
         return catchErrors {
@@ -54,6 +54,7 @@ class AuthRepositoryImpl (
             // TODO: Build an extension method to do this for you:
             val data = response.data.body<LoginResponse>()
 
+            // TODO: Use Case
             dataStorage.saveAuthData(
                 LoginResponse(
                     accessToken = data.accessToken,
@@ -61,6 +62,12 @@ class AuthRepositoryImpl (
                     username = data.username
                 )
             )
+
+            // TODO: Use Case?
+            val user = dataStorage.getUserid()
+            if (user == null) {
+                dataStorage.saveUserId(UUID.randomUUID().toString())
+            }
         }
 
         return response.asEmptyDataResult()
@@ -77,7 +84,6 @@ class AuthRepositoryImpl (
 
             if (results is Result.Success) {
                 dataStorage.saveAuthData(null)
-
             }
 
             return results.asEmptyDataResult()

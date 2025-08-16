@@ -19,6 +19,7 @@ private object AuthPreferenceValues {
 
 private object SettingValues {
     val SYNC_INTERVAL = stringPreferencesKey("sync_interval")
+    val SYNC_USER = stringPreferencesKey("sync_user")
 }
 
 class DataStorageImpl(
@@ -68,6 +69,18 @@ class DataStorageImpl(
         dataStore.edit { preferences ->
             preferences[SettingValues.SYNC_INTERVAL] = interval.text
         }
+    }
+
+    override suspend fun saveUserId(id: String) {
+        dataStore.edit { preferences ->
+            preferences[SettingValues.SYNC_USER] = id
+        }
+    }
+
+    override suspend fun getUserid(): String? {
+        val value = dataStore.data.first()
+
+        return value[SettingValues.SYNC_USER]
     }
 
     override suspend fun getSyncInterval(): SyncInterval {
