@@ -39,9 +39,7 @@ import kotlin.time.Instant
 
 @OptIn(ExperimentalTime::class)
 class NoteRepositoryImpl (
-    private val localDataSource: LocalDataSource,
-    private val applicationScope: CoroutineScope,
-    private val remoteDataSource: KtorRemoteDataSource
+    private val localDataSource: LocalDataSource
 ) : NoteRepository {
     override suspend fun createNote(title: String, body: String): Result<Note, DataError> {
         val remoteId = UUID.randomUUID().toString()
@@ -52,18 +50,6 @@ class NoteRepositoryImpl (
             createdAt = getTimeStampForInsert()
         )
         val localResult = localDataSource.upsertNote(note)
-
-        // TODO: Is this right?
-//        if (localResult is Result.Success)
-//        {
-//            applicationScope.async {
-//                val noteSave = remoteDataSource.saveNote(note)
-//                if (noteSave is Result.Success)
-//                {
-//                    return@async Result.Success(Unit)
-//                }
-//            }.await()
-//        }
 
         if (localResult is Result.Success) {
             return Result.Success(data = localResult.data.toNote())
@@ -89,14 +75,6 @@ class NoteRepositoryImpl (
 
         if (result is Result.Success)
         {
-//            applicationScope.async {
-//                val remoteUpdate = remoteDataSource.updateNote(localNoteForUpdate)
-//                if (remoteUpdate is Result.Success) {
-//
-//                    return@async Result.Success(Unit)
-//                }
-//            }.await()
-
             return Result.Success(localNoteForUpdate)
         }
 
@@ -116,15 +94,10 @@ class NoteRepositoryImpl (
 
         val result = localDataSource.deleteNote(note.id)
         if (result) {
-            applicationScope.async {
-                val remoteDelete = remoteDataSource.deleteNote(note.remoteId)
-                if (remoteDelete is Result.Success) {
-                    return@async Result.Success(Unit)
-                }
-            }.await()
+            return Result.Success(Unit)
         }
 
-        return Result.Success(Unit)
+        return Result.Error(error = DataError.Network.UNKNOWN)
     }
 
     override suspend fun getNote(id: Long) : Note? {
