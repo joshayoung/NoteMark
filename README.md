@@ -20,7 +20,6 @@
   * opereation field for CREATE, UPDATE, or DELETE
   * remove from sync_queue after sync
 * Add work manager to run on sync schedule in settings or manually
-* Add sync prompt on log out.
 
 ### NoteMark Resources
 * https://jwt.io/

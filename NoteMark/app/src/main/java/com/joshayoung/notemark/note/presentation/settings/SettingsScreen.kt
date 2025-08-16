@@ -2,8 +2,6 @@
 
 package com.joshayoung.notemark.note.presentation.settings
 
-import android.R
-import android.graphics.drawable.Icon
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,21 +15,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,12 +33,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joshayoung.notemark.core.design.theme.LogoutIcon
@@ -56,8 +47,8 @@ import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
 import com.joshayoung.notemark.note.domain.models.SyncInterval
+import com.joshayoung.notemark.note.presentation.add_note.AddNoteAction
 import org.koin.androidx.compose.koinViewModel
-import java.nio.file.WatchEvent
 
 
 @Composable
@@ -93,6 +84,32 @@ fun SettingsScreen(
     state: SettingsState,
     onAction: (SettingsAction) -> Unit
 ) {
+    var showLogoutPrompt by remember { mutableStateOf(false) }
+
+    if (showLogoutPrompt) {
+        AlertDialog(
+            onDismissRequest = {
+                showLogoutPrompt = false
+            },
+            title = { Text("Unsynced Changes") },
+            text = { Text("You have unsynced changes. What would you like to do before logging out?") },
+            confirmButton = {
+                Button(onClick = {
+                    showLogoutPrompt = false
+                    onAction(SettingsAction.OnLogoutClick)
+                }) {
+                    Text("Log Out Anyway")
+                }
+                Button(onClick = {
+                    showLogoutPrompt = false
+                    onAction(SettingsAction.Sync)
+                }) {
+                    Text("Sync Now")
+                }
+            },
+        )
+    }
+
     NoteMarkScaffold(
         topAppBar = {
             NoteMarkToolbar(
@@ -258,7 +275,11 @@ fun SettingsScreen(
                     "Log Out",
                     modifier = Modifier
                         .clickable {
-                            onAction(SettingsAction.OnLogoutClick)
+                            if (state.hasUnsyncedChanges) {
+                                showLogoutPrompt = true
+                            } else {
+                                onAction(SettingsAction.OnLogoutClick)
+                            }
                         },
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.titleSmall

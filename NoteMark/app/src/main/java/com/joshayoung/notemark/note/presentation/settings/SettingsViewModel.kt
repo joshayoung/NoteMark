@@ -41,7 +41,8 @@ class SettingsViewModel(
         viewModelScope.launch {
             var interval = dataStorage.getSyncInterval()
             state = state.copy(
-                interval = interval
+                interval = interval,
+                hasUnsyncedChanges = true
             )
         }
 
