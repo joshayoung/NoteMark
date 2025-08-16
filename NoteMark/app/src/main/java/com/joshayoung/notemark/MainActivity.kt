@@ -69,48 +69,48 @@ class MainActivity : ComponentActivity() {
             navController = navController,
             startDestination = if (isAuthenticated) Destination.NoteGraph  else Destination.AuthGraph
         ) {
-            navigation<Destination.AuthGraph>(
-                startDestination = Destination.StartScreen
-            ) {
-                authGraph()
-            }
-            navigation<Destination.NoteGraph>(
-                startDestination = Destination.NoteList
-            ) {
-                noteGraph()
-            }
+            authGraph()
+            noteGraph()
         }
     }
 
     private fun NavGraphBuilder.noteGraph() {
-        composable<Destination.NoteList> {
-            NoteListScreenRoot()
-        }
+        navigation<Destination.NoteGraph>(
+            startDestination = Destination.NoteList
+        ) {
+            composable<Destination.NoteList> {
+                NoteListScreenRoot()
+            }
 
-        composable<Destination.AddNote> {
-            AddNoteScreenRoot()
-        }
+            composable<Destination.AddNote> {
+                AddNoteScreenRoot()
+            }
 
-        composable<Destination.Settings> {
-            SettingsScreenRoot()
-        }
+            composable<Destination.Settings> {
+                SettingsScreenRoot()
+            }
 
-        composable<Destination.NoteDetail>() {
-            NoteDetailScreenRoot()
+            composable<Destination.NoteDetail>() {
+                NoteDetailScreenRoot()
+            }
         }
     }
 
     private fun NavGraphBuilder.authGraph() {
-        composable<Destination.StartScreen> {
-            GettingStartedScreenRoot()
-        }
+        navigation<Destination.AuthGraph>(
+            startDestination = Destination.StartScreen
+        ) {
+            composable<Destination.StartScreen> {
+                GettingStartedScreenRoot()
+            }
 
-        composable<Destination.Registration> {
-            RegistrationScreenRoot()
-        }
+            composable<Destination.Registration> {
+                RegistrationScreenRoot()
+            }
 
-        composable<Destination.Login> {
-            LoginScreenRoot()
+            composable<Destination.Login> {
+                LoginScreenRoot()
+            }
         }
     }
 
