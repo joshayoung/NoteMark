@@ -47,7 +47,6 @@ import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
 import com.joshayoung.notemark.note.domain.models.SyncInterval
-import com.joshayoung.notemark.note.presentation.add_note.AddNoteAction
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -84,24 +83,18 @@ fun SettingsScreen(
     state: SettingsState,
     onAction: (SettingsAction) -> Unit
 ) {
-    var showLogoutPrompt by remember { mutableStateOf(false) }
-
-    if (showLogoutPrompt) {
+    if (state.displayLogoutPrompt) {
         AlertDialog(
-            onDismissRequest = {
-                showLogoutPrompt = false
-            },
+            onDismissRequest = {},
             title = { Text("Unsynced Changes") },
             text = { Text("You have unsynced changes. What would you like to do before logging out?") },
             confirmButton = {
                 Button(onClick = {
-                    showLogoutPrompt = false
-                    onAction(SettingsAction.OnLogoutClick)
+                    onAction(SettingsAction.LogOutWithoutSyncing)
                 }) {
                     Text("Log Out Anyway")
                 }
                 Button(onClick = {
-                    showLogoutPrompt = false
                     onAction(SettingsAction.Sync)
                 }) {
                     Text("Sync Now")
@@ -121,7 +114,6 @@ fun SettingsScreen(
             )
         }
     ) { innerPadding ->
-        var isSyncing by remember { mutableStateOf(false) }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -275,11 +267,7 @@ fun SettingsScreen(
                     "Log Out",
                     modifier = Modifier
                         .clickable {
-                            if (state.hasUnsyncedChanges) {
-                                showLogoutPrompt = true
-                            } else {
-                                onAction(SettingsAction.OnLogoutClick)
-                            }
+                            onAction(SettingsAction.CheckForUnsyncedChanges)
                         },
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.titleSmall

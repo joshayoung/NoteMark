@@ -11,6 +11,7 @@ interface LocalSyncDataSource {
     suspend fun clearSyncQueue()
     suspend fun addOrUpdateQueue(note: Note, operation: SyncOperation) : Result<Unit, DataError.Local>
     fun getAllSyncs() : Flow<List<SyncRecord>>
+    fun hasPendingSyncs(): Flow<Boolean>
     suspend fun getSync(note: Note): SyncRecord?
     suspend fun deleteSync(id: Long?)
 }

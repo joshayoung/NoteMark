@@ -10,6 +10,14 @@ import com.joshayoung.notemark.note.data.mappers.toNoteEntity
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.models.Note
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.flow.flatMap
+import kotlinx.coroutines.flow.flatten
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.json.Json
 
 class RoomSyncLocalDataSource(
@@ -52,6 +60,12 @@ class RoomSyncLocalDataSource(
         val syncs = syncDao.getAllSyncs()
 
         return syncs
+    }
+
+    override fun hasPendingSyncs(): Flow<Boolean> {
+        return syncDao.getAllSyncs().map { itemList ->
+            itemList.isNotEmpty()
+        }
     }
 
     override suspend fun getSync(note: Note): SyncRecord? {

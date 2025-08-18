@@ -14,7 +14,12 @@ import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.use_cases.PullRemoteNotesUseCase
 import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
@@ -31,17 +36,16 @@ class SettingsViewModel(
         private set
 
     var isNotConnected: Boolean = false
+    var hasNoPendingSyncs: Boolean = false
 
     private val eventChannel = Channel<SettingsEvent>()
     val events = eventChannel.receiveAsFlow()
 
     init {
         viewModelScope.launch {
-            var interval = dataStorage.getSyncInterval()
-            state = state.copy(
-                interval = interval,
-                hasUnsyncedChanges = true
-            )
+            localSyncDataSource.hasPendingSyncs().collect { value ->
+                hasNoPendingSyncs = value
+            }
         }
 
         viewModelScope.launch {
@@ -53,7 +57,7 @@ class SettingsViewModel(
 
     fun onAction(action : SettingsAction) {
         when(action) {
-            SettingsAction.OnLogoutClick -> {
+            SettingsAction.CheckForUnsyncedChanges -> {
                 viewModelScope.launch {
                     if (isNotConnected) {
                         eventChannel.send(SettingsEvent.InternetOfflineCannotLogout)
@@ -61,11 +65,22 @@ class SettingsViewModel(
                         return@launch
                     }
 
-                    // Add Use Case:
-                    // Clear all the notes
-                    localDataSource.removeAllNotes()
+                    if (!hasNoPendingSyncs) {
+                        localDataSource.removeAllNotes()
+                        localSyncDataSource.clearSyncQueue()
+                        authRepositoryImpl.logout()
+                        return@launch
+                    } else {
+                        state = state.copy(displayLogoutPrompt = true)
+                    }
+                }
+            }
 
-                    // Clear sync queue
+            SettingsAction.LogOutWithoutSyncing -> {
+                state = state.copy(displayLogoutPrompt = false)
+                viewModelScope.launch {
+                    // Add Use Case:
+                    localDataSource.removeAllNotes()
                     localSyncDataSource.clearSyncQueue()
                     authRepositoryImpl.logout()
                 }
@@ -88,7 +103,7 @@ class SettingsViewModel(
 
             SettingsAction.Sync -> {
                 viewModelScope.launch {
-                    state = state.copy(isSyncing = true)
+                    state = state.copy(isSyncing = true, displayLogoutPrompt = false)
                     syncNotesUseCase.execute()
                     pullRemoteNotesUseCase.execute()
                     state = state.copy(isSyncing = false)
