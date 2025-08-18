@@ -1,11 +1,13 @@
 package com.joshayoung.notemark
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import com.joshayoung.notemark.auth.presentation.log_in.LoginScreenRoot
 import com.joshayoung.notemark.auth.presentation.registration.RegistrationScreenRoot
@@ -27,6 +29,7 @@ fun NoteMarkNavigation(
     navController: NavHostController,
     isAuthenticated: Boolean
 ) {
+
     ObserveAsEvents(flow = navigator.navigationAction) { action ->
         when(action) {
             is NavigationAction.Navigate -> navController.navigate(
@@ -43,6 +46,31 @@ fun NoteMarkNavigation(
             }
         }
     }
+    SetNavigationGraph(
+        modifier = modifier,
+        viewModel = viewModel,
+        navController = navController,
+        isAuthenticated = isAuthenticated
+    )
+}
+
+@Composable
+fun SetNavigationGraph(
+    modifier: Modifier,
+    viewModel: MainViewModel,
+    navController: NavHostController,
+    isAuthenticated: Boolean
+
+) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.parent?.route?.substringAfterLast(".")
+    val authGraph = Destination.AuthGraph.toString()
+
+    ObserveAsEvents(viewModel.authData) { refreshToken ->
+        if (refreshToken == "unset" && currentRoute != authGraph) {
+            navController.navigate(Destination.StartScreen)
+        }
+    }
 
     NavHost(
         modifier = modifier,
@@ -53,6 +81,7 @@ fun NoteMarkNavigation(
         noteGraph()
     }
 }
+
 private fun NavGraphBuilder.noteGraph() {
     navigation<Destination.NoteGraph>(
         startDestination = Destination.NoteList

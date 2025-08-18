@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.navigation.Destination
@@ -33,12 +35,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             NoteMarkTheme {
                 val navController = rememberNavController()
-
-                ObserveAsEvents(viewModel.authData) { refreshToken ->
-                    if (refreshToken == "unset" && AuthHelper.notInAuthRoutes(navController.currentDestination?.route)) {
-                        navController.navigate(Destination.StartScreen)
-                    }
-                }
 
                 val navigator = koinInject<Navigator>()
                 Surface(modifier = Modifier.fillMaxSize()) {
