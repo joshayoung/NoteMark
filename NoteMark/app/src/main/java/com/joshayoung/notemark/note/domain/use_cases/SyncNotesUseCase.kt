@@ -121,10 +121,10 @@ class SyncNotesUseCase(
                     if (remoteDate?.isBefore(localNote) ?: false) {
                         // mapper?
                         val note = Note(
-                            id = remoteVersion?.id,
-                            remoteId = remoteVersion?.remoteId,
-                            content = remoteVersion?.content,
-                            createdAt = remoteVersion?.createdAt,
+                            id = remoteVersion.id,
+                            remoteId = remoteVersion.remoteId,
+                            content = syncNote.content,
+                            createdAt = remoteVersion.createdAt,
                             lastEditedAt = syncNote.lastEditedAt,
                             title = syncNote.title
                         )

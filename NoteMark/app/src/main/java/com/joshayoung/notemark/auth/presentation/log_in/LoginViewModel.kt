@@ -13,6 +13,7 @@ import com.joshayoung.notemark.core.data.DataStorageImpl
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
+import com.joshayoung.notemark.note.domain.use_cases.PullRemoteNotesUseCase
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +25,8 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val authRepository: AuthRepository,
     private val validateEmail: ValidateEmail,
-    private val navigator: Navigator
+    private val navigator: Navigator,
+    private val pullRemoteNotesUseCase: PullRemoteNotesUseCase
 ) : ViewModel() {
     var state by mutableStateOf(LoginState())
         private set
@@ -58,6 +60,8 @@ class LoginViewModel(
                         if (result is Result.Success)
                         {
                             state = state.copy(isLoggingIn = false)
+                            pullRemoteNotesUseCase.execute()
+
                             eventChannel.send(LoginEvent.Success)
                         } else {
                             state = state.copy(isLoggingIn = false)
