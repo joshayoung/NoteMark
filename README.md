@@ -15,11 +15,15 @@
 
 ### To Do
 * Add linting
-* Add user id (UUID) after auth.
-* Create sync_queue table
-  * opereation field for CREATE, UPDATE, or DELETE
-  * remove from sync_queue after sync
 * Add work manager to run on sync schedule in settings or manually
+* Rename remoteId to something more generic because this value is use locally as well.
+* Do not directly use data sources in VM if you have a repository.
+* Add use-cases for some of the logic I have in my vms.
+* Watch responsive layout video.
+
+### Sync Notes
+* Populate the local data source with the network data source
+* Last-write wins
 
 ### Questions
 * If I close the app from the note page, how do i make sure I update the sync queue?
