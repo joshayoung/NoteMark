@@ -40,6 +40,8 @@ class AddNoteViewModel (
             val n = savedStateHandle.toRoute<Destination.AddNote>()
             n.id?.let { theId ->
                 currentNote = noteRepository.getNote(theId)
+                initialTitle = currentNote?.title ?: ""
+                initialBody = currentNote?.content ?: ""
                 state = state.copy(
                     noteTitle = TextFieldState(
                         initialText = currentNote?.title ?: ""
@@ -69,9 +71,14 @@ class AddNoteViewModel (
 
     val autoSaveNote = debounceNoteSave.debounce(viewModelScope, 1000) { title: String, body: String  ->
         viewModelScope.launch {
+//            if (title == initialTitle && body == initialBody) {
+//                return@launch
+//            }
+
             val result = noteRepository.updateNote(currentNote, title, body)
             if (result is Result.Success) {
                 currentNote = result.data
+                updateSyncQueue()
             }
         }
     }
@@ -80,7 +87,6 @@ class AddNoteViewModel (
         when(action) {
             AddNoteAction.NavigateBack -> {
                 deleteBlankNote()
-                updateSyncQueue()
                 viewModelScope.launch {
                     navigator.navigateUp()
                 }

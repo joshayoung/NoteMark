@@ -44,6 +44,12 @@ class RoomSyncLocalDataSource(
             timestamp = System.currentTimeMillis()
         )
 
+        // move to Use Case:
+        if (operation == SyncOperation.CREATE)
+        {
+            syncDao.deleteAllSyncsForNoteId(note.remoteId.toString(), SyncOperation.CREATE.name)
+        }
+
         if (operation == SyncOperation.UPDATE)
         {
             // This way I only ever have i update per note.
