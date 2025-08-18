@@ -8,14 +8,13 @@ import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.models.Note
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class SyncNotesUseCase(
     private val remoteDataSource: KtorRemoteDataSource,
     private val localSyncDataSource: LocalSyncDataSource
 ) {
-    suspend fun sync() {
+    suspend fun execute() {
         // listen to the getNotes flow instead of having to call this 3 times:
         var remoteNotes = remoteDataSource.getNotes()
         var serverNotes = emptyList<Note>()
@@ -84,9 +83,9 @@ class SyncNotesUseCase(
                     val remoteDate = DateHelper.convertToDate(remoteVersion.lastEditedAt)
                     val localNote = DateHelper.convertToDate(syncNote.lastEditedAt)
 
-                    if (remoteDate?.isBefore(localNote) ?: false) {
+                    if (remoteDate?.isBefore(localNote) ?: false || remoteDate?.isEqual(localNote) ?: false) {
                         // TODO: Improve null check:
-                        remoteDataSource.deleteNote(remoteVersion?.remoteId!!)
+                        remoteDataSource.deleteNote(remoteVersion.remoteId!!)
                     }
                 }
                 localSyncDataSource.deleteSync(sync.id)

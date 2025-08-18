@@ -32,6 +32,7 @@ import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.use_cases.PatternValidator
+import com.joshayoung.notemark.note.domain.use_cases.PullRemoteNotesUseCase
 import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
 import com.joshayoung.notemark.note.domain.use_cases.ValidatePassword
@@ -117,4 +118,5 @@ var appModule = module {
     singleOf(::ValidateUsername)
     singleOf(::ValidatePassword)
     singleOf(::ValidateEmail)
+    singleOf(::PullRemoteNotesUseCase)
 }

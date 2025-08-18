@@ -53,4 +53,10 @@ class RoomLocalDataSource(
     override suspend fun removeAllNotes() {
         noteDao.deleteAllNotes()
     }
+
+    override suspend fun addRemoteNotes(notes: List<Note>) {
+        notes.forEach { note ->
+            upsertNote(note)
+        }
+    }
 }

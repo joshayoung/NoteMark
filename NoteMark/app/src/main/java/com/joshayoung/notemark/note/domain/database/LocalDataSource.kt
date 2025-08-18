@@ -13,4 +13,5 @@ interface LocalDataSource {
     suspend fun getNote(id: Long) : Note?
     suspend fun deleteNote(id: Long) : Boolean
     suspend fun removeAllNotes()
+    suspend fun addRemoteNotes(notes: List<Note>)
 }

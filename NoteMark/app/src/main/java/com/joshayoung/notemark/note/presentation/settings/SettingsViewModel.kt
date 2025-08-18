@@ -6,24 +6,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.auth.data.repository.AuthRepositoryImpl
-import com.joshayoung.notemark.auth.presentation.registration.RegistrationEvent
 import com.joshayoung.notemark.core.ConnectivityObserver
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
+import com.joshayoung.notemark.note.domain.use_cases.PullRemoteNotesUseCase
 import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
@@ -33,7 +24,8 @@ class SettingsViewModel(
     val localDataSource: LocalDataSource,
     val localSyncDataSource: LocalSyncDataSource,
     val navigator: Navigator,
-    val syncNotesUseCase: SyncNotesUseCase
+    val syncNotesUseCase: SyncNotesUseCase,
+    val pullRemoteNotesUseCase: PullRemoteNotesUseCase
 ) : ViewModel() {
     var state by mutableStateOf(SettingsState())
         private set
@@ -96,16 +88,10 @@ class SettingsViewModel(
 
             SettingsAction.Sync -> {
                 viewModelScope.launch {
-                    state = state.copy(
-                        isSyncing = true
-                    )
-
-                    syncNotesUseCase.sync()
-
-                    // Sync with Backend.
-                    state = state.copy(
-                        isSyncing = false
-                    )
+                    state = state.copy(isSyncing = true)
+                    syncNotesUseCase.execute()
+                    pullRemoteNotesUseCase.execute()
+                    state = state.copy(isSyncing = false)
                 }
             }
         }
