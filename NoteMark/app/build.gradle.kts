@@ -132,4 +132,6 @@ dependencies {
     testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.assertk)
+
+    implementation(libs.material3.adaptive)
 }

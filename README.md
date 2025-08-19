@@ -19,7 +19,8 @@
 * Rename remoteId to something more generic because this value is use locally as well.
 * Do not directly use data sources in VM if you have a repository.
 * Add use-cases for some of the logic I have in my vms.
-* Watch responsive layout video.
+* Change the status bar color and icons color for the login page only.
+* Change to OutlinedTextField
 
 ### Sync Notes
 * Populate the local data source with the network data source

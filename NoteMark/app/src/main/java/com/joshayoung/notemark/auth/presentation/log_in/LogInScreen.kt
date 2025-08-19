@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,12 +25,14 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.core.presentation.components.NoteMarkButton
 import com.joshayoung.notemark.core.presentation.components.NoteMarkTextField
 import com.joshayoung.notemark.core.presentation.components.TextFieldType
 import com.joshayoung.notemark.core.design.theme.EyeIcon
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.utils.DeviceConfiguration
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -55,12 +58,32 @@ fun LoginScreenRoot(
         }
     }
 
-    LoginScreen(
-        state = viewModel.state,
-        onAction = { action ->
-            viewModel.onAction(action)
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
+
+    when(deviceConfiguration) {
+        DeviceConfiguration.MOBILE_PORTRAIT -> {
+            LoginScreenPortrait(
+                state = viewModel.state,
+                onAction = { action ->
+                    viewModel.onAction(action)
+                }
+            )
         }
-    )
+        DeviceConfiguration.MOBILE_LANDSCAPE -> {
+            LoginScreenLandscape(
+                state = viewModel.state,
+                onAction = { action ->
+                    viewModel.onAction(action)
+                }
+            )
+        }
+        DeviceConfiguration.TABLET_PORTRAIT,
+        DeviceConfiguration.TABLET_LANDSCAPE,
+        DeviceConfiguration.DESKTOP -> {
+
+        }
+    }
 }
 
 @Composable
@@ -79,42 +102,44 @@ fun LoginHeader(
 }
 
 @Composable
-fun LoginScreen(
+fun LoginScreenPortrait(
     state: LoginState,
     onAction: (LoginAction) -> Unit
 ) {
-    val configuration = LocalConfiguration.current
-    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-
-    if (isPortrait) {
+    Column(
+        modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.primary)
+            .padding(top =10.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    )
+    {
         Column(
             modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.primary)
-                .padding(top =10.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        )
-        {
-            Column(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                    .background(Color.White)
-                    .padding(20.dp)
-            ) {
-                LoginHeader(
-                    modifier = Modifier
-                        .padding(top = 40.dp)
-                )
-                LoginContent(
-                    state = state,
-                    onAction = onAction
-                )
-            }
-        }
-    } else {
-        Row(modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.primary)
+                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                .background(Color.White)
+                .padding(20.dp)
         ) {
+            LoginHeader(
+                modifier = Modifier
+                    .padding(top = 40.dp)
+            )
+            LoginContent(
+                state = state,
+                onAction = onAction
+            )
+        }
+    }
+}
+
+@Composable
+fun LoginScreenLandscape(
+    state: LoginState,
+    onAction: (LoginAction) -> Unit
+) {
+    Row(modifier = Modifier
+        .background(color = MaterialTheme.colorScheme.primary)
+    ) {
         Row(
             modifier = Modifier
                 .padding(top = 10.dp)
@@ -135,7 +160,6 @@ fun LoginScreen(
                     .padding(20.dp)
             )
         }
-    }
     }
 }
 
@@ -180,7 +204,10 @@ fun LoginContent(
 @Preview(showBackground = true)
 fun LoginScreenPreview() {
     NoteMarkTheme {
-        LoginScreen(state = LoginState(),
+        LoginScreenLandscape(state = LoginState(),
+            onAction = {}
+        )
+        LoginScreenPortrait(state = LoginState(),
             onAction = {}
         )
     }
