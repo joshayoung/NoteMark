@@ -33,8 +33,8 @@ fun NoteMarkButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = MaterialTheme.colorScheme.tertiary,
-            disabledContentColor = MaterialTheme.colorScheme.onTertiary
+            disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+            disabledContentColor = MaterialTheme.colorScheme.primary
         ),
         shape = RoundedCornerShape(12f),
         modifier =
@@ -47,7 +47,7 @@ fun NoteMarkButton(
                     .size(15.dp),
 //                    .alpha(if (isLoading) 1f else 0f),
                 strokeWidth = 1.5.dp,
-                color = if(isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onTertiary
+                color = if(isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
             )
         } else {
             Text(text)

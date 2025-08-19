@@ -176,9 +176,7 @@ private fun RegularTextField(
     BasicTextField(
         state = state,
         lineLimits = TextFieldLineLimits.SingleLine,
-        textStyle = LocalTextStyle.current.copy(
-            color = MaterialTheme.colorScheme.onSurface
-        ),
+        textStyle = MaterialTheme.typography.bodyLarge,
         decorator = { innerBox ->
             Row(
                 modifier = Modifier

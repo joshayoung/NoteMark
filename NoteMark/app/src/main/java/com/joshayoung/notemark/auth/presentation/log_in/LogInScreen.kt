@@ -70,9 +70,10 @@ fun LoginHeader(
     Column(modifier = modifier
     ) {
         Text("Log In", modifier = Modifier,
-            style = MaterialTheme.typography.headlineLarge
+            style = MaterialTheme.typography.titleLarge
         )
-        Text("Capture your thoughts and ideas.", modifier = Modifier
+        Text("Capture your thoughts and ideas.", modifier = Modifier,
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }
