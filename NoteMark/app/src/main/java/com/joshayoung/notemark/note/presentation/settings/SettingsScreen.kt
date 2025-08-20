@@ -117,7 +117,8 @@ fun SettingsScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0x20000000))
+                .background(color = MaterialTheme.colorScheme.surface)
+
         ) {
             if (state.isSyncing) {
                 CircularProgressIndicator(
@@ -235,7 +236,7 @@ fun SettingsScreen(
                             "Last sync: 12 min ago",
                             modifier = Modifier
                                 .padding(start = 10.dp),
-                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                             style = MaterialTheme.typography.titleSmall
                         )
                     }

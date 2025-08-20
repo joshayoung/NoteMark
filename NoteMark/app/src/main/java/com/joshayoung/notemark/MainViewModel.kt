@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -20,12 +21,11 @@ class MainViewModel(
     var state by mutableStateOf(MainState())
         private set
 
-    val authData: StateFlow<String> = dataStorage.values
+    val authData = dataStorage.values
         .map { it }
-        .stateIn(
+        .shareIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000L),
-            initialValue = "loading"
+            started = SharingStarted.WhileSubscribed(5000L)
         )
 
     init {

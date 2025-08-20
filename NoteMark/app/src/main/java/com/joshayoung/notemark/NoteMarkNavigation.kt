@@ -1,5 +1,6 @@
 package com.joshayoung.notemark
 
+import androidx.activity.OnBackPressedCallback
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -9,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
+import androidx.navigation.navOptions
 import com.joshayoung.notemark.auth.presentation.log_in.LoginScreenRoot
 import com.joshayoung.notemark.auth.presentation.registration.RegistrationScreenRoot
 import com.joshayoung.notemark.core.navigation.Destination
@@ -68,14 +70,18 @@ fun SetNavigationGraph(
 
     ObserveAsEvents(viewModel.authData) { refreshToken ->
         if (refreshToken == "unset" && currentRoute != authGraph) {
-            navController.navigate(Destination.StartScreen)
+            navController.navigate(Destination.StartScreen) {
+                popUpTo(Destination.AuthGraph) {
+                    inclusive = true
+                }
+            }
         }
     }
 
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = if (isAuthenticated) Destination.NoteGraph  else Destination.AuthGraph
+        startDestination = if (isAuthenticated) Destination.NoteGraph else Destination.AuthGraph
     ) {
         authGraph()
         noteGraph()
@@ -106,7 +112,7 @@ private fun NavGraphBuilder.noteGraph() {
 
 private fun NavGraphBuilder.authGraph() {
     navigation<Destination.AuthGraph>(
-        startDestination = Destination.StartScreen
+        startDestination = Destination.Login
     ) {
         composable<Destination.StartScreen> {
             GettingStartedScreenRoot()
