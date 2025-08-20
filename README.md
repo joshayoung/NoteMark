@@ -6,6 +6,7 @@
   * I just used my splash image as a starting point. 
     * See notes on creating the splash image [here](https://github.com/joshayoung/android-kotlin-app-training/blob/main/README.md)
 * **If you want the top bar of the app to display correctly, `enableEdgeToEdge()` needs to be called below the splash screen code in your `MainActivity`!**
+* If you have a domain layer, then never directly reference your data source (local or remote) in our viewmodels. Any call to either of these data sources should go through either a repository or a use-case.
 
 ### Add Test
 * Select class name and press `ALT` + `ENTER`.
@@ -21,6 +22,7 @@
 * Add use-cases for some of the logic I have in my vms.
 * Change the status bar color and icons color for the login page only.
 * Change to OutlinedTextField
+* Switch auth flow to channel instead of shared flow.
 
 ### Sync Notes
 * Populate the local data source with the network data source
