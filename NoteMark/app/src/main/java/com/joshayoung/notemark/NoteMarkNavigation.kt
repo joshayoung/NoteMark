@@ -73,6 +73,7 @@ fun SetNavigationGraph(
     ObserveAsEvents(viewModel.events) { refreshToken ->
         if (refreshToken == null && currentRoute != authGraph) {
             navController.navigate(Destination.AuthGraph) {
+                launchSingleTop = true
                 popUpTo(Destination.NoteGraph) {
                     inclusive = true
                 }
