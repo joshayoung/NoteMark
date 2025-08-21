@@ -71,7 +71,7 @@ fun SetNavigationGraph(
     val authGraph = Destination.AuthGraph.toString()
 
     ObserveAsEvents(viewModel.events) { refreshToken ->
-        if (refreshToken == "unset" && currentRoute != authGraph) {
+        if (refreshToken == null && currentRoute != authGraph) {
             navController.navigate(Destination.AuthGraph) {
                 popUpTo(Destination.NoteGraph) {
                     inclusive = true

@@ -69,6 +69,7 @@ class SettingsViewModel(
                         localDataSource.removeAllNotes()
                         localSyncDataSource.clearSyncQueue()
                         authRepositoryImpl.logout()
+
                         return@launch
                     } else {
                         state = state.copy(displayLogoutPrompt = true)

@@ -26,9 +26,9 @@ class DataStorageImpl(
     private val dataStore: DataStore<Preferences>
 ) : DataStorage {
 
-    override val values: Flow<String> = dataStore.data
+    override val values: Flow<String?> = dataStore.data
         .map { preferences ->
-            val value = preferences[AuthPreferenceValues.REFRESH_TOKEN] ?: "Default Value"
+            val value = preferences[AuthPreferenceValues.REFRESH_TOKEN]
             value
         }
 
@@ -40,9 +40,9 @@ class DataStorageImpl(
     override fun getAuthData(): Flow<LoginResponse> = dataStore.data
         .map { preferences ->
             val t = LoginResponse(
-                accessToken = preferences[AuthPreferenceValues.ACCESS_TOKEN],
-                refreshToken = preferences[AuthPreferenceValues.REFRESH_TOKEN],
-                username = preferences[AuthPreferenceValues.USERNAME]
+                accessToken = preferences[AuthPreferenceValues.ACCESS_TOKEN] ?: "",
+                refreshToken = preferences[AuthPreferenceValues.REFRESH_TOKEN] ?: "",
+                username = preferences[AuthPreferenceValues.USERNAME] ?: ""
             )
             t
         }
@@ -50,19 +50,18 @@ class DataStorageImpl(
     override suspend fun saveAuthData(settings: LoginResponse?) {
         if (settings == null) {
             dataStore.edit { preferences ->
-                preferences[AuthPreferenceValues.ACCESS_TOKEN] = "unset"
-                preferences[AuthPreferenceValues.REFRESH_TOKEN] = "unset"
-                preferences[AuthPreferenceValues.USERNAME] = "unset"
+                preferences.remove(AuthPreferenceValues.ACCESS_TOKEN)
+                preferences.remove(AuthPreferenceValues.REFRESH_TOKEN)
+                preferences.remove(AuthPreferenceValues.USERNAME)
             }
 
             return;
         }
+
         dataStore.edit { preferences ->
-            preferences[AuthPreferenceValues.ACCESS_TOKEN] = settings.accessToken ?: ""
-            preferences[AuthPreferenceValues.REFRESH_TOKEN] = settings.refreshToken ?: ""
-            if (settings.username != null) {
-                preferences[AuthPreferenceValues.USERNAME] = settings.username
-            }
+            preferences[AuthPreferenceValues.ACCESS_TOKEN] = settings.accessToken
+            preferences[AuthPreferenceValues.REFRESH_TOKEN] = settings.refreshToken
+            preferences[AuthPreferenceValues.USERNAME] = settings.username
         }
     }
 

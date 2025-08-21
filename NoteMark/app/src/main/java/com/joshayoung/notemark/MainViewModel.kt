@@ -25,7 +25,7 @@ class MainViewModel(
     var state by mutableStateOf(MainState())
         private set
 
-    private val eventChannel = Channel<String>()
+    private val eventChannel = Channel<String?>()
     val events = eventChannel.receiveAsFlow()
 
     init {
@@ -48,8 +48,7 @@ class MainViewModel(
     private suspend fun checkAccessToken() : Boolean {
         val token = dataStorage.getAuthData().first().accessToken
 
-        // TODO: Only check for null:
-        return token != null && token != "unset" && token != ""
+        return token != ""
     }
 
     fun clearToken() {
@@ -59,11 +58,7 @@ class MainViewModel(
                 return@launch
             }
 
-            dataStorage.saveAuthData(LoginResponse(
-                accessToken = null,
-                refreshToken = null,
-                username = null
-            ))
+            dataStorage.saveAuthData(null)
         }
     }
 }

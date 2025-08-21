@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface DataStorage {
     fun getAuthData(): Flow<LoginResponse>
     suspend fun saveAuthData(settings: LoginResponse?)
-    val values: Flow<String>
+    val values: Flow<String?>
     val username: Flow<String>
 
     suspend fun saveSyncInterval(interval: SyncInterval)
