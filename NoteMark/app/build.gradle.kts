@@ -134,5 +134,7 @@ dependencies {
     testImplementation(libs.assertk)
 
     implementation(libs.material3.adaptive)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.koin.androidx.workmanager)
 
 }

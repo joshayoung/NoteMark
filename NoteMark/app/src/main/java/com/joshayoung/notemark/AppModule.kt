@@ -1,5 +1,6 @@
 package com.joshayoung.notemark
 import android.content.Context
+import android.provider.ContactsContract
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.emptyPreferences
@@ -28,6 +29,7 @@ import com.joshayoung.notemark.note.data.database.RoomSyncLocalDataSource
 import com.joshayoung.notemark.note.data.database.SyncDatabase
 import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
 import com.joshayoung.notemark.note.data.repository.NoteRepositoryImpl
+import com.joshayoung.notemark.note.data.workers.DataSyncWorker
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
@@ -47,6 +49,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidApplication
+import org.koin.androidx.workmanager.dsl.workerOf
+
 
 var appModule = module {
 
@@ -119,4 +123,6 @@ var appModule = module {
     singleOf(::ValidatePassword)
     singleOf(::ValidateEmail)
     singleOf(::PullRemoteNotesUseCase)
+
+    workerOf(::DataSyncWorker)
 }

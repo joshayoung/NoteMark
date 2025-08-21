@@ -55,3 +55,4 @@
 * [Passing Data Back](https://www.youtube.com/watch?v=NhoV78E6yWo)
 * [The Full Jetpack Compose Responsive UI Crash Course](https://www.youtube.com/watch?v=jU_BAQI4DiM)
 * [Theming](https://www.youtube.com/watch?v=SH7HzLUjyBs)
+* [Setup WorkManager with Koin](https://insert-koin.io/docs/reference/koin-android/workmanager/)
