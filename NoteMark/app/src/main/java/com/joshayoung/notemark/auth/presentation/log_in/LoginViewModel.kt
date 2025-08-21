@@ -86,7 +86,7 @@ class LoginViewModel(
                     navigator.navigate(
                         destination = Destination.NoteList,
                         navOptions = {
-                            popUpTo(Destination.StartScreen) {
+                            popUpTo(Destination.AuthGraph) {
                                 inclusive = true
                             }
                         }

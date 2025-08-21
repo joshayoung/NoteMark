@@ -22,6 +22,8 @@ import com.joshayoung.notemark.note.presentation.note_detail.NoteDetailScreenRoo
 import com.joshayoung.notemark.note.presentation.note_list.NoteListScreenRoot
 import com.joshayoung.notemark.note.presentation.settings.SettingsScreenRoot
 import com.joshayoung.notemark.note.presentation.start.GettingStartedScreenRoot
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun NoteMarkNavigation(
@@ -52,13 +54,15 @@ fun NoteMarkNavigation(
         modifier = modifier,
         viewModel = viewModel,
         navController = navController,
-        isAuthenticated = isAuthenticated
+        isAuthenticated = isAuthenticated,
+        navigator = navigator,
     )
 }
 
 @Composable
 fun SetNavigationGraph(
     modifier: Modifier,
+    navigator: Navigator,
     viewModel: MainViewModel,
     navController: NavHostController,
     isAuthenticated: Boolean
@@ -70,8 +74,8 @@ fun SetNavigationGraph(
 
     ObserveAsEvents(viewModel.authData) { refreshToken ->
         if (refreshToken == "unset" && currentRoute != authGraph) {
-            navController.navigate(Destination.StartScreen) {
-                popUpTo(Destination.AuthGraph) {
+            navController.navigate(Destination.AuthGraph) {
+                popUpTo(Destination.NoteGraph) {
                     inclusive = true
                 }
             }
@@ -112,7 +116,7 @@ private fun NavGraphBuilder.noteGraph() {
 
 private fun NavGraphBuilder.authGraph() {
     navigation<Destination.AuthGraph>(
-        startDestination = Destination.Login
+        startDestination = Destination.StartScreen
     ) {
         composable<Destination.StartScreen> {
             GettingStartedScreenRoot()
