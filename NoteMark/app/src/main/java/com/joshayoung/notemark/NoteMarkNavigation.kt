@@ -33,7 +33,6 @@ fun NoteMarkNavigation(
     navController: NavHostController,
     isAuthenticated: Boolean
 ) {
-
     ObserveAsEvents(flow = navigator.navigationAction) { action ->
         when(action) {
             is NavigationAction.Navigate -> navController.navigate(
@@ -50,19 +49,18 @@ fun NoteMarkNavigation(
             }
         }
     }
+
     SetNavigationGraph(
         modifier = modifier,
         viewModel = viewModel,
         navController = navController,
-        isAuthenticated = isAuthenticated,
-        navigator = navigator,
+        isAuthenticated = isAuthenticated
     )
 }
 
 @Composable
 fun SetNavigationGraph(
     modifier: Modifier,
-    navigator: Navigator,
     viewModel: MainViewModel,
     navController: NavHostController,
     isAuthenticated: Boolean
@@ -72,7 +70,7 @@ fun SetNavigationGraph(
     val currentRoute = backStackEntry?.destination?.parent?.route?.substringAfterLast(".")
     val authGraph = Destination.AuthGraph.toString()
 
-    ObserveAsEvents(viewModel.authData) { refreshToken ->
+    ObserveAsEvents(viewModel.events) { refreshToken ->
         if (refreshToken == "unset" && currentRoute != authGraph) {
             navController.navigate(Destination.AuthGraph) {
                 popUpTo(Destination.NoteGraph) {

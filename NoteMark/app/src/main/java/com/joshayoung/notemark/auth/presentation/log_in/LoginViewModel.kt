@@ -57,8 +57,7 @@ class LoginViewModel(
                             state.password.text.toString(),
                         )
 
-                        if (result is Result.Success)
-                        {
+                        if (result is Result.Success) {
                             state = state.copy(isLoggingIn = false)
                             pullRemoteNotesUseCase.execute()
 
@@ -70,6 +69,7 @@ class LoginViewModel(
                     }
                 }
             }
+
             LoginAction.DontHaveAccount -> {
                 viewModelScope.launch {
                     navigator.navigate(

@@ -39,11 +39,12 @@ class DataStorageImpl(
 
     override fun getAuthData(): Flow<LoginResponse> = dataStore.data
         .map { preferences ->
-            LoginResponse(
+            val t = LoginResponse(
                 accessToken = preferences[AuthPreferenceValues.ACCESS_TOKEN],
                 refreshToken = preferences[AuthPreferenceValues.REFRESH_TOKEN],
                 username = preferences[AuthPreferenceValues.USERNAME]
             )
+            t
         }
 
     override suspend fun saveAuthData(settings: LoginResponse?) {
