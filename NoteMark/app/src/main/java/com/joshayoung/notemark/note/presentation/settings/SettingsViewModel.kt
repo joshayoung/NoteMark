@@ -16,6 +16,7 @@ import com.joshayoung.notemark.note.domain.models.SyncInterval
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.use_cases.PullRemoteNotesUseCase
 import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
@@ -38,7 +39,8 @@ class SettingsViewModel(
     val syncNotesUseCase: SyncNotesUseCase,
     val pullRemoteNotesUseCase: PullRemoteNotesUseCase,
     val syncNoteWorkerScheduler: SyncNoteWorkerScheduler,
-    val noteRepository: NoteRepository
+    val noteRepository: NoteRepository,
+    val applicationScope: CoroutineScope
 
 ) : ViewModel() {
     var state by mutableStateOf(SettingsState())
@@ -75,10 +77,7 @@ class SettingsViewModel(
                     }
 
                     if (!hasNoPendingSyncs) {
-                        localDataSource.removeAllNotes()
-                        localSyncDataSource.clearSyncQueue()
-                        noteRepository.logout()
-
+                        logout()
                         return@launch
                     } else {
                         state = state.copy(displayLogoutPrompt = true)
@@ -88,12 +87,7 @@ class SettingsViewModel(
 
             SettingsAction.LogOutWithoutSyncing -> {
                 state = state.copy(displayLogoutPrompt = false)
-                viewModelScope.launch {
-                    // Add Use Case:
-                    localDataSource.removeAllNotes()
-                    localSyncDataSource.clearSyncQueue()
-                    noteRepository.logout()
-                }
+                logout()
             }
 
             SettingsAction.NavigateBack -> {
@@ -133,6 +127,16 @@ class SettingsViewModel(
                     state = state.copy(isSyncing = false)
                 }
             }
+        }
+    }
+
+    // Add Use Case:
+    private fun logout() {
+        applicationScope.launch {
+            syncNoteWorkerScheduler.cancelSyncs()
+            localSyncDataSource.clearSyncQueue()
+            localDataSource.removeAllNotes()
+            noteRepository.logout()
         }
     }
 }
