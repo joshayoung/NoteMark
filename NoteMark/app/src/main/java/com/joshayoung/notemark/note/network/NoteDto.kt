@@ -8,5 +8,5 @@ data class NoteDto(
     val content: String?,
     val createdAt: String?,
     val lastEditedAt: String? = null,
-    val title: String
+    val title: String,
 )

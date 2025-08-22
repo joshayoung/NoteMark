@@ -5,22 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joshayoung.notemark.auth.domain.models.LoginResponse
 import com.joshayoung.notemark.core.domain.DataStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val dataStorage: DataStorage,
-    private val applicationScope: CoroutineScope
+    private val applicationScope: CoroutineScope,
 ) : ViewModel() {
     var state by mutableStateOf(MainState())
         private set
@@ -38,14 +32,15 @@ class MainViewModel(
 
         viewModelScope.launch {
             state = state.copy(isCheckingSession = true)
-            state = state.copy(
-                isAuthenticated = checkAccessToken()
-            )
+            state =
+                state.copy(
+                    isAuthenticated = checkAccessToken(),
+                )
             state = state.copy(isCheckingSession = false)
         }
     }
 
-    private suspend fun checkAccessToken() : Boolean {
+    private suspend fun checkAccessToken(): Boolean {
         val token = dataStorage.getAuthData().first().accessToken
 
         return token != ""

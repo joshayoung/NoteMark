@@ -6,5 +6,5 @@ data class SettingsState(
     val interval: SyncInterval = SyncInterval.MANUAL,
     val isSyncing: Boolean = false,
     val hasUnsyncedChanges: Boolean = false,
-    val displayLogoutPrompt: Boolean = false
+    val displayLogoutPrompt: Boolean = false,
 )

@@ -28,84 +28,89 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.joshayoung.notemark.R
-import com.joshayoung.notemark.core.presentation.components.NoteMarkButton
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
+import com.joshayoung.notemark.core.presentation.components.NoteMarkButton
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun GettingStartedScreenRoot(
-    viewModel: GettingStartedViewModel = koinViewModel(),
-) {
+fun GettingStartedScreenRoot(viewModel: GettingStartedViewModel = koinViewModel()) {
     GettingStartedScreen(
         onAction = { action ->
             viewModel.onAction(action)
-        }
+        },
     )
 }
 
 @Composable
-fun GettingStartedScreen(
-    onAction: (StartAction) -> Unit,
-) {
+fun GettingStartedScreen(onAction: (StartAction) -> Unit) {
     val configuration = LocalConfiguration.current
     val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
     if (isPortrait) {
         PortraitOrientation(
-            onAction = onAction)
+            onAction = onAction,
+        )
     } else {
         LandscapeOrientation(
-            onAction = onAction)
+            onAction = onAction,
+        )
     }
 }
 
 @Composable
 fun LandscapeOrientation(onAction: (StartAction) -> Unit) {
-        Row(
-            modifier = Modifier
-                .background( Color(0xFFE0EAFF))
+    Row(
+        modifier =
+            Modifier
+                .background(Color(0xFFE0EAFF))
                 .fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-                Image(
-                    painterResource(id = R.drawable.greeting),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxHeight(),
-                )
-                NoteIntroCard(
-                    onAction = onAction,
-                    modifier = Modifier
-                        .width(400.dp)
-                        .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp))
-                )
-        }
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Image(
+            painterResource(id = R.drawable.greeting),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier =
+                Modifier
+                    .fillMaxHeight(),
+        )
+        NoteIntroCard(
+            onAction = onAction,
+            modifier =
+                Modifier
+                    .width(400.dp)
+                    .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp)),
+        )
+    }
 }
 
 @Composable
-private fun PortraitOrientation(
-    onAction: (StartAction) -> Unit) {
+private fun PortraitOrientation(onAction: (StartAction) -> Unit) {
     Column(
-        modifier = Modifier
-            .background( Color(0xFFE0EAFF))
-        ,verticalArrangement = Arrangement.Bottom
+        modifier =
+            Modifier
+                .background(Color(0xFFE0EAFF)),
+        verticalArrangement = Arrangement.Bottom,
     ) {
-        Box(modifier = Modifier
-            .weight(1f)
+        Box(
+            modifier =
+                Modifier
+                    .weight(1f),
         ) {
             Image(
                 painterResource(id = R.drawable.greeting),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
             )
         }
         NoteIntroCard(
-            modifier = Modifier
-                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
-                    onAction = onAction
+            modifier =
+                Modifier
+                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+            onAction = onAction,
         )
     }
 }
@@ -113,43 +118,47 @@ private fun PortraitOrientation(
 @Composable
 private fun NoteIntroCard(
     modifier: Modifier = Modifier,
-    onAction: (StartAction) -> Unit
-    ) {
+    onAction: (StartAction) -> Unit,
+) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier =
+            modifier
+                .fillMaxWidth(),
     ) {
         Column(
-            modifier = modifier
-                .background(Color.White)
-                .padding(vertical = 20.dp, horizontal = 20.dp)
-                .fillMaxWidth()
+            modifier =
+                modifier
+                    .background(Color.White)
+                    .padding(vertical = 20.dp, horizontal = 20.dp)
+                    .fillMaxWidth(),
         ) {
             Text(
                 modifier = Modifier,
                 text = "Your Own Collection of Notes",
                 fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
-                modifier = Modifier
-                    .padding(bottom = 20.dp),
-                text = "Capture your thoughts and ideas."
+                modifier =
+                    Modifier
+                        .padding(bottom = 20.dp),
+                text = "Capture your thoughts and ideas.",
             )
             NoteMarkButton(
                 text = "Get Started",
                 onClick = {
                     onAction(StartAction.CreateAccount)
                 },
-                isEnabled = true
+                isEnabled = true,
             )
             OutlinedButton(
                 shape = RoundedCornerShape(12f),
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
                 onClick = {
                     onAction(StartAction.Login)
-                }
+                },
             ) {
                 Text("Log in")
             }
@@ -157,15 +166,15 @@ private fun NoteIntroCard(
     }
 }
 
-//@Preview(widthDp = 640, heightDp = 360)
-//@Preview(widthDp = 840, heightDp = 360)
+// @Preview(widthDp = 640, heightDp = 360)
+// @Preview(widthDp = 840, heightDp = 360)
 @Preview(widthDp = 260, heightDp = 560)
-//@Preview
+// @Preview
 @Composable
 private fun GettingStartedScreenPreview() {
     NoteMarkTheme {
         GettingStartedScreen(
-            onAction = {}
+            onAction = {},
         )
     }
 }

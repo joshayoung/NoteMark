@@ -7,27 +7,28 @@ import io.ktor.client.statement.HttpResponse
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.SerializationException
 
-suspend inline fun<reified T> catchErrors(myFunction: () -> HttpResponse) : Result<T, DataError.Network> {
-    val response = try {
-        myFunction()
-    } catch(e: io.ktor.util.network.UnresolvedAddressException) {
-        e.printStackTrace()
-        return Result.Error(DataError.Network.NO_INTERNET)
-    } catch (e: SerializationException) {
-        e.printStackTrace()
-        return Result.Error(DataError.Network.SERIALIZATION)
-    } catch(e: Exception) {
-        if(e is CancellationException) throw e
+suspend inline fun <reified T> catchErrors(myFunction: () -> HttpResponse): Result<T, DataError.Network> {
+    val response =
+        try {
+            myFunction()
+        } catch (e: io.ktor.util.network.UnresolvedAddressException) {
+            e.printStackTrace()
+            return Result.Error(DataError.Network.NO_INTERNET)
+        } catch (e: SerializationException) {
+            e.printStackTrace()
+            return Result.Error(DataError.Network.SERIALIZATION)
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
 
-        e.printStackTrace()
-        return Result.Error(DataError.Network.UNKNOWN)
-    }
+            e.printStackTrace()
+            return Result.Error(DataError.Network.UNKNOWN)
+        }
 
     return responseToResult(response)
 }
 
-suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<T, DataError.Network> {
-    return when(response.status.value) {
+suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<T, DataError.Network> =
+    when (response.status.value) {
         in 200..299 -> Result.Success(response.body<T>())
         401 -> Result.Error(DataError.Network.UNAUTHORIZED)
         408 -> Result.Error(DataError.Network.REQUEST_TIMEOUT)
@@ -39,4 +40,3 @@ suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<
 
         else -> Result.Error(DataError.Network.UNKNOWN)
     }
-}

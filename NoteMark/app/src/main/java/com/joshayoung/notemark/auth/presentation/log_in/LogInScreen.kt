@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,139 +36,152 @@ import com.joshayoung.notemark.core.utils.DeviceConfiguration
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LoginScreenRoot(
-    viewModel: LoginViewModel = koinViewModel()
-) {
+fun LoginScreenRoot(viewModel: LoginViewModel = koinViewModel()) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     ObserveAsEvents(viewModel.events) { event ->
-        when(event) {
+        when (event) {
             is LoginEvent.Success -> {
-                Toast.makeText(
-                    context,
-                    "You are Logged In!",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast
+                    .makeText(
+                        context,
+                        "You are Logged In!",
+                        Toast.LENGTH_LONG,
+                    ).show()
                 viewModel.onAction(LoginAction.LoginSuccess)
             }
 
             LoginEvent.Failure -> {
                 keyboardController?.hide()
-                Toast.makeText(
-                    context,
-                    "Invalid Login Credentials",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast
+                    .makeText(
+                        context,
+                        "Invalid Login Credentials",
+                        Toast.LENGTH_LONG,
+                    ).show()
             }
         }
     }
-
 
     LoginScreen(
         state = viewModel.state,
         onAction = { action ->
             viewModel.onAction(action)
-        }
+        },
     )
 }
 
-    @Composable
-    fun LoginScreen(
-        state: LoginState,
-        onAction: (LoginAction) -> Unit
-    ) {
-        val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-        val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
+@Composable
+fun LoginScreen(
+    state: LoginState,
+    onAction: (LoginAction) -> Unit,
+) {
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
 
-        val loginModifier = Modifier
+    val loginModifier =
+        Modifier
             .fillMaxSize()
             .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
 
-        when(deviceConfiguration) {
-            DeviceConfiguration.MOBILE_PORTRAIT -> {
-                Column(
-                    modifier = Modifier
+    when (deviceConfiguration) {
+        DeviceConfiguration.MOBILE_PORTRAIT -> {
+            Column(
+                modifier =
+                    Modifier
                         .background(color = MaterialTheme.colorScheme.background)
-                        .padding(top = 20.dp)
-                ) {
-                    Column(
-                        modifier = loginModifier
-                            .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
-                            .padding(horizontal = 16.dp, vertical = 24.dp)
-                    ) {
-                        LoginHeader(
-                            modifier = Modifier
-                                .padding(top = 40.dp)
-                        )
-                        LoginContent(
-                            state = state,
-                            onAction = { action ->
-                                onAction(action)
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        )
-                    }
-                }
-            }
-        DeviceConfiguration.MOBILE_LANDSCAPE -> {
-            Row(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.background)
-                    .padding(top = 20.dp)
+                        .padding(top = 20.dp),
             ) {
-                Row(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                        .background(Color.White)
-                        .fillMaxSize()
-                        .padding(20.dp)
-                    ,horizontalArrangement = Arrangement.SpaceBetween
+                Column(
+                    modifier =
+                        loginModifier
+                            .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
+                            .padding(horizontal = 16.dp, vertical = 24.dp),
                 ) {
                     LoginHeader(
-                        modifier = Modifier
-                            .weight(1f)
+                        modifier =
+                            Modifier
+                                .padding(top = 40.dp),
                     )
                     LoginContent(
                         state = state,
                         onAction = { action ->
                             onAction(action)
                         },
-                        modifier = Modifier
-                            .weight(1f)
-                            .verticalScroll(rememberScrollState())
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
+                    )
+                }
+            }
+        }
+        DeviceConfiguration.MOBILE_LANDSCAPE -> {
+            Row(
+                modifier =
+                    Modifier
+                        .background(color = MaterialTheme.colorScheme.background)
+                        .padding(top = 20.dp),
+            ) {
+                Row(
+                    modifier =
+                        Modifier
+                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                            .background(Color.White)
+                            .fillMaxSize()
+                            .padding(20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    LoginHeader(
+                        modifier =
+                            Modifier
+                                .weight(1f),
+                    )
+                    LoginContent(
+                        state = state,
+                        onAction = { action ->
+                            onAction(action)
+                        },
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .verticalScroll(rememberScrollState()),
                     )
                 }
             }
         }
         DeviceConfiguration.TABLET_PORTRAIT,
         DeviceConfiguration.TABLET_LANDSCAPE,
-        DeviceConfiguration.DESKTOP -> {
+        DeviceConfiguration.DESKTOP,
+        -> {
             Column(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.background)
-                    .padding(top = 20.dp)
+                modifier =
+                    Modifier
+                        .background(color = MaterialTheme.colorScheme.background)
+                        .padding(top = 20.dp),
             ) {
                 Column(
-                    modifier = loginModifier
-                        .verticalScroll(rememberScrollState())
-                        .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
-                        .padding(vertical = 48.dp),
+                    modifier =
+                        loginModifier
+                            .verticalScroll(rememberScrollState())
+                            .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
+                            .padding(vertical = 48.dp),
                     verticalArrangement = Arrangement.spacedBy(32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     LoginHeader(
                         alignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .widthIn(max = 540.dp)
+                        modifier =
+                            Modifier
+                                .widthIn(max = 540.dp),
                     )
                     LoginContent(
-                        modifier = Modifier
-                            .widthIn(max = 540.dp)
-                        ,state = state,
+                        modifier =
+                            Modifier
+                                .widthIn(max = 540.dp),
+                        state = state,
                         onAction = { action ->
                             onAction(action)
-                        }
+                        },
                     )
                 }
             }
@@ -182,14 +194,19 @@ fun LoginHeader(
     modifier: Modifier = Modifier,
     alignment: Alignment.Horizontal = Alignment.Start,
 ) {
-    Column(modifier = modifier,
-        horizontalAlignment = alignment
+    Column(
+        modifier = modifier,
+        horizontalAlignment = alignment,
     ) {
-        Text("Log In", modifier = Modifier,
-            style = MaterialTheme.typography.titleLarge
+        Text(
+            "Log In",
+            modifier = Modifier,
+            style = MaterialTheme.typography.titleLarge,
         )
-        Text("Capture your thoughts and ideas.", modifier = Modifier,
-            style = MaterialTheme.typography.bodyLarge
+        Text(
+            "Capture your thoughts and ideas.",
+            modifier = Modifier,
+            style = MaterialTheme.typography.bodyLarge,
         )
     }
 }
@@ -198,10 +215,10 @@ fun LoginHeader(
 fun LoginContent(
     state: LoginState,
     onAction: (LoginAction) -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         NoteMarkTextField(state = state.username, label = "Username", hint = "john.doe@example.com")
         NoteMarkTextField(
@@ -210,19 +227,24 @@ fun LoginContent(
             label = "Password",
             icon = EyeIcon,
             hint = "Password",
-            type = TextFieldType.Password
+            type = TextFieldType.Password,
         )
-        NoteMarkButton(text = "Log In", isEnabled = state.formFilled,
-            isLoading = state.isLoggingIn
+        NoteMarkButton(
+            text = "Log In",
+            isEnabled = state.formFilled,
+            isLoading = state.isLoggingIn,
         ) {
             onAction(LoginAction.OnLoginClick)
         }
         Text(
-            "Don't have an account?", modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onAction(LoginAction.DontHaveAccount)
-            }, textAlign = TextAlign.Center
+            "Don't have an account?",
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onAction(LoginAction.DontHaveAccount)
+                    },
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -231,15 +253,19 @@ fun LoginContent(
 @Preview(showBackground = true)
 @Preview(
     showBackground = true,
-    widthDp = 840, heightDp = 360)
+    widthDp = 840,
+    heightDp = 360,
+)
 @Preview(
     showBackground = true,
-    widthDp = 800, heightDp = 1280)
+    widthDp = 800,
+    heightDp = 1280,
+)
 fun LoginScreenPreview() {
     NoteMarkTheme {
         LoginScreen(
             state = LoginState(),
-            onAction = {}
+            onAction = {},
         )
     }
 }

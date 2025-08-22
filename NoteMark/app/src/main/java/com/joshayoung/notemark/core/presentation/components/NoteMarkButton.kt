@@ -23,31 +23,33 @@ fun NoteMarkButton(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = false,
     isLoading: Boolean = false,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Button(
         onClick = {
             onClick()
         },
         enabled = isEnabled,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-            disabledContentColor = MaterialTheme.colorScheme.primary
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                disabledContentColor = MaterialTheme.colorScheme.primary,
+            ),
         shape = RoundedCornerShape(12f),
         modifier =
-        modifier
-            .fillMaxWidth()
+            modifier
+                .fillMaxWidth(),
     ) {
         if (isLoading) {
             CircularProgressIndicator(
-                modifier = Modifier
-                    .size(15.dp),
-//                    .alpha(if (isLoading) 1f else 0f),
+                modifier =
+                    Modifier
+                        .size(15.dp),
+                //                    .alpha(if (isLoading) 1f else 0f),
                 strokeWidth = 1.5.dp,
-                color = if(isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
+                color = if (isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
             )
         } else {
             Text(text)
@@ -59,29 +61,32 @@ fun NoteMarkButton(
 @Composable
 fun NoteMarkButtonPreview() {
     NoteMarkTheme {
-        Column(modifier = Modifier
-            .fillMaxSize(),
-            verticalArrangement = Arrangement.Center) {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+        ) {
             NoteMarkButton(
                 text = "Create Account",
                 onClick = {},
-                isEnabled = true
+                isEnabled = true,
             )
             NoteMarkButton(
                 text = "Login In",
-                onClick = {}
+                onClick = {},
             )
             NoteMarkButton(
                 text = "Login In",
                 isEnabled = true,
                 isLoading = true,
-                onClick = {}
+                onClick = {},
             )
             NoteMarkButton(
                 text = "Disabled and Loading",
                 isEnabled = false,
                 isLoading = true,
-                onClick = {}
+                onClick = {},
             )
         }
     }

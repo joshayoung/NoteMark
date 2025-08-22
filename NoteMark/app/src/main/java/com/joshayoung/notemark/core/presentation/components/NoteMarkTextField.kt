@@ -48,33 +48,37 @@ fun NoteMarkTextField(
     hint: String,
     helperText: String = "",
     label: String,
-    type: TextFieldType = TextFieldType.Regular
+    type: TextFieldType = TextFieldType.Regular,
 ) {
     Column(modifier = modifier) {
-        Text(text = label,
-            modifier = Modifier
-            .padding(bottom = 7.dp),
-            fontWeight = FontWeight.SemiBold
-            )
-        Row(modifier = Modifier
-            .fillMaxWidth()
+        Text(
+            text = label,
+            modifier =
+                Modifier
+                    .padding(bottom = 7.dp),
+            fontWeight = FontWeight.SemiBold,
+        )
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
         ) {
-            when(type) {
+            when (type) {
                 TextFieldType.Regular -> {
                     RegularTextField(
                         state = state,
                         keyboardType = keyboardType,
                         helperText = helperText,
                         icon = icon,
-                        hint = hint
+                        hint = hint,
                     )
                 }
-                TextFieldType.Password ->  {
+                TextFieldType.Password -> {
                     PasswordTextField(
                         state = state,
                         helperText = helperText,
                         keyboardType = keyboardType,
-                        hint = hint
+                        hint = hint,
                     )
                 }
             }
@@ -96,64 +100,73 @@ private fun PasswordTextField(
     var isVisible by remember {
         mutableStateOf(false)
     }
-    Column() {
-
-    BasicSecureTextField(
-        state = state,
-        textObfuscationMode = if(isVisible) {
-            TextObfuscationMode.Visible
-        } else TextObfuscationMode.Hidden,
-        textStyle = LocalTextStyle.current.copy(
-            color = MaterialTheme.colorScheme.onSurface
-        ),
-        decorator = { innerBox ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                        .weight(1f)
+    Column {
+        BasicSecureTextField(
+            state = state,
+            textObfuscationMode =
+                if (isVisible) {
+                    TextObfuscationMode.Visible
+                } else {
+                    TextObfuscationMode.Hidden
+                },
+            textStyle =
+                LocalTextStyle.current.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
+            decorator = { innerBox ->
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if (state.text.isEmpty() && !isFocused)
-                    {
-                        Text(text = hint)
+                    Box(
+                        modifier =
+                            Modifier
+                                .padding(start = 10.dp)
+                                .weight(1f),
+                    ) {
+                        if (state.text.isEmpty() && !isFocused) {
+                            Text(text = hint)
+                        }
+                        innerBox()
                     }
-                    innerBox()
+                    IconButton(
+                        onClick = {
+                            isVisible = !isVisible
+                        },
+                    ) {
+                        Icon(
+                            modifier =
+                                Modifier
+                                    .padding(start = 10.dp),
+                            imageVector =
+                                if (isVisible) {
+                                    EyeClosedIcon
+                                } else {
+                                    EyeIcon
+                                },
+                            contentDescription = null,
+                        )
+                    }
                 }
-                IconButton(
-                    onClick = {
-                        isVisible = !isVisible
-                    }) {
-                    Icon(
-                    modifier = Modifier
-                        .padding(start = 10.dp),
-                    imageVector = if (isVisible) {
-                        EyeClosedIcon
-                    } else {
-                        EyeIcon
-                    },
-                    contentDescription = null)
-                }
-            }
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = keyboardType
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged {
-                isFocused = it.isFocused
-            }
-            .clip(RoundedCornerShape(4.dp))
-            .background(if (!isFocused) MaterialTheme.colorScheme.surface else Color.White)
-            .border(2.dp, if(isFocused) Color.Blue else Color.Transparent)
-    )
+            },
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = keyboardType,
+                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        isFocused = it.isFocused
+                    }.clip(RoundedCornerShape(4.dp))
+                    .background(if (!isFocused) MaterialTheme.colorScheme.surface else Color.White)
+                    .border(2.dp, if (isFocused) Color.Blue else Color.Transparent),
+        )
         if (helperText != "") {
             AnimatedVisibility(
-                visible = isFocused
+                visible = isFocused,
             ) {
                 Text(text = helperText)
             }
@@ -167,57 +180,61 @@ private fun RegularTextField(
     keyboardType: KeyboardType,
     icon: ImageVector? = null,
     helperText: String = "",
-    hint: String
+    hint: String,
 ) {
     var isFocused by remember {
         mutableStateOf(false)
     }
-    Column() {
-    BasicTextField(
-        state = state,
-        lineLimits = TextFieldLineLimits.SingleLine,
-        textStyle = MaterialTheme.typography.bodyLarge,
-        decorator = { innerBox ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
+    Column {
+        BasicTextField(
+            state = state,
+            lineLimits = TextFieldLineLimits.SingleLine,
+            textStyle = MaterialTheme.typography.bodyLarge,
+            decorator = { innerBox ->
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if (state.text.isEmpty() && !isFocused) {
-                        Text(text = hint)
+                    Box(
+                        modifier =
+                            Modifier
+                                .weight(1f),
+                    ) {
+                        if (state.text.isEmpty() && !isFocused) {
+                            Text(text = hint)
+                        }
+                        innerBox()
                     }
-                    innerBox()
+                    if (icon != null) {
+                        Icon(
+                            modifier =
+                                Modifier
+                                    .padding(start = 10.dp),
+                            imageVector = icon,
+                            contentDescription = null,
+                        )
+                    }
                 }
-                if (icon != null) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 10.dp),
-                        imageVector = icon,
-                        contentDescription = null
-                    )
-                }
-            }
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = keyboardType
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged {
-                isFocused = it.isFocused
-            }
-            .clip(RoundedCornerShape(4.dp))
-            .background(if (!isFocused) MaterialTheme.colorScheme.surface else Color.White)
-            .border(2.dp, if (isFocused) Color.Blue else Color.Transparent)
-            .padding(12.dp)
-    )
+            },
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = keyboardType,
+                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        isFocused = it.isFocused
+                    }.clip(RoundedCornerShape(4.dp))
+                    .background(if (!isFocused) MaterialTheme.colorScheme.surface else Color.White)
+                    .border(2.dp, if (isFocused) Color.Blue else Color.Transparent)
+                    .padding(12.dp),
+        )
         if (helperText != "") {
             AnimatedVisibility(
-                visible = isFocused
+                visible = isFocused,
             ) {
                 Text(text = helperText)
             }
@@ -235,7 +252,7 @@ fun NoteMarkTextFieldPreview() {
                 state = TextFieldState(),
                 label = "Username",
                 helperText = "Enter a valid username",
-                hint = "Enter Username"
+                hint = "Enter Username",
             )
             NoteMarkTextField(
                 modifier = Modifier,
@@ -243,7 +260,7 @@ fun NoteMarkTextFieldPreview() {
                 label = "Password",
                 helperText = "Enter a valid password",
                 hint = "Enter Password",
-                type = TextFieldType.Password
+                type = TextFieldType.Password,
             )
         }
     }

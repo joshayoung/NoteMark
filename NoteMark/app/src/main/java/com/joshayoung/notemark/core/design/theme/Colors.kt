@@ -2,7 +2,7 @@ package com.joshayoung.notemark.core.design.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Primary =  Color(0xFF5977F7)
+val Primary = Color(0xFF5977F7)
 val Background = Color(0xFF58A1F8)
 val Surface = Color(0xFFEFEFF2)
 val OnSurface = Color(0xFF1B1B1C)

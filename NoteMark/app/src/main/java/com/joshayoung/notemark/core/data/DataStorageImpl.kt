@@ -1,11 +1,11 @@
 package com.joshayoung.notemark.core.data
 
-import com.joshayoung.notemark.auth.domain.models.LoginResponse
-import com.joshayoung.notemark.core.domain.DataStorage
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.joshayoung.notemark.auth.domain.models.LoginResponse
+import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.note.domain.models.SyncInterval
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -23,29 +23,32 @@ private object SettingValues {
 }
 
 class DataStorageImpl(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
 ) : DataStorage {
+    override val values: Flow<String?> =
+        dataStore.data
+            .map { preferences ->
+                val value = preferences[AuthPreferenceValues.REFRESH_TOKEN]
+                value
+            }
 
-    override val values: Flow<String?> = dataStore.data
-        .map { preferences ->
-            val value = preferences[AuthPreferenceValues.REFRESH_TOKEN]
-            value
-        }
+    override val username: Flow<String> =
+        dataStore.data
+            .map { preferences ->
+                preferences[AuthPreferenceValues.USERNAME] ?: ""
+            }
 
-    override val username: Flow<String> = dataStore.data
-        .map { preferences ->
-            preferences[AuthPreferenceValues.USERNAME] ?: ""
-        }
-
-    override fun getAuthData(): Flow<LoginResponse> = dataStore.data
-        .map { preferences ->
-            val t = LoginResponse(
-                accessToken = preferences[AuthPreferenceValues.ACCESS_TOKEN] ?: "",
-                refreshToken = preferences[AuthPreferenceValues.REFRESH_TOKEN] ?: "",
-                username = preferences[AuthPreferenceValues.USERNAME] ?: ""
-            )
-            t
-        }
+    override fun getAuthData(): Flow<LoginResponse> =
+        dataStore.data
+            .map { preferences ->
+                val t =
+                    LoginResponse(
+                        accessToken = preferences[AuthPreferenceValues.ACCESS_TOKEN] ?: "",
+                        refreshToken = preferences[AuthPreferenceValues.REFRESH_TOKEN] ?: "",
+                        username = preferences[AuthPreferenceValues.USERNAME] ?: "",
+                    )
+                t
+            }
 
     override suspend fun saveAuthData(settings: LoginResponse?) {
         if (settings == null) {
@@ -55,7 +58,7 @@ class DataStorageImpl(
                 preferences.remove(AuthPreferenceValues.USERNAME)
             }
 
-            return;
+            return
         }
 
         dataStore.edit { preferences ->

@@ -2,7 +2,6 @@ package com.joshayoung.notemark.note.data.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.UUID
 
 @Entity(tableName = "sync_queue")
 data class SyncRecord(
@@ -11,5 +10,5 @@ data class SyncRecord(
     val noteId: String?,
     val operation: SyncOperation,
     val payload: String,
-    val timestamp: Long
+    val timestamp: Long,
 )

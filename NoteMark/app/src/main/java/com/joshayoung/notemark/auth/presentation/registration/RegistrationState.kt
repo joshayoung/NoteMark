@@ -15,13 +15,10 @@ data class RegistrationState(
     val passwordError: String = "",
     val passwordEqualityError: String = "",
     val passwordsNotEqual: Boolean = false,
-
     val invalidPassword: Boolean = false,
     val invalidUsername: Boolean = false,
-    val invalidEmail: Boolean = false
+    val invalidEmail: Boolean = false,
 ) {
-
     val formValid: Boolean
         get() = !invalidUsername && !invalidEmail && !invalidPassword
-
 }

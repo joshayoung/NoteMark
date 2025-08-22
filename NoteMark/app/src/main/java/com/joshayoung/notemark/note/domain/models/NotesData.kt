@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NotesData(
     val notes: List<NoteDto>,
-    val total: Int = 0
+    val total: Int = 0,
 )

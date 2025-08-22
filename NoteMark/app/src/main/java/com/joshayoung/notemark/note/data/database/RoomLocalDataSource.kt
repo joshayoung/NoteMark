@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class RoomLocalDataSource(
-    private val noteDao: NoteDao
+    private val noteDao: NoteDao,
 ) : LocalDataSource {
     override fun getNotes(): Flow<List<Note>> {
-        val entities = noteDao.getNotes();
+        val entities = noteDao.getNotes()
 
         return entities.map { noteEntities ->
             noteEntities.map {
@@ -33,18 +33,18 @@ class RoomLocalDataSource(
                 return Result.Success(data = noteEntity)
             }
             return Result.Success(data = noteEntity.copy(id = id))
-        } catch(e: SQLiteFullException) {
+        } catch (e: SQLiteFullException) {
             return Result.Error(DataError.Local.DISK_FULL)
         }
     }
 
-    override suspend fun getNote(id: Long) : Note? {
+    override suspend fun getNote(id: Long): Note? {
         val noteEntity = noteDao.getNoteById(id)?.toNote()
 
         return noteEntity
     }
 
-    override suspend fun deleteNote(id: Long) : Boolean {
+    override suspend fun deleteNote(id: Long): Boolean {
         val rows = noteDao.deleteNote(id)
 
         return rows == 1

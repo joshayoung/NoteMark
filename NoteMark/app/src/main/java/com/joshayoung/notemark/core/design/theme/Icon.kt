@@ -21,7 +21,6 @@ val OfflineIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(R.drawable.offline)
 
-
 val CopyIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(R.drawable.copy)

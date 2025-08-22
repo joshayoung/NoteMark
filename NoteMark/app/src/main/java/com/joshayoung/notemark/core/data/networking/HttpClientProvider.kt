@@ -26,19 +26,20 @@ import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 
 class HttpClientProvider(
-    private val sessionStorage: DataStorage
+    private val sessionStorage: DataStorage,
 ) {
-    fun provide(): HttpClient {
-        return HttpClient(CIO) {
+    fun provide(): HttpClient =
+        HttpClient(CIO) {
             install(Logging) {
                 level = LogLevel.ALL
             }
 
             install(ContentNegotiation) {
                 json(
-                    json = Json {
-                        ignoreUnknownKeys = true
-                    }
+                    json =
+                        Json {
+                            ignoreUnknownKeys = true
+                        },
                 )
             }
 
@@ -48,20 +49,21 @@ class HttpClientProvider(
                         val tokenPair = sessionStorage.getAuthData().first()
                         BearerTokens(
                             accessToken = tokenPair.accessToken,
-                            refreshToken = tokenPair.refreshToken
+                            refreshToken = tokenPair.refreshToken,
                         )
                     }
 
                     refreshTokens {
                         val tokenPair = sessionStorage.getAuthData().first()
-                        val response = client.post {
-                            url(BuildConfig.BASE_URL + BuildConfig.REFRESH_PATH)
-                            setBody(RefreshToken(refreshToken = tokenPair.refreshToken))
-                            markAsRefreshTokenRequest()
+                        val response =
+                            client.post {
+                                url(BuildConfig.BASE_URL + BuildConfig.REFRESH_PATH)
+                                setBody(RefreshToken(refreshToken = tokenPair.refreshToken))
+                                markAsRefreshTokenRequest()
 
-                            // To invalidate token after 30 seconds:
-                            header("Debug", true)
-                        }
+                                // To invalidate token after 30 seconds:
+                                header("Debug", true)
+                            }
 
                         if (response.status == HttpStatusCode.Companion.OK) {
                             val responseText = response.bodyAsText()
@@ -70,7 +72,7 @@ class HttpClientProvider(
 
                             BearerTokens(
                                 accessToken = jsonObject.accessToken,
-                                refreshToken = jsonObject.refreshToken
+                                refreshToken = jsonObject.refreshToken,
                             )
                             // test expiration:
 //                            sessionStorage.saveAuthData(LoginResponse(refreshToken = "", accessToken = "", username = ""))
@@ -81,12 +83,11 @@ class HttpClientProvider(
                         } else {
                             BearerTokens(
                                 accessToken = "",
-                                refreshToken = ""
+                                refreshToken = "",
                             )
                         }
                     }
                 }
-
             }
 
             defaultRequest {
@@ -97,5 +98,4 @@ class HttpClientProvider(
                 header("Debug", true)
             }
         }
-    }
 }

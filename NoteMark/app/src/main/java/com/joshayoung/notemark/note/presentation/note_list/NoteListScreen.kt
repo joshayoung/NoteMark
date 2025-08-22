@@ -44,20 +44,16 @@ import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
 import com.joshayoung.notemark.note.presentation.model.NoteUi
 import org.koin.androidx.compose.koinViewModel
 
-
 @Composable
-fun NoteListScreenRoot(
-    viewModel: NoteListViewModel = koinViewModel()
-) {
-
+fun NoteListScreenRoot(viewModel: NoteListViewModel = koinViewModel()) {
     val isConnected by viewModel.isConnected.collectAsStateWithLifecycle()
 
     NoteListScreen(
-       state = viewModel.state.collectAsStateWithLifecycle().value,
+        state = viewModel.state.collectAsStateWithLifecycle().value,
         isOffline = !isConnected,
-       onAction = { action ->
+        onAction = { action ->
             viewModel.onAction(action)
-       }
+        },
     )
 }
 
@@ -65,7 +61,7 @@ fun NoteListScreenRoot(
 fun NoteListScreen(
     state: NoteListState,
     isOffline: Boolean,
-    onAction: (NoteListAction) -> Unit
+    onAction: (NoteListAction) -> Unit,
 ) {
     NoteMarkScaffold(
         topAppBar = {
@@ -77,75 +73,81 @@ fun NoteListScreen(
                 userAbbreviation = state.userAbbreviation,
                 navigateToSettings = {
                     onAction(NoteListAction.OnSettingsClick)
-                }
+                },
             )
         },
         floatingActionButton = {
             Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(size = 26.dp))
-                    .size(70.dp)
-                    .shadow(10.dp)
-                    .clickable(onClick = {
-                        onAction(NoteListAction.AddNoteClick)
-                    }
-
-                    )
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color(0xFF58A1F8),
-                                Color(0xFF5A4CF7),
-                            ),
-                            startY = 0f,
-                            endY = 200f
-                        )
-                    )
-                    .graphicsLayer {
-                        shadowElevation = 10f
-                        alpha = 0.8f
-                    }, contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .clip(RoundedCornerShape(size = 26.dp))
+                        .size(70.dp)
+                        .shadow(10.dp)
+                        .clickable(
+                            onClick = {
+                                onAction(NoteListAction.AddNoteClick)
+                            },
+                        ).background(
+                            brush =
+                                Brush.verticalGradient(
+                                    colors =
+                                        listOf(
+                                            Color(0xFF58A1F8),
+                                            Color(0xFF5A4CF7),
+                                        ),
+                                    startY = 0f,
+                                    endY = 200f,
+                                ),
+                        ).graphicsLayer {
+                            shadowElevation = 10f
+                            alpha = 0.8f
+                        },
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = PlusIcon,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onPrimary,
                 )
             }
-        }
-
+        },
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .background(
-                    brush = Brush.radialGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.surface,
-                            MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
-                        ),
-                        center = Offset(0.5f, 0.5f),
-                        radius = 9300f
-                    )
-                )
-                .padding(innerPadding)
-                .padding(10.dp)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .background(
+                        brush =
+                            Brush.radialGradient(
+                                colors =
+                                    listOf(
+                                        MaterialTheme.colorScheme.surface,
+                                        MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                                    ),
+                                center = Offset(0.5f, 0.5f),
+                                radius = 9300f,
+                            ),
+                    ).padding(innerPadding)
+                    .padding(10.dp)
+                    .fillMaxSize(),
         ) {
             if (!state.hasItems) {
                 Text(
-                    modifier = Modifier
-                        .padding(horizontal = 30.dp)
-                        .padding(top = 60.dp),
-                    text = "You've got an empty board, let's place your first note on it!")
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 30.dp)
+                            .padding(top = 60.dp),
+                    text = "You've got an empty board, let's place your first note on it!",
+                )
             }
 
             if (state.hasItems) {
                 LazyVerticalStaggeredGrid(
                     columns = StaggeredGridCells.Fixed(2),
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
                     verticalItemSpacing = 10.dp,
-                    horizontalArrangement = Arrangement.SpaceAround
+                    horizontalArrangement = Arrangement.SpaceAround,
                 ) {
                     items(state.notes) { item ->
                         NoteItem(
@@ -153,7 +155,7 @@ fun NoteListScreen(
                             onAction = onAction,
                             onNavigateToEdit = {
                                 onAction(NoteListAction.GoToDetail(item.id ?: 0))
-                            }
+                            },
                         )
                     }
                 }
@@ -165,9 +167,9 @@ fun NoteListScreen(
 @Composable
 fun NoteItem(
     note: NoteUi,
-    onAction: (NoteListAction)-> Unit,
-    onNavigateToEdit: (id: Long) -> Unit
-    ) {
+    onAction: (NoteListAction) -> Unit,
+    onNavigateToEdit: (id: Long) -> Unit,
+) {
     var showConfirmDeleteDialog by remember { mutableStateOf(false) }
 
     if (showConfirmDeleteDialog) {
@@ -176,11 +178,11 @@ fun NoteItem(
             title = {
                 Text("Delete Note?")
             },
-            text = { Text(text = "Are you sure you want to delete this note? This action cannot be undone.")},
+            text = { Text(text = "Are you sure you want to delete this note? This action cannot be undone.") },
             confirmButton = {
                 TextButton(onClick = {
                     showConfirmDeleteDialog = false
-                    note.id?.let{
+                    note.id?.let {
                         onAction(NoteListAction.OnDeleteClick(note))
                     }
                 }) {
@@ -193,41 +195,42 @@ fun NoteItem(
                 }) {
                     Text("Cancel")
                 }
-            }
-       )
+            },
+        )
     }
 
     Column(
-        modifier = Modifier
-            .padding(10.dp)
-            .clip(RoundedCornerShape(size = 20.dp))
-            .background(Color.White.copy(alpha = 0.8f))
-            .combinedClickable(
-                onClick = {
-                    if (note.id != null) {
-                        onNavigateToEdit(note.id)
-                    }
-                },
-                onLongClick = {
-                    showConfirmDeleteDialog = true
-                }
-            )
-            .padding(20.dp)
+        modifier =
+            Modifier
+                .padding(10.dp)
+                .clip(RoundedCornerShape(size = 20.dp))
+                .background(Color.White.copy(alpha = 0.8f))
+                .combinedClickable(
+                    onClick = {
+                        if (note.id != null) {
+                            onNavigateToEdit(note.id)
+                        }
+                    },
+                    onLongClick = {
+                        showConfirmDeleteDialog = true
+                    },
+                ).padding(20.dp),
     ) {
-        Text(text = note.date,
-            modifier = Modifier
-                ,
+        Text(
+            text = note.date,
+            modifier = Modifier,
             color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
-        Text(text = note.title,
+        Text(
+            text = note.title,
             style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-            )
+            fontWeight = FontWeight.Bold,
+        )
         Text(
             text = note.content ?: "",
             maxLines = 4,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -237,35 +240,37 @@ fun NoteItem(
 fun NoteListScreenPreview() {
     NoteMarkTheme {
         NoteListScreen(
-            state = NoteListState(
-                userAbbreviation = "NM",
-                hasItems = true,
-                notes = listOf(
-                    NoteUi(
-                        id = 1,
-                        remoteId = "",
-                        title = "My First Note",
-                        content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
-                        createdAt = "2025-07-26T16:16:05Z"
-                    ),
-                    NoteUi(
-                        id = 2,
-                        remoteId = "",
-                        title = "Second Note",
-                        content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
-                        createdAt = "2025-07-26T16:16:05Z"
-                    ),
-                    NoteUi(
-                        id = 3,
-                        remoteId = "",
-                        title = "Another Note With",
-                        content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
-                        createdAt = "2025-07-26T16:16:05Z"
-                    )
-                )
-            ),
+            state =
+                NoteListState(
+                    userAbbreviation = "NM",
+                    hasItems = true,
+                    notes =
+                        listOf(
+                            NoteUi(
+                                id = 1,
+                                remoteId = "",
+                                title = "My First Note",
+                                content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
+                                createdAt = "2025-07-26T16:16:05Z",
+                            ),
+                            NoteUi(
+                                id = 2,
+                                remoteId = "",
+                                title = "Second Note",
+                                content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
+                                createdAt = "2025-07-26T16:16:05Z",
+                            ),
+                            NoteUi(
+                                id = 3,
+                                remoteId = "",
+                                title = "Another Note With",
+                                content = "Augue non mauris ante viverra ut arcu sed ut lectus interdum morbi sed leo purus gravida non id mi augue.",
+                                createdAt = "2025-07-26T16:16:05Z",
+                            ),
+                        ),
+                ),
             isOffline = true,
-            onAction = {}
+            onAction = {},
         )
     }
 }

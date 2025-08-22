@@ -33,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,39 +48,34 @@ import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
 import com.joshayoung.notemark.note.domain.models.SyncInterval
 import org.koin.androidx.compose.koinViewModel
 
-
 @Composable
-fun SettingsScreenRoot(
-    viewModel: SettingsViewModel = koinViewModel()
-) {
-
-
+fun SettingsScreenRoot(viewModel: SettingsViewModel = koinViewModel()) {
     val context = LocalContext.current
     ObserveAsEvents(viewModel.events) { event ->
-        when(event) {
+        when (event) {
             is SettingsEvent.InternetOfflineCannotLogout -> {
-                Toast.makeText(
-                    context,
-                    "You need an internet connection to log out",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast
+                    .makeText(
+                        context,
+                        "You need an internet connection to log out",
+                        Toast.LENGTH_LONG,
+                    ).show()
             }
         }
-
     }
-
 
     SettingsScreen(
         state = viewModel.state,
         onAction = { action ->
             viewModel.onAction(action)
-        }
+        },
     )
 }
+
 @Composable
 fun SettingsScreen(
     state: SettingsState,
-    onAction: (SettingsAction) -> Unit
+    onAction: (SettingsAction) -> Unit,
 ) {
     if (state.displayLogoutPrompt) {
         AlertDialog(
@@ -110,173 +104,185 @@ fun SettingsScreen(
                     onAction(SettingsAction.NavigateBack)
                 },
                 title = "Settings",
-                hasBackButton = true
+                hasBackButton = true,
             )
-        }
+        },
     ) { innerPadding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surface)
-
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(color = MaterialTheme.colorScheme.surface),
         ) {
             if (state.isSyncing) {
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(80.dp),
-                    color = MaterialTheme.colorScheme.onPrimary
+                    modifier =
+                        Modifier
+                            .align(Alignment.Center)
+                            .size(80.dp),
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
-        Column(
-            Modifier
-                .padding(innerPadding)
-                .padding(20.dp)
-                .fillMaxSize()
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+            Column(
+                Modifier
+                    .padding(innerPadding)
+                    .padding(20.dp)
+                    .fillMaxSize(),
             ) {
-                Row {
-                    Icon(
-                        imageVector = TimeIcon,
-                        contentDescription = null,
-                    )
-                    Text(
-                        text = "Sync interval",
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Row {
+                        Icon(
+                            imageVector = TimeIcon,
+                            contentDescription = null,
+                        )
+                        Text(
+                            text = "Sync interval",
+                            modifier =
+                                Modifier
+                                    .padding(start = 10.dp),
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
 
-                        modifier = Modifier
-                            .padding(start = 10.dp), style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(
+                        modifier = Modifier,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        var expanded by remember { mutableStateOf(false) }
+
+                        Text(
+                            text = state.interval.text,
+                            modifier =
+                                Modifier
+                                    .clickable {
+                                        expanded = !expanded
+                                    },
+                        )
+                        Box(
+                            modifier = Modifier,
+                        ) {
+                            IconButton(onClick = { expanded = !expanded }) {
+                                Icon(RightArrowIcon, contentDescription = "More options")
+                            }
+                            DropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false },
+                            ) {
+                                DropdownMenuItem(
+                                    text = { Text(SyncInterval.MANUAL.text) },
+                                    onClick = {
+                                        expanded = false
+                                        onAction(SettingsAction.SetSyncInterval(SyncInterval.MANUAL))
+                                    },
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(SyncInterval.FIFTEEN.text) },
+                                    onClick = {
+                                        expanded = false
+                                        onAction(SettingsAction.SetSyncInterval(SyncInterval.FIFTEEN))
+                                    },
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(SyncInterval.THIRTY.text) },
+                                    onClick = {
+                                        expanded = false
+                                        onAction(SettingsAction.SetSyncInterval(SyncInterval.THIRTY))
+                                    },
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(SyncInterval.HOUR.text) },
+                                    onClick = {
+                                        expanded = false
+                                        onAction(SettingsAction.SetSyncInterval(SyncInterval.HOUR))
+                                    },
+                                )
+                            }
+                        }
+                    }
                 }
 
+                Spacer(Modifier.height(16.dp))
+                HorizontalDivider()
+                Spacer(Modifier.height(16.dp))
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
+                ) {
+                    Row(
+                        modifier =
+                            Modifier
+                                .clickable {
+                                    onAction(SettingsAction.Sync)
+                                },
+                    ) {
+                        Icon(
+                            imageVector = RefreshIcon,
+                            contentDescription = null,
+                        )
+                        Column {
+                            Text(
+                                "Sync Data",
+                                modifier =
+                                    Modifier
+                                        .padding(start = 10.dp),
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.titleSmall,
+                            )
+                            Text(
+                                "Last sync: 12 min ago",
+                                modifier =
+                                    Modifier
+                                        .padding(start = 10.dp),
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                                style = MaterialTheme.typography.titleSmall,
+                            )
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(16.dp))
+                HorizontalDivider()
+                Spacer(Modifier.height(16.dp))
                 Row(
                     modifier = Modifier,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    var expanded by remember { mutableStateOf(false) }
-
-                    Text(
-                        text = state.interval.text, modifier = Modifier
-                            .clickable {
-                                expanded = !expanded
-                            }
-                    )
-                    Box(
-                        modifier = Modifier
-                    ) {
-                        IconButton(onClick = { expanded = !expanded }) {
-                            Icon(RightArrowIcon, contentDescription = "More options")
-                        }
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false }
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text(SyncInterval.MANUAL.text) },
-                                onClick = {
-                                    expanded = false
-                                    onAction(SettingsAction.SetSyncInterval(SyncInterval.MANUAL))
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text(SyncInterval.FIFTEEN.text) },
-                                onClick = {
-                                    expanded = false
-                                    onAction(SettingsAction.SetSyncInterval(SyncInterval.FIFTEEN))
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text(SyncInterval.THIRTY.text) },
-                                onClick = {
-                                    expanded = false
-                                    onAction(SettingsAction.SetSyncInterval(SyncInterval.THIRTY))
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text(SyncInterval.HOUR.text) },
-                                onClick = {
-                                    expanded = false
-                                    onAction(SettingsAction.SetSyncInterval(SyncInterval.HOUR))
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(16.dp))
-            HorizontalDivider()
-            Spacer(Modifier.height(16.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Row(modifier = Modifier
-                    .clickable {
-                        onAction(SettingsAction.Sync)
-                    }
-                ) {
-                    Icon(
-                        imageVector = RefreshIcon,
-                        contentDescription = null
-                    )
-                    Column() {
-                        Text(
-                            "Sync Data",
-                            modifier = Modifier
-                                .padding(start = 10.dp), fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.titleSmall
-                        )
-                        Text(
-                            "Last sync: 12 min ago",
-                            modifier = Modifier
-                                .padding(start = 10.dp),
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                            style = MaterialTheme.typography.titleSmall
-                        )
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(16.dp))
-            HorizontalDivider()
-            Spacer(Modifier.height(16.dp))
-            Row(
-                modifier = Modifier,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(
-                    modifier = Modifier
-                        .padding(end = 10.dp)
-                        .size(20.dp),
-                    onClick = {
-                    },
-
-                    ) {
-                    Icon(
-                        imageVector = LogoutIcon,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.error,
-                    )
-                }
-                Text(
-                    "Log Out",
-                    modifier = Modifier
-                        .clickable {
-                            onAction(SettingsAction.CheckForUnsyncedChanges)
+                    IconButton(
+                        modifier =
+                            Modifier
+                                .padding(end = 10.dp)
+                                .size(20.dp),
+                        onClick = {
                         },
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.titleSmall
-                )
+                    ) {
+                        Icon(
+                            imageVector = LogoutIcon,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.error,
+                        )
+                    }
+                    Text(
+                        "Log Out",
+                        modifier =
+                            Modifier
+                                .clickable {
+                                    onAction(SettingsAction.CheckForUnsyncedChanges)
+                                },
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                }
             }
         }
     }
-}
 }
 
 @Preview(showBackground = true)
@@ -285,7 +291,7 @@ fun SettingsScreenPreview() {
     NoteMarkTheme {
         SettingsScreen(
             state = SettingsState(),
-            onAction = {}
+            onAction = {},
         )
     }
 }

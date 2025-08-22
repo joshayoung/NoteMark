@@ -21,19 +21,19 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 
-class AddNoteViewModel (
+class AddNoteViewModel(
     val noteRepository: NoteRepository,
     private val navigator: Navigator,
     savedStateHandle: SavedStateHandle,
-    private val localSyncDataSource: LocalSyncDataSource
+    private val localSyncDataSource: LocalSyncDataSource,
 ) : ViewModel() {
     var state by mutableStateOf(AddNoteState())
         private set
 
     private var currentNote: Note? = null
-    private var initialTitle : String = ""
-    private var initialBody : String = ""
-    private var debounceNoteSave : DebounceNoteSave = DebounceNoteSave()
+    private var initialTitle: String = ""
+    private var initialBody: String = ""
+    private var debounceNoteSave: DebounceNoteSave = DebounceNoteSave()
 
     init {
         viewModelScope.launch {
@@ -42,17 +42,20 @@ class AddNoteViewModel (
                 currentNote = noteRepository.getNote(theId)
                 initialTitle = currentNote?.title ?: ""
                 initialBody = currentNote?.content ?: ""
-                state = state.copy(
-                    noteTitle = TextFieldState(
-                        initialText = currentNote?.title ?: ""
-                    ),
-                    noteBody = TextFieldState(
-                        initialText = currentNote?.content ?: ""
-                    ),
-                    inEditMode = true
-                )
+                state =
+                    state.copy(
+                        noteTitle =
+                            TextFieldState(
+                                initialText = currentNote?.title ?: "",
+                            ),
+                        noteBody =
+                            TextFieldState(
+                                initialText = currentNote?.content ?: "",
+                            ),
+                        inEditMode = true,
+                    )
             } ?: run {
-                var result = noteRepository.createNote( title = "", body = "" )
+                var result = noteRepository.createNote(title = "", body = "")
                 if (result is Result.Success) {
                     currentNote = result.data
                 }
@@ -60,31 +63,33 @@ class AddNoteViewModel (
 
             combine(state.noteTitle.textAsFlow(), state.noteBody.textAsFlow()) { title, body ->
                 if (title != initialTitle || body != initialBody) {
-                    state = state.copy(
-                        hasChangeInitialContent = true
-                    )
+                    state =
+                        state.copy(
+                            hasChangeInitialContent = true,
+                        )
                     autoSaveNote(title.toString(), body.toString())
                 }
             }.launchIn(viewModelScope)
         }
     }
 
-    val autoSaveNote = debounceNoteSave.debounce(viewModelScope, 1000) { title: String, body: String  ->
-        viewModelScope.launch {
+    val autoSaveNote =
+        debounceNoteSave.debounce(viewModelScope, 1000) { title: String, body: String ->
+            viewModelScope.launch {
 //            if (title == initialTitle && body == initialBody) {
 //                return@launch
 //            }
 
-            val result = noteRepository.updateNote(currentNote, title, body)
-            if (result is Result.Success) {
-                currentNote = result.data
-                updateSyncQueue()
+                val result = noteRepository.updateNote(currentNote, title, body)
+                if (result is Result.Success) {
+                    currentNote = result.data
+                    updateSyncQueue()
+                }
             }
         }
-    }
 
     fun onAction(action: AddNoteAction) {
-        when(action) {
+        when (action) {
             AddNoteAction.NavigateBack -> {
                 deleteBlankNote()
                 viewModelScope.launch {
@@ -110,8 +115,7 @@ class AddNoteViewModel (
     }
 
     private fun deleteBlankNote() {
-        if (currentNote?.title == "" && currentNote?.content == "")
-        {
+        if (currentNote?.title == "" && currentNote?.content == "") {
             viewModelScope.launch {
                 currentNote?.let { note ->
                     noteRepository.deleteNote(note)

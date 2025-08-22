@@ -21,18 +21,18 @@ import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 
-
 class KtorRemoteDataSource(
     private val client: HttpClient,
 ) : RemoteDataSource {
     override suspend fun createNote(note: Note): Result<Note, DataError.Network> {
         val noteDto = note.toNoteDto()
-        val response = catchErrors<NoteDto> {
-            client.post {
-                url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
-                setBody(noteDto)
+        val response =
+            catchErrors<NoteDto> {
+                client.post {
+                    url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
+                    setBody(noteDto)
+                }
             }
-        }
 
         return response.map {
             it.toNote()
@@ -40,11 +40,12 @@ class KtorRemoteDataSource(
     }
 
     override suspend fun getNotes(): Result<List<Note>, DataError.Network> {
-        val response = catchErrors<NotesData> {
-            client.get {
-                url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
+        val response =
+            catchErrors<NotesData> {
+                client.get {
+                    url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
+                }
             }
-        }
 
         return response.map { noteData ->
             noteData.notes.map {
@@ -55,22 +56,24 @@ class KtorRemoteDataSource(
 
     override suspend fun updateNote(note: Note): EmptyDataResult<DataError.Network> {
         val noteDto = note.toNoteDto()
-        val response = catchErrors<NoteDto> {
-            client.put {
-                url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
-                setBody(noteDto)
+        val response =
+            catchErrors<NoteDto> {
+                client.put {
+                    url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
+                    setBody(noteDto)
+                }
             }
-        }
 
         return response.asEmptyDataResult()
     }
 
     override suspend fun deleteNote(id: String?): EmptyDataResult<DataError.Network> {
-        val response = catchErrors<Unit> {
-            client.delete {
-                url("${BuildConfig.BASE_URL}${BuildConfig.NOTE_PATH}/${id}")
+        val response =
+            catchErrors<Unit> {
+                client.delete {
+                    url("${BuildConfig.BASE_URL}${BuildConfig.NOTE_PATH}/$id")
+                }
             }
-        }
 
         return response.asEmptyDataResult()
     }

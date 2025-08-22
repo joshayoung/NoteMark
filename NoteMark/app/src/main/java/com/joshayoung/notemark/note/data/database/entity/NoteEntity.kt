@@ -8,7 +8,6 @@ import kotlinx.serialization.Serializable
 @Entity(tableName = "notes")
 data class NoteEntity(
     @PrimaryKey val id: Long? = null,
-
     val remoteId: String?,
     val content: String?,
     val createdAt: String?,

@@ -24,7 +24,6 @@ import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.OfflineIcon
 import com.joshayoung.notemark.core.design.theme.SettingsIcon
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteMarkToolbar(
@@ -34,26 +33,27 @@ fun NoteMarkToolbar(
     hasBackButton: Boolean = false,
     hasActions: Boolean = false,
     userAbbreviation: String? = null,
-    navigateToSettings: () -> Unit = {}
+    navigateToSettings: () -> Unit = {},
 ) {
     TopAppBar(
         title = {
             Row(
                 modifier = Modifier,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
                 if (isOffline) {
                     Icon(
                         imageVector = OfflineIcon,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.surfaceVariant,
-                        modifier = Modifier
-                            .padding(start = 10.dp)
-                            .size(20.dp)
+                        modifier =
+                            Modifier
+                                .padding(start = 10.dp)
+                                .size(20.dp),
                     )
                 }
             }
@@ -64,8 +64,9 @@ fun NoteMarkToolbar(
                     Icon(
                         imageVector = BackIcon,
                         contentDescription = null,
-                        modifier = Modifier
-                            .size(20.dp)
+                        modifier =
+                            Modifier
+                                .size(20.dp),
                     )
                 }
             }
@@ -73,45 +74,49 @@ fun NoteMarkToolbar(
         actions = {
             if (hasActions) {
                 Row(
-                    modifier = Modifier
-                    ,
+                    modifier = Modifier,
                     horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
-                        modifier = Modifier
-                            .padding(end = 4.dp)
+                        modifier =
+                            Modifier
+                                .padding(end = 4.dp),
                     ) {
-                        IconButton(onClick = navigateToSettings,
-                            modifier = Modifier
-                                .size(26.dp)
+                        IconButton(
+                            onClick = navigateToSettings,
+                            modifier =
+                                Modifier
+                                    .size(26.dp),
                         ) {
                             Icon(
                                 imageVector = SettingsIcon,
                                 contentDescription = null,
-                                modifier = Modifier
-                                    .size(26.dp),
-                                tint = MaterialTheme.colorScheme.onSurface
+                                modifier =
+                                    Modifier
+                                        .size(26.dp),
+                                tint = MaterialTheme.colorScheme.onSurface,
                             )
                         }
                     }
-                        Box(
-                            modifier = Modifier
+                    Box(
+                        modifier =
+                            Modifier
                                 .size(34.dp)
                                 .clip(RoundedCornerShape(size = 10.dp))
                                 .background(color = MaterialTheme.colorScheme.primary),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = userAbbreviation ?: "NM", modifier = Modifier
-                                ,color = MaterialTheme.colorScheme.onPrimary,
-                                style = MaterialTheme.typography.titleSmall
-                            )
-                        }
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = userAbbreviation ?: "NM",
+                            modifier = Modifier,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.titleSmall,
+                        )
                     }
                 }
             }
-
+        },
     )
 }
 
@@ -125,7 +130,7 @@ fun NoteMarkToolbarPreview() {
             isOffline = true,
             hasActions = true,
             navigateToSettings = {},
-            userAbbreviation = "NM"
+            userAbbreviation = "NM",
         )
     }
 }

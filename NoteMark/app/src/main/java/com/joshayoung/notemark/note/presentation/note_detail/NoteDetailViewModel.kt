@@ -19,17 +19,18 @@ import kotlinx.coroutines.launch
 class NoteDetailViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val noteRepository: NoteRepository,
-    private val navigator: Navigator
+    private val navigator: Navigator,
 ) : ViewModel() {
     private var _state = MutableStateFlow(NoteDetailState())
-    val state = _state
-        .onStart {
-            loadData()
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(1000L),
-            NoteDetailState()
-        )
+    val state =
+        _state
+            .onStart {
+                loadData()
+            }.stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(1000L),
+                NoteDetailState(),
+            )
 
     fun loadData() {
         val noteId = savedStateHandle.toRoute<Destination.NoteDetail>().id
@@ -46,7 +47,7 @@ class NoteDetailViewModel(
                         lastEdited = noteUi.dateLastEdited,
                         title = noteUi.title,
                         body = noteUi.content ?: "",
-                        viewMode = NoteViewMode.DISPLAY
+                        viewMode = NoteViewMode.DISPLAY,
                     )
                 }
             }
@@ -54,7 +55,7 @@ class NoteDetailViewModel(
     }
 
     fun onAction(action: NoteDetailAction) {
-        when(action) {
+        when (action) {
             NoteDetailAction.GoBack -> {
                 viewModelScope.launch {
                     navigator.navigateUp()
@@ -64,7 +65,7 @@ class NoteDetailViewModel(
             is NoteDetailAction.GoToEdit -> {
                 viewModelScope.launch {
                     navigator.navigate(
-                        AddNote(id = action.id)
+                        AddNote(id = action.id),
                     )
                 }
             }

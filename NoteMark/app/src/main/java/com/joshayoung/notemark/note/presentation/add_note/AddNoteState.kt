@@ -6,5 +6,5 @@ data class AddNoteState(
     val noteTitle: TextFieldState = TextFieldState(),
     val noteBody: TextFieldState = TextFieldState(),
     val inEditMode: Boolean = false,
-    val hasChangeInitialContent: Boolean = false
+    val hasChangeInitialContent: Boolean = false,
 )

@@ -9,5 +9,5 @@ data class Error(
     val reason: String? = null,
     val timestamp: String? = null,
     val error: String? = null,
-    val path: String? = null
+    val path: String? = null,
 )

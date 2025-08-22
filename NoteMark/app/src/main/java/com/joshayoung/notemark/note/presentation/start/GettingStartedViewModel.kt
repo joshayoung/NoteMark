@@ -7,10 +7,10 @@ import com.joshayoung.notemark.core.navigation.Navigator
 import kotlinx.coroutines.launch
 
 class GettingStartedViewModel(
-    private val navigator: Navigator
+    private val navigator: Navigator,
 ) : ViewModel() {
     fun onAction(action: StartAction) {
-        when(action) {
+        when (action) {
             StartAction.CreateAccount -> {
                 viewModelScope.launch {
                     navigator.navigate(Destination.Registration)

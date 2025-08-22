@@ -9,15 +9,16 @@ class DebounceNoteSave {
     fun <T1, T2> debounce(
         scope: CoroutineScope,
         delay: Long,
-        function: (T1, T2) -> Unit
+        function: (T1, T2) -> Unit,
     ): (T1, T2) -> Unit {
         var job: Job? = null
         return { one: T1, two: T2 ->
             job?.cancel()
-            job = scope.launch {
-                delay(delay)
-                function(one, two)
-            }
+            job =
+                scope.launch {
+                    delay(delay)
+                    function(one, two)
+                }
         }
     }
 }

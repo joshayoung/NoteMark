@@ -7,7 +7,6 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.await
-import com.google.common.util.concurrent.ListenableFuture
 import com.joshayoung.notemark.note.data.workers.DataSyncWorker
 import com.joshayoung.notemark.note.domain.SyncNotesScheduler
 import kotlinx.coroutines.Dispatchers
@@ -17,9 +16,8 @@ import kotlin.time.Duration
 import kotlin.time.toJavaDuration
 
 class SyncNoteWorkerScheduler(
-    private val context: Context
+    private val context: Context,
 ) : SyncNotesScheduler {
-
     private val workManager = WorkManager.getInstance(context)
 
     override suspend fun scheduleSync(interval: Duration) {
@@ -27,38 +25,41 @@ class SyncNoteWorkerScheduler(
     }
 
     private suspend fun scheduleNotesSync(interval: Duration) {
-        val isSyncScheduled = withContext(Dispatchers.IO) {
-            workManager.getWorkInfosByTag("sync_work")
-                .get()
-                .isNotEmpty()
-        }
+        val isSyncScheduled =
+            withContext(Dispatchers.IO) {
+                workManager
+                    .getWorkInfosByTag("sync_work")
+                    .get()
+                    .isNotEmpty()
+            }
 
-        if(isSyncScheduled) {
+        if (isSyncScheduled) {
             return
         }
 
-        val workRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
-            repeatInterval = interval.toJavaDuration()
-        )
-            .setConstraints(
-                Constraints.Builder()
+        val workRequest =
+            PeriodicWorkRequestBuilder<DataSyncWorker>(
+                repeatInterval = interval.toJavaDuration(),
+            ).setConstraints(
+                Constraints
+                    .Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build()
-            )
-            .setBackoffCriteria(
+                    .build(),
+            ).setBackoffCriteria(
                 backoffPolicy = BackoffPolicy.EXPONENTIAL,
                 backoffDelay = 2000L,
-                timeUnit = TimeUnit.MILLISECONDS
+                timeUnit = TimeUnit.MILLISECONDS,
             )
 //            .setInitialDelay()
-            .addTag("sync_work")
-            .build()
+                .addTag("sync_work")
+                .build()
 
         workManager.enqueue(workRequest).await()
     }
 
     override suspend fun cancelSyncs() {
-        WorkManager.getInstance(context)
+        WorkManager
+            .getInstance(context)
             .cancelAllWork()
             .await()
     }

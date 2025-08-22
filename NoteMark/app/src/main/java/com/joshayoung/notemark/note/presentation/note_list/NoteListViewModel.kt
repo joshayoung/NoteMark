@@ -2,15 +2,13 @@ package com.joshayoung.notemark.note.presentation.note_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joshayoung.notemark.core.AndroidConnectivityObserver
 import com.joshayoung.notemark.core.ConnectivityObserver
-import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.core.domain.DataStorage
-import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Destination.*
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
+import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import com.joshayoung.notemark.note.presentation.mappers.toNoteUi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,33 +27,34 @@ class NoteListViewModel(
     private val connectivityObserver: ConnectivityObserver,
     private val localDataSource: LocalDataSource,
     private val syncNotesUseCase: SyncNotesUseCase,
-    private val navigator: Navigator
+    private val navigator: Navigator,
 ) : ViewModel() {
-
     private var _state = MutableStateFlow(NoteListState(notes = emptyList()))
-    val state = _state
-        .onStart {
-            loadData()
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(1000L),
-            NoteListState(notes = emptyList())
-        )
+    val state =
+        _state
+            .onStart {
+                loadData()
+            }.stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(1000L),
+                NoteListState(notes = emptyList()),
+            )
 
-    val isConnected = connectivityObserver
-        .isConnected
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000L),
-            false
-        )
+    val isConnected =
+        connectivityObserver
+            .isConnected
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000L),
+                false,
+            )
 
     init {
         viewModelScope.launch {
             dataStorage.username.collect { user ->
                 _state.update {
                     it.copy(
-                        userAbbreviation = formatUser(user)
+                        userAbbreviation = formatUser(user),
                     )
                 }
             }
@@ -63,8 +62,7 @@ class NoteListViewModel(
     }
 
     private fun formatUser(user: String): String {
-        if (user.length > 1)
-        {
+        if (user.length > 1) {
             val firstTwo = user.take(2)
 
             return firstTwo.uppercase()
@@ -78,7 +76,7 @@ class NoteListViewModel(
             is NoteListAction.OnDeleteClick -> {
                 viewModelScope.launch {
                     noteRepository.deleteNote(
-                        note = action.noteUi.toNote()
+                        note = action.noteUi.toNote(),
                     )
                 }
             }
@@ -93,7 +91,7 @@ class NoteListViewModel(
                 viewModelScope.launch {
                     syncNotesUseCase.execute()
                     navigator.navigate(
-                        NoteDetail(id = action.id)
+                        NoteDetail(id = action.id),
                     )
                 }
             }
@@ -107,14 +105,16 @@ class NoteListViewModel(
     }
 
     private fun loadData() {
-        localDataSource.getNotes().map { notes ->
-            val noteUi = notes.map { it.toNoteUi() }
-            _state.update {
-                it.copy(
-                    notes = noteUi,
-                    hasItems = true
-                )
-            }
-        }.launchIn(viewModelScope)
+        localDataSource
+            .getNotes()
+            .map { notes ->
+                val noteUi = notes.map { it.toNoteUi() }
+                _state.update {
+                    it.copy(
+                        notes = noteUi,
+                        hasItems = true,
+                    )
+                }
+            }.launchIn(viewModelScope)
     }
 }

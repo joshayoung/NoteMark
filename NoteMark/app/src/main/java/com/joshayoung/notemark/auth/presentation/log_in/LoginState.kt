@@ -6,5 +6,5 @@ data class LoginState(
     val username: TextFieldState = TextFieldState(),
     val password: TextFieldState = TextFieldState(),
     val formFilled: Boolean = false,
-    val isLoggingIn: Boolean = false
+    val isLoggingIn: Boolean = false,
 )

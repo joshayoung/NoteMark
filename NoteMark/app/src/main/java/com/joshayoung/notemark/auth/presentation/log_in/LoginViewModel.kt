@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.navOptions
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
-import com.joshayoung.notemark.core.data.DataStorageImpl
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
@@ -26,7 +25,7 @@ class LoginViewModel(
     private val authRepository: AuthRepository,
     private val validateEmail: ValidateEmail,
     private val navigator: Navigator,
-    private val pullRemoteNotesUseCase: PullRemoteNotesUseCase
+    private val pullRemoteNotesUseCase: PullRemoteNotesUseCase,
 ) : ViewModel() {
     var state by mutableStateOf(LoginState())
         private set
@@ -38,24 +37,25 @@ class LoginViewModel(
         // TODO: Find a better way:
         combine(
             state.username.textAsFlow(),
-            state.password.textAsFlow()
+            state.password.textAsFlow(),
         ) { username, password ->
             state = state.copy(formFilled = filledWithValidEmail(username, password))
         }.launchIn(viewModelScope)
     }
 
-    fun TextFieldState.textAsFlow() : Flow<CharSequence> = snapshotFlow { text }
+    fun TextFieldState.textAsFlow(): Flow<CharSequence> = snapshotFlow { text }
 
     fun onAction(action: LoginAction) {
-        when(action) {
+        when (action) {
             LoginAction.OnLoginClick -> {
                 viewModelScope.launch {
                     state = state.copy(isLoggingIn = true)
                     viewModelScope.launch {
-                        val result = authRepository.login(
-                            state.username.text.toString(),
-                            state.password.text.toString(),
-                        )
+                        val result =
+                            authRepository.login(
+                                state.username.text.toString(),
+                                state.password.text.toString(),
+                            )
 
                         if (result is Result.Success) {
                             state = state.copy(isLoggingIn = false)
@@ -76,7 +76,7 @@ class LoginViewModel(
                         destination = Destination.Registration,
                         navOptions = {
                             popUpTo(Destination.StartScreen)
-                        }
+                        },
                     )
                 }
             }
@@ -89,20 +89,20 @@ class LoginViewModel(
                             popUpTo(Destination.AuthGraph) {
                                 inclusive = true
                             }
-                        }
+                        },
                     )
                 }
-
             }
         }
     }
 
-    private fun filledWithValidEmail(username: CharSequence, password: CharSequence): Boolean {
+    private fun filledWithValidEmail(
+        username: CharSequence,
+        password: CharSequence,
+    ): Boolean {
         val bothFilled = username != "" && password != ""
         val validEmail = validateEmail.invoke(username.toString())
 
         return bothFilled && !validEmail.inValidEmail
     }
 }
-
-

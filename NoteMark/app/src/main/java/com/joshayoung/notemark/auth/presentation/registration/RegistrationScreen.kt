@@ -19,31 +19,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joshayoung.notemark.R
+import com.joshayoung.notemark.auth.presentation.registration.components.DisplayErrorList
+import com.joshayoung.notemark.core.design.theme.EyeIcon
+import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
 import com.joshayoung.notemark.core.presentation.components.NoteMarkButton
 import com.joshayoung.notemark.core.presentation.components.NoteMarkTextField
 import com.joshayoung.notemark.core.presentation.components.TextFieldType
-import com.joshayoung.notemark.auth.presentation.registration.components.DisplayErrorList
-import com.joshayoung.notemark.core.design.theme.EyeIcon
-import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun RegistrationScreenRoot(
-    viewModel: RegistrationViewModel = koinViewModel()
-) {
+fun RegistrationScreenRoot(viewModel: RegistrationViewModel = koinViewModel()) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var errorMessage by remember { mutableStateOf<List<String?>?>(null) }
 
     ObserveAsEvents(viewModel.events) { event ->
-        when(event) {
+        when (event) {
             is RegistrationEvent.RegistrationSuccess -> {
                 viewModel.onAction(RegistrationAction.RegisterSuccess)
             }
@@ -62,7 +59,7 @@ fun RegistrationScreenRoot(
         errorMessage = errorMessage,
         onnAction = { action ->
             viewModel.onAction(action)
-        }
+        },
     )
 }
 
@@ -70,28 +67,33 @@ fun RegistrationScreenRoot(
 fun RegistrationScreen(
     state: RegistrationState,
     errorMessage: List<String?>?,
-    onnAction: (RegistrationAction) -> Unit
+    onnAction: (RegistrationAction) -> Unit,
 ) {
     val configuration = LocalConfiguration.current
     val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 
     if (!isPortrait) {
-        Row(modifier = Modifier
-            .fillMaxSize()
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxSize(),
         ) {
             Header(modifier = Modifier.weight(1f))
             Form(
                 errorMessage,
                 state,
                 onnAction,
-                        modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f),
             )
         }
     } else {
-        Column() {
+        Column {
             Header()
-            Form(errorMessage,
-                state, onnAction)
+            Form(
+                errorMessage,
+                state,
+                onnAction,
+            )
         }
     }
 }
@@ -108,12 +110,13 @@ private fun Form(
             .verticalScroll(rememberScrollState())
             .fillMaxWidth()
             .padding(vertical = 10.dp, horizontal = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         DisplayErrorList(
-            modifier = Modifier
-                .weight(1f),
-            errorMessage
+            modifier =
+                Modifier
+                    .weight(1f),
+            errorMessage,
         )
 
         NoteMarkTextField(
@@ -135,7 +138,7 @@ private fun Form(
             icon = EyeIcon,
             hint = "Password",
             helperText = "Use 8+ characters with a number or symbol for better security",
-            type = TextFieldType.Password
+            type = TextFieldType.Password,
         )
         if (state.passwordError != "") {
             Text(text = state.passwordError, color = MaterialTheme.colorScheme.error)
@@ -145,7 +148,7 @@ private fun Form(
             label = "Repeat Password",
             icon = EyeIcon,
             hint = "Repeat Password",
-            type = TextFieldType.Password
+            type = TextFieldType.Password,
         )
         if (state.passwordEqualityError != "") {
             Text(text = state.passwordEqualityError, color = MaterialTheme.colorScheme.error)
@@ -153,16 +156,18 @@ private fun Form(
         NoteMarkButton(
             text = "Create Account",
             isEnabled = state.canRegister && !state.isRegistering,
-            isLoading = state.isRegistering
+            isLoading = state.isRegistering,
         ) {
             onnAction(RegistrationAction.OnRegisterClick)
         }
         Text(
-            stringResource(R.string.have_account), modifier = Modifier
-                .clickable {
-                    onnAction(RegistrationAction.AlreadyAccount)
-                }
-                .fillMaxWidth(), textAlign = TextAlign.Center
+            stringResource(R.string.have_account),
+            modifier =
+                Modifier
+                    .clickable {
+                        onnAction(RegistrationAction.AlreadyAccount)
+                    }.fillMaxWidth(),
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -170,21 +175,22 @@ private fun Form(
 @Composable
 private fun Header(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
-            "Create Account", modifier = Modifier
-                .fillMaxWidth(),
+            "Create Account",
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
             style = MaterialTheme.typography.headlineLarge,
-            textAlign = TextAlign.Center
-
+            textAlign = TextAlign.Center,
         )
         Text(
             "Capture your thoughts and ideas.",
-            modifier = Modifier
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center
-
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -196,7 +202,7 @@ fun RegistrationScreenPreview() {
         RegistrationScreen(
             state = RegistrationState(),
             errorMessage = null,
-            onnAction = {}
+            onnAction = {},
         )
     }
 }

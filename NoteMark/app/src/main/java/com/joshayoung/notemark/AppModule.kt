@@ -1,31 +1,26 @@
 package com.joshayoung.notemark
 import android.content.Context
-import android.provider.ContactsContract
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.joshayoung.notemark.auth.data.repository.AuthRepositoryImpl
+import com.joshayoung.notemark.auth.data.use_cases.EmailValidator
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.auth.presentation.log_in.LoginViewModel
-import org.koin.core.module.dsl.singleOf
-import org.koin.core.module.dsl.viewModelOf
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import com.joshayoung.notemark.auth.presentation.registration.RegistrationViewModel
-import com.joshayoung.notemark.core.data.DataStorageImpl
-import com.joshayoung.notemark.core.data.networking.HttpClientProvider
-import com.joshayoung.notemark.note.data.database.RoomLocalDataSource
-import com.joshayoung.notemark.note.data.database.NoteDatabase
-import com.joshayoung.notemark.auth.data.use_cases.EmailValidator
 import com.joshayoung.notemark.core.AndroidConnectivityObserver
 import com.joshayoung.notemark.core.ConnectivityObserver
+import com.joshayoung.notemark.core.data.DataStorageImpl
+import com.joshayoung.notemark.core.data.networking.HttpClientProvider
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.DefaultNavigator
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.SyncNoteWorkerScheduler
+import com.joshayoung.notemark.note.data.database.NoteDatabase
+import com.joshayoung.notemark.note.data.database.RoomLocalDataSource
 import com.joshayoung.notemark.note.data.database.RoomSyncLocalDataSource
 import com.joshayoung.notemark.note.data.database.SyncDatabase
 import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
@@ -52,81 +47,88 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.workmanager.dsl.workerOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
+var appModule =
+    module {
 
-var appModule = module {
+        single<Navigator> {
+            DefaultNavigator(startDestination = Destination.AuthGraph)
+        }
 
-    single<Navigator> {
-        DefaultNavigator(startDestination = Destination.AuthGraph)
+        viewModelOf(::MainViewModel)
+        viewModelOf(::RegistrationViewModel)
+        viewModelOf(::LoginViewModel)
+        viewModelOf(::GettingStartedViewModel)
+
+        single {
+            HttpClientProvider(get()).provide()
+        }
+
+        single {
+            PreferenceDataStoreFactory.create(
+                corruptionHandler =
+                    ReplaceFileCorruptionHandler(
+                        produceNewData = { emptyPreferences() },
+                    ),
+                scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+                produceFile = { get<Context>().preferencesDataStoreFile("notemark_preferences") },
+            )
+        }
+
+        singleOf(::NoteRepositoryImpl).bind<NoteRepository>()
+        singleOf(::AuthRepositoryImpl).bind<AuthRepository>()
+
+        singleOf(::DataStorageImpl).bind<DataStorage>()
+
+        viewModelOf(::NoteListViewModel)
+        viewModelOf(::AddNoteViewModel)
+        viewModelOf(::SettingsViewModel)
+        viewModelOf(::NoteDetailViewModel)
+
+        single {
+            Room
+                .databaseBuilder(
+                    androidApplication(),
+                    NoteDatabase::class.java,
+                    NoteDatabase.DATABASE_NAME,
+                ).build()
+        }
+
+        single {
+            Room
+                .databaseBuilder(
+                    androidApplication(),
+                    SyncDatabase::class.java,
+                    SyncDatabase.DATABASE_NAME,
+                ).build()
+        }
+
+        single { get<NoteDatabase>().noteDao }
+        single { get<SyncDatabase>().syncDao }
+
+        singleOf(::RoomLocalDataSource).bind<LocalDataSource>()
+        singleOf(::RoomSyncLocalDataSource).bind<LocalSyncDataSource>()
+        singleOf(::KtorRemoteDataSource).bind<RemoteDataSource>()
+
+        single<CoroutineScope> {
+            (androidApplication() as NoteMarkApp).applicationScope
+        }
+
+        singleOf(::AndroidConnectivityObserver).bind<ConnectivityObserver>()
+
+        // Use Cases
+        singleOf(::SyncNotesUseCase)
+        singleOf(::EmailValidator).bind<PatternValidator>()
+        singleOf(::ValidateUsername)
+        singleOf(::ValidatePassword)
+        singleOf(::ValidateEmail)
+        singleOf(::PullRemoteNotesUseCase)
+
+        // worker:
+        workerOf(::DataSyncWorker)
+        singleOf(::SyncNoteWorkerScheduler).bind<SyncNotesScheduler>()
     }
-
-    viewModelOf(::MainViewModel)
-    viewModelOf(::RegistrationViewModel)
-    viewModelOf(::LoginViewModel)
-    viewModelOf(::GettingStartedViewModel)
-
-    single {
-        HttpClientProvider(get()).provide()
-    }
-
-    single {
-        PreferenceDataStoreFactory.create(
-            corruptionHandler = ReplaceFileCorruptionHandler(
-                produceNewData = { emptyPreferences() }
-            ),
-            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-            produceFile = { get<Context>().preferencesDataStoreFile("notemark_preferences") }
-        )
-    }
-
-    singleOf(::NoteRepositoryImpl).bind<NoteRepository>()
-    singleOf(::AuthRepositoryImpl).bind<AuthRepository>()
-
-    singleOf(::DataStorageImpl).bind<DataStorage>()
-
-    viewModelOf(::NoteListViewModel)
-    viewModelOf(::AddNoteViewModel)
-    viewModelOf(::SettingsViewModel)
-    viewModelOf(::NoteDetailViewModel)
-
-    single {
-        Room.databaseBuilder(
-            androidApplication(),
-            NoteDatabase::class.java,
-            NoteDatabase.DATABASE_NAME
-        ).build()
-    }
-
-    single {
-        Room.databaseBuilder(
-            androidApplication(),
-            SyncDatabase::class.java,
-            SyncDatabase.DATABASE_NAME
-        ).build()
-    }
-
-    single { get<NoteDatabase>().noteDao }
-    single { get<SyncDatabase>().syncDao }
-
-    singleOf(::RoomLocalDataSource).bind<LocalDataSource>()
-    singleOf(::RoomSyncLocalDataSource).bind<LocalSyncDataSource>()
-    singleOf(::KtorRemoteDataSource).bind<RemoteDataSource>()
-
-    single<CoroutineScope> {
-        (androidApplication() as NoteMarkApp).applicationScope
-    }
-
-    singleOf(::AndroidConnectivityObserver).bind<ConnectivityObserver>()
-
-    // Use Cases
-    singleOf(::SyncNotesUseCase)
-    singleOf(::EmailValidator).bind<PatternValidator>()
-    singleOf(::ValidateUsername)
-    singleOf(::ValidatePassword)
-    singleOf(::ValidateEmail)
-    singleOf(::PullRemoteNotesUseCase)
-
-    // worker:
-    workerOf(::DataSyncWorker)
-    singleOf(::SyncNoteWorkerScheduler).bind<SyncNotesScheduler>()
-}

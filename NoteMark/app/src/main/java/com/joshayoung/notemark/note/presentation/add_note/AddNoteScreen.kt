@@ -1,6 +1,5 @@
 package com.joshayoung.notemark.note.presentation.add_note
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,15 +8,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -34,10 +30,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,49 +42,51 @@ import com.joshayoung.notemark.core.presentation.components.DashedDivider
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import org.koin.androidx.compose.koinViewModel
 
-
 @Composable
-fun AddNoteScreenRoot(
-    viewModel: AddNoteViewModel = koinViewModel()
-) {
+fun AddNoteScreenRoot(viewModel: AddNoteViewModel = koinViewModel()) {
     AddNoteScreen(
         state = viewModel.state,
         onAction = { action ->
             viewModel.onAction(action)
-        }
+        },
     )
 }
 
 @Composable
 fun AddNoteScreen(
     state: AddNoteState,
-    onAction: (AddNoteAction)-> Unit
+    onAction: (AddNoteAction) -> Unit,
 ) {
     NoteMarkScaffold(
         topAppBar = {
             Row(
-                modifier = Modifier
-                    .background(Color.White)
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp, vertical = 20.dp)
-                ,
+                modifier =
+                    Modifier
+                        .background(Color.White)
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp, vertical = 20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(imageVector = CloseIcon, contentDescription = null, modifier = Modifier
-                    .size(26.dp)
-                    .clickable {
-                        onAction(AddNoteAction.NavigateBack)
-                    },
-                    tint = MaterialTheme.colorScheme.primary
+                Icon(
+                    imageVector = CloseIcon,
+                    contentDescription = null,
+                    modifier =
+                        Modifier
+                            .size(26.dp)
+                            .clickable {
+                                onAction(AddNoteAction.NavigateBack)
+                            },
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
-        }
+        },
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
         ) {
             NoteTextFieldSingleLine(state = state.noteTitle)
             NoteTextFieldMultiline(state = state.noteBody)
@@ -99,70 +95,72 @@ fun AddNoteScreen(
 }
 
 @Composable
-fun NoteTextFieldSingleLine(
-    state: TextFieldState,
-) {
+fun NoteTextFieldSingleLine(state: TextFieldState) {
     var isFocused by remember {
         mutableStateOf(false)
     }
     val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit)  {
+    LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 
     Column {
         BasicTextField(
             state = state,
-            textStyle = TextStyle(
-                fontSize = 40.sp,
-                color = MaterialTheme.colorScheme.primary
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .onFocusChanged {
-                    isFocused = it.isFocused
-                }
-                .focusRequester(focusRequester)
-                .padding(20.dp),
+            textStyle =
+                TextStyle(
+                    fontSize = 40.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        isFocused = it.isFocused
+                    }.focusRequester(focusRequester)
+                    .padding(20.dp),
             decorator = { innerBox ->
-                Box() {
+                Box {
                     if (state.text.isEmpty() && !isFocused) {
-                        Text(text = "Note Title", modifier = Modifier
-                            ,fontSize = 40.sp,
-                            color = MaterialTheme.colorScheme.primary
+                        Text(
+                            text = "Note Title",
+                            modifier = Modifier,
+                            fontSize = 40.sp,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                     innerBox()
                 }
-            }
+            },
         )
     }
     DashedDivider(MaterialTheme.colorScheme.primary)
 }
 
 @Composable
-fun NoteTextFieldMultiline(
-    state: TextFieldState,
-) {
+fun NoteTextFieldMultiline(state: TextFieldState) {
     var isFocused by remember {
         mutableStateOf(false)
     }
 
-    Column() {
+    Column {
         BasicTextField(
             state = state,
-            textStyle = LocalTextStyle.current.copy(
-                color = MaterialTheme.colorScheme.onSurface
-            ),
+            textStyle =
+                LocalTextStyle.current.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
             decorator = { innerBox ->
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
-                        modifier = Modifier
-                            .weight(1f)
+                        modifier =
+                            Modifier
+                                .weight(1f),
                     ) {
                         if (state.text.isEmpty() && !isFocused) {
                             Text(text = "Note Body")
@@ -171,16 +169,17 @@ fun NoteTextFieldMultiline(
                     }
                 }
             },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .onFocusChanged {
-                    isFocused = it.isFocused
-                }
-                .padding(20.dp)
-                .clip(RoundedCornerShape(4.dp))
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        isFocused = it.isFocused
+                    }.padding(20.dp)
+                    .clip(RoundedCornerShape(4.dp)),
         )
     }
 }
@@ -191,7 +190,7 @@ fun AddNoteScreenPreview() {
     NoteMarkTheme {
         AddNoteScreen(
             state = AddNoteState(),
-            onAction = {}
+            onAction = {},
         )
     }
 }

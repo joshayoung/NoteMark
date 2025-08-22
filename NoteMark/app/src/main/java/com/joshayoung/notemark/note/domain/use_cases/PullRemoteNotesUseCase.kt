@@ -6,7 +6,7 @@ import com.joshayoung.notemark.note.domain.database.LocalDataSource
 
 class PullRemoteNotesUseCase(
     private val remoteDataSource: KtorRemoteDataSource,
-    private val localDataSource: LocalDataSource
+    private val localDataSource: LocalDataSource,
 ) {
     suspend fun execute() {
         val remoteNotes = remoteDataSource.getNotes()

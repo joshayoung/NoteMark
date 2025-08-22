@@ -8,7 +8,6 @@ import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.startKoin
 
 class NoteMarkApp : Application() {
-
     val applicationScope = CoroutineScope(SupervisorJob())
 
     override fun onCreate() {
@@ -18,7 +17,7 @@ class NoteMarkApp : Application() {
             androidContext(this@NoteMarkApp)
             workManagerFactory()
             modules(
-                appModule
+                appModule,
             )
         }
     }

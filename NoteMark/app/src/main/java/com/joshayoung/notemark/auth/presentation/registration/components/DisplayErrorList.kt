@@ -15,20 +15,21 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun DisplayErrorList(
     modifier: Modifier,
-    errorMessage: List<String?>?) {
+    errorMessage: List<String?>?,
+) {
     LazyColumn(modifier = modifier) {
         errorMessage?.let { nonNullItems ->
             items(nonNullItems) { item ->
-                if (item != null)
-                {
+                if (item != null) {
                     Text(
                         text = item,
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.White,
-                        modifier = Modifier
-                            .padding(vertical = 2.dp)
-                            .background(color = MaterialTheme.colorScheme.error)
-                            .padding(2.dp)
+                        modifier =
+                            Modifier
+                                .padding(vertical = 2.dp)
+                                .background(color = MaterialTheme.colorScheme.error)
+                                .padding(2.dp),
                     )
                 }
             }
@@ -41,10 +42,12 @@ fun DisplayErrorList(
 fun DisplayErrorListPreview() {
     DisplayErrorList(
         modifier = Modifier,
-        errorMessage = listOf(
-        "The email format was invalid",
-        null,
-        "The password was too long. Please make it shorter and try again.",
-        "The verification password did not match the password.")
+        errorMessage =
+            listOf(
+                "The email format was invalid",
+                null,
+                "The password was too long. Please make it shorter and try again.",
+                "The verification password did not match the password.",
+            ),
     )
 }

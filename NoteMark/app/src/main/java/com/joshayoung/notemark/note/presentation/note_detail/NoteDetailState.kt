@@ -7,5 +7,5 @@ data class NoteDetailState(
     val body: String = "",
     val title: String = "",
     val viewMode: NoteViewMode? = null,
-    val hasChanged: Boolean = false
+    val hasChanged: Boolean = false,
 )

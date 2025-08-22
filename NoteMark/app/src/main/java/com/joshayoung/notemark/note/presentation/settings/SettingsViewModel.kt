@@ -18,14 +18,9 @@ import com.joshayoung.notemark.note.domain.use_cases.PullRemoteNotesUseCase
 import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
@@ -40,8 +35,7 @@ class SettingsViewModel(
     val pullRemoteNotesUseCase: PullRemoteNotesUseCase,
     val syncNoteWorkerScheduler: SyncNoteWorkerScheduler,
     val noteRepository: NoteRepository,
-    val applicationScope: CoroutineScope
-
+    val applicationScope: CoroutineScope,
 ) : ViewModel() {
     var state by mutableStateOf(SettingsState())
         private set
@@ -66,8 +60,8 @@ class SettingsViewModel(
         }
     }
 
-    fun onAction(action : SettingsAction) {
-        when(action) {
+    fun onAction(action: SettingsAction) {
+        when (action) {
             SettingsAction.CheckForUnsyncedChanges -> {
                 viewModelScope.launch {
                     if (isNotConnected) {
@@ -96,24 +90,27 @@ class SettingsViewModel(
                 }
             }
 
-            is SettingsAction.SetSyncInterval -> { action
+            is SettingsAction.SetSyncInterval -> {
+                action
                 viewModelScope.launch {
                     dataStorage.saveSyncInterval(action.interval)
-                    state = state.copy(
-                        interval = action.interval
-                    )
+                    state =
+                        state.copy(
+                            interval = action.interval,
+                        )
 
                     // TODO: Temporary:
-                    val interval = when(state.interval) {
-                        SyncInterval.FIFTEEN -> 15.minutes
-                        SyncInterval.THIRTY -> 30.minutes
-                        SyncInterval.HOUR -> 1.hours
-                        else -> 30.minutes
-                    }
+                    val interval =
+                        when (state.interval) {
+                            SyncInterval.FIFTEEN -> 15.minutes
+                            SyncInterval.THIRTY -> 30.minutes
+                            SyncInterval.HOUR -> 1.hours
+                            else -> 30.minutes
+                        }
 
                     viewModelScope.launch {
                         syncNoteWorkerScheduler.scheduleSync(
-                            interval = interval
+                            interval = interval,
                         )
                     }
                 }

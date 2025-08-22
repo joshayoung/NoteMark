@@ -11,9 +11,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun DashedDivider(color: Color) {
-    Canvas(modifier = Modifier
-        .fillMaxWidth()
-        .height(1.dp)) {
+    Canvas(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(1.dp),
+    ) {
         val width = size.width
         val y = size.height / 2
 
@@ -27,7 +30,7 @@ fun DashedDivider(color: Color) {
                 start = Offset(x, y),
                 color = color,
                 end = Offset(x + dashLength, y),
-                strokeWidth = thickness
+                strokeWidth = thickness,
             )
             x += dashLength + gapLength
         }

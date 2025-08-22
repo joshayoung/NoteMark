@@ -4,29 +4,33 @@ import kotlinx.serialization.Serializable
 
 sealed interface Destination {
     @Serializable
-    data object AuthGraph: Destination
+    data object AuthGraph : Destination
 
     @Serializable
-    data object NoteGraph: Destination
+    data object NoteGraph : Destination
 
     @Serializable
-    data object StartScreen: Destination
+    data object StartScreen : Destination
 
     @Serializable
-    data object Registration: Destination
+    data object Registration : Destination
 
     @Serializable
-    data object Login: Destination
+    data object Login : Destination
 
     @Serializable
-    data object NoteList: Destination
+    data object NoteList : Destination
 
     @Serializable
-    data class AddNote(val id: Long?): Destination
+    data class AddNote(
+        val id: Long?,
+    ) : Destination
 
     @Serializable
-    data object Settings: Destination
+    data object Settings : Destination
 
     @Serializable
-    data class NoteDetail(val id: Long): Destination
+    data class NoteDetail(
+        val id: Long,
+    ) : Destination
 }

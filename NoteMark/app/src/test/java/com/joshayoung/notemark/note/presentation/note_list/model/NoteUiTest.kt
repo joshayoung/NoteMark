@@ -11,14 +11,15 @@ class NoteUiTest {
 
     @BeforeEach
     fun setUp() {
-        noteUi = NoteUi(
-            id = 1,
-            title = "First Note",
-            content = "First Note Content",
-            createdAt = "2025-07-26T16:15:05+00:00",
-            lastEditedAt = "2025-07-26T16:17:05+00:00",
-            remoteId = "fc5e6f13-19b9-4b2a-a8bb-7a56f5922358"
-        )
+        noteUi =
+            NoteUi(
+                id = 1,
+                title = "First Note",
+                content = "First Note Content",
+                createdAt = "2025-07-26T16:15:05+00:00",
+                lastEditedAt = "2025-07-26T16:17:05+00:00",
+                remoteId = "fc5e6f13-19b9-4b2a-a8bb-7a56f5922358",
+            )
     }
 
     @Test

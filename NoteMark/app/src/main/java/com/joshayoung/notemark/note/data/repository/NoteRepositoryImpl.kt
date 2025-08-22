@@ -17,6 +17,8 @@ import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.auth.authProviders
+import io.ktor.client.plugins.auth.providers.BearerAuthProvider
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -28,33 +30,26 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import kotlin.time.ExperimentalTime
-import io.ktor.client.plugins.auth.authProviders
-import io.ktor.client.plugins.auth.providers.BearerAuthProvider
-
-import io.ktor.client.plugins.auth.Auth
-import io.ktor.client.plugins.auth.authProviders
-import io.ktor.client.plugins.plugin
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalTime::class)
-class NoteRepositoryImpl (
+class NoteRepositoryImpl(
     private val localDataSource: LocalDataSource,
     private val localSyncDataSource: LocalSyncDataSource,
     private val dataStorage: DataStorage,
     private val client: HttpClient,
 ) : NoteRepository {
-    override suspend fun createNote(title: String, body: String): Result<Note, DataError> {
+    override suspend fun createNote(
+        title: String,
+        body: String,
+    ): Result<Note, DataError> {
         val remoteId = UUID.randomUUID().toString()
-        val note = Note(
-            remoteId = remoteId,
-            title = title,
-            content = body,
-            createdAt = getTimeStampForInsert()
-        )
+        val note =
+            Note(
+                remoteId = remoteId,
+                title = title,
+                content = body,
+                createdAt = getTimeStampForInsert(),
+            )
         val localResult = localDataSource.upsertNote(note)
 
         if (localResult is Result.Success) {
@@ -68,22 +63,26 @@ class NoteRepositoryImpl (
         }
     }
 
-    override suspend fun updateNote(note: Note?, title: String, body: String): Result<Note, DataError> {
+    override suspend fun updateNote(
+        note: Note?,
+        title: String,
+        body: String,
+    ): Result<Note, DataError> {
         // TODO: Move these to mapper:
         val currentDateTime = LocalDateTime.now(ZoneOffset.UTC)
         val currentInstant = currentDateTime.toInstant(ZoneOffset.UTC)
-        val localNoteForUpdate = Note(
-            id = note?.id,
-            title = title,
-            content = body,
-            createdAt = note!!.createdAt,
-            lastEditedAt = DateTimeFormatter.ISO_INSTANT.format(currentInstant),
-            remoteId = note.remoteId
-        )
+        val localNoteForUpdate =
+            Note(
+                id = note?.id,
+                title = title,
+                content = body,
+                createdAt = note!!.createdAt,
+                lastEditedAt = DateTimeFormatter.ISO_INSTANT.format(currentInstant),
+                remoteId = note.remoteId,
+            )
         val result = localDataSource.upsertNote(localNoteForUpdate)
 
-        if (result is Result.Success)
-        {
+        if (result is Result.Success) {
 //            val sync = localSyncDataSource.getSync(localNoteForUpdate)
 //            localSyncDataSource.addOrUpdateQueue(localNoteForUpdate, SyncOperation.UPDATE)
 
@@ -94,13 +93,10 @@ class NoteRepositoryImpl (
         return Result.Error(error = DataError.Network.UNKNOWN)
     }
 
-    override suspend fun getNotes(): Flow<List<Note>> {
-        return localDataSource.getNotes()
-    }
+    override suspend fun getNotes(): Flow<List<Note>> = localDataSource.getNotes()
 
-    override suspend fun deleteNote(note: Note) : EmptyResult<DataError> {
-        if (note.id == null)
-        {
+    override suspend fun deleteNote(note: Note): EmptyResult<DataError> {
+        if (note.id == null) {
             return Result.Error(error = DataError.Network.UNKNOWN)
         }
 
@@ -113,27 +109,27 @@ class NoteRepositoryImpl (
         return Result.Error(error = DataError.Network.UNKNOWN)
     }
 
-    override suspend fun getNote(id: Long) : Note? {
-        return localDataSource.getNote(id)
-    }
+    override suspend fun getNote(id: Long): Note? = localDataSource.getNote(id)
 
     override suspend fun logout(): EmptyDataResult<DataError.Network> {
         dataStorage.getAuthData().first().refreshToken.let { refreshToken ->
 
             // TODO: Move this call to the remote data source:
-            val results = catchErrors<HttpResponse> {
-                client.post {
-                    url(BuildConfig.BASE_URL + BuildConfig.LOGOUT_PATH)
-                    setBody(Logout(refreshToken = refreshToken))
+            val results =
+                catchErrors<HttpResponse> {
+                    client.post {
+                        url(BuildConfig.BASE_URL + BuildConfig.LOGOUT_PATH)
+                        setBody(Logout(refreshToken = refreshToken))
+                    }
                 }
-            }
 
             if (results is Result.Success) {
                 dataStorage.saveAuthData(null)
             }
 
             // Delete ktor tokens:
-            client.authProviders.filterIsInstance<BearerAuthProvider>()
+            client.authProviders
+                .filterIsInstance<BearerAuthProvider>()
                 .firstOrNull()
                 ?.clearToken()
 
