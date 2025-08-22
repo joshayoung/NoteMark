@@ -72,23 +72,4 @@ class AuthRepositoryImpl (
 
         return response.asEmptyDataResult()
     }
-
-    override suspend fun logout(): EmptyDataResult<DataError.Network> {
-        dataStorage.getAuthData().first().refreshToken?.let { refreshToken ->
-            val results = catchErrors<HttpResponse> {
-                client.post {
-                    url(BuildConfig.BASE_URL + BuildConfig.LOGOUT_PATH)
-                    setBody(Logout(refreshToken = refreshToken))
-                }
-            }
-
-            if (results is Result.Success) {
-                dataStorage.saveAuthData(null)
-            }
-
-            return results.asEmptyDataResult()
-        }
-
-        return Result.Error(error = DataError.Network.UNKNOWN)
-    }
 }

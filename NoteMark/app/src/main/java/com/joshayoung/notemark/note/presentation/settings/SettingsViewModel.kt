@@ -13,6 +13,7 @@ import com.joshayoung.notemark.note.data.SyncNoteWorkerScheduler
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.models.SyncInterval
+import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.use_cases.PullRemoteNotesUseCase
 import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import kotlinx.coroutines.channels.Channel
@@ -36,7 +37,8 @@ class SettingsViewModel(
     val navigator: Navigator,
     val syncNotesUseCase: SyncNotesUseCase,
     val pullRemoteNotesUseCase: PullRemoteNotesUseCase,
-    val syncNoteWorkerScheduler: SyncNoteWorkerScheduler
+    val syncNoteWorkerScheduler: SyncNoteWorkerScheduler,
+    val noteRepository: NoteRepository
 
 ) : ViewModel() {
     var state by mutableStateOf(SettingsState())
@@ -75,7 +77,7 @@ class SettingsViewModel(
                     if (!hasNoPendingSyncs) {
                         localDataSource.removeAllNotes()
                         localSyncDataSource.clearSyncQueue()
-                        authRepositoryImpl.logout()
+                        noteRepository.logout()
 
                         return@launch
                     } else {
@@ -90,7 +92,7 @@ class SettingsViewModel(
                     // Add Use Case:
                     localDataSource.removeAllNotes()
                     localSyncDataSource.clearSyncQueue()
-                    authRepositoryImpl.logout()
+                    noteRepository.logout()
                 }
             }
 
