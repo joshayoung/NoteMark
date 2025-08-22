@@ -56,18 +56,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    override fun onPause() {
-        super.onPause()
-        lifecycleScope.launch {
-            viewModel.clearToken()
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        lifecycleScope.launch {
-            viewModel.clearToken()
-        }
-    }
 }

@@ -50,15 +50,4 @@ class MainViewModel(
 
         return token != ""
     }
-
-    fun clearToken() {
-        // NOTE: Clear the token to prevent the data flow from triggering with 'unset':
-        viewModelScope.launch {
-            if (state.isAuthenticated) {
-                return@launch
-            }
-
-            dataStorage.saveAuthData(null)
-        }
-    }
 }
