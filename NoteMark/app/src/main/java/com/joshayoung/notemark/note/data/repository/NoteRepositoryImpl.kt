@@ -28,7 +28,17 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import kotlin.time.ExperimentalTime
+import io.ktor.client.plugins.auth.authProviders
+import io.ktor.client.plugins.auth.providers.BearerAuthProvider
 
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.authProviders
+import io.ktor.client.plugins.plugin
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalTime::class)
 class NoteRepositoryImpl (
@@ -121,6 +131,11 @@ class NoteRepositoryImpl (
             if (results is Result.Success) {
                 dataStorage.saveAuthData(null)
             }
+
+            // Delete ktor tokens:
+            client.authProviders.filterIsInstance<BearerAuthProvider>()
+                .firstOrNull()
+                ?.clearToken()
 
             return results.asEmptyDataResult()
         }
