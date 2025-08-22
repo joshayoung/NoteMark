@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.util.Properties
 
 plugins {
@@ -8,11 +9,13 @@ plugins {
     kotlin("plugin.serialization")
     id("com.google.devtools.ksp")
     id("de.mannodermaus.android-junit5") version "1.13.1.0"
+    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
 }
 
-val localProperties = Properties().apply {
-    load(File(rootProject.projectDir, "local.properties").inputStream())
-}
+val localProperties =
+    Properties().apply {
+        load(File(rootProject.projectDir, "local.properties").inputStream())
+    }
 
 android {
     namespace = "com.joshayoung.notemark"
@@ -33,44 +36,44 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
         debug {
             buildConfigField(
                 "String",
                 "CAMPUS_SUBSCRIPTION_EMAIL",
-                localProperties.getProperty("CAMPUS_SUBSCRIPTION_EMAIL")
+                localProperties.getProperty("CAMPUS_SUBSCRIPTION_EMAIL"),
             )
             buildConfigField(
                 "String",
                 "BASE_URL",
-                localProperties.getProperty("BASE_URL")
+                localProperties.getProperty("BASE_URL"),
             )
             buildConfigField(
                 "String",
                 "REGISTER_PATH",
-                localProperties.getProperty("REGISTER_PATH")
+                localProperties.getProperty("REGISTER_PATH"),
             )
             buildConfigField(
                 "String",
                 "REFRESH_PATH",
-                localProperties.getProperty("REFRESH_PATH")
+                localProperties.getProperty("REFRESH_PATH"),
             )
             buildConfigField(
                 "String",
                 "NOTE_PATH",
-                localProperties.getProperty("NOTE_PATH")
+                localProperties.getProperty("NOTE_PATH"),
             )
             buildConfigField(
                 "String",
                 "LOGIN_PATH",
-                localProperties.getProperty("LOGIN_PATH")
+                localProperties.getProperty("LOGIN_PATH"),
             )
             buildConfigField(
                 "String",
                 "LOGOUT_PATH",
-                localProperties.getProperty("LOGOUT_PATH")
+                localProperties.getProperty("LOGOUT_PATH"),
             )
         }
     }
@@ -86,6 +89,16 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+}
+
+ktlint {
+    android = true
+    ignoreFailures = false
+    reporters {
+        reporter(ReporterType.PLAIN)
+        reporter(ReporterType.CHECKSTYLE)
+        reporter(ReporterType.SARIF)
     }
 }
 
@@ -136,5 +149,4 @@ dependencies {
     implementation(libs.material3.adaptive)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.koin.androidx.workmanager)
-
 }

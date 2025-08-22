@@ -12,18 +12,18 @@
 ### Add Test
 * Select class name and press `ALT` + `ENTER`.
 
-### Linting
-* `./gradlew lint`
-
 ### To Do
 * Add linting
-* Add work manager to run on sync schedule in settings or manually
 * Rename remoteId to something more generic because this value is use locally as well.
 * Do not directly use data sources in VM if you have a repository.
 * Add use-cases for some of the logic I have in my vms.
 * Change the status bar color and icons color for the login page only.
 * Change to OutlinedTextField
-* Switch auth flow to channel instead of shared flow.
+* Test Work Manager
+
+### Ktlint
+* `./gradlew ktlintCheck` - generate reports
+* `./gradlew ktlintFormat` - format code
 
 ### Sync Notes
 * Populate the local data source with the network data source
