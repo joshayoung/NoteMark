@@ -45,6 +45,11 @@ fun LoginScreenRoot(
     ObserveAsEvents(viewModel.events) { event ->
         when(event) {
             is LoginEvent.Success -> {
+                Toast.makeText(
+                    context,
+                    "You are Logged In!",
+                    Toast.LENGTH_LONG
+                ).show()
                 viewModel.onAction(LoginAction.LoginSuccess)
             }
 
