@@ -25,11 +25,13 @@ import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.DefaultNavigator
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
+import com.joshayoung.notemark.note.data.SyncNoteWorkerScheduler
 import com.joshayoung.notemark.note.data.database.RoomSyncLocalDataSource
 import com.joshayoung.notemark.note.data.database.SyncDatabase
 import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
 import com.joshayoung.notemark.note.data.repository.NoteRepositoryImpl
 import com.joshayoung.notemark.note.data.workers.DataSyncWorker
+import com.joshayoung.notemark.note.domain.SyncNotesScheduler
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
@@ -124,5 +126,7 @@ var appModule = module {
     singleOf(::ValidateEmail)
     singleOf(::PullRemoteNotesUseCase)
 
+    // worker:
     workerOf(::DataSyncWorker)
+    singleOf(::SyncNoteWorkerScheduler).bind<SyncNotesScheduler>()
 }

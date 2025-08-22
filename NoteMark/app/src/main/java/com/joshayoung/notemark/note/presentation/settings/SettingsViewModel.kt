@@ -9,8 +9,10 @@ import com.joshayoung.notemark.auth.data.repository.AuthRepositoryImpl
 import com.joshayoung.notemark.core.ConnectivityObserver
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.Navigator
+import com.joshayoung.notemark.note.data.SyncNoteWorkerScheduler
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
+import com.joshayoung.notemark.note.domain.models.SyncInterval
 import com.joshayoung.notemark.note.domain.use_cases.PullRemoteNotesUseCase
 import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import kotlinx.coroutines.channels.Channel
@@ -21,6 +23,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 class SettingsViewModel(
     val authRepositoryImpl: AuthRepositoryImpl,
@@ -30,7 +35,9 @@ class SettingsViewModel(
     val localSyncDataSource: LocalSyncDataSource,
     val navigator: Navigator,
     val syncNotesUseCase: SyncNotesUseCase,
-    val pullRemoteNotesUseCase: PullRemoteNotesUseCase
+    val pullRemoteNotesUseCase: PullRemoteNotesUseCase,
+    val syncNoteWorkerScheduler: SyncNoteWorkerScheduler
+
 ) : ViewModel() {
     var state by mutableStateOf(SettingsState())
         private set
@@ -99,6 +106,20 @@ class SettingsViewModel(
                     state = state.copy(
                         interval = action.interval
                     )
+
+                    // TODO: Temporary:
+                    val interval = when(state.interval) {
+                        SyncInterval.FIFTEEN -> 15.minutes
+                        SyncInterval.THIRTY -> 30.minutes
+                        SyncInterval.HOUR -> 1.hours
+                        else -> 30.minutes
+                    }
+
+                    viewModelScope.launch {
+                        syncNoteWorkerScheduler.scheduleSync(
+                            interval = interval
+                        )
+                    }
                 }
             }
 
