@@ -47,8 +47,8 @@ class HttpClientProvider(
                     loadTokens {
                         val tokenPair = sessionStorage.getAuthData().first()
                         BearerTokens(
-                            accessToken = tokenPair.accessToken ?: "",
-                            refreshToken = tokenPair.refreshToken ?: ""
+                            accessToken = tokenPair.accessToken,
+                            refreshToken = tokenPair.refreshToken
                         )
                     }
 
@@ -56,7 +56,7 @@ class HttpClientProvider(
                         val tokenPair = sessionStorage.getAuthData().first()
                         val response = client.post {
                             url(BuildConfig.BASE_URL + BuildConfig.REFRESH_PATH)
-                            setBody(RefreshToken(refreshToken = tokenPair.refreshToken ?: ""))
+                            setBody(RefreshToken(refreshToken = tokenPair.refreshToken))
                             markAsRefreshTokenRequest()
 
                             // To invalidate token after 30 seconds:
@@ -65,12 +65,11 @@ class HttpClientProvider(
 
                         if (response.status == HttpStatusCode.Companion.OK) {
                             val responseText = response.bodyAsText()
-                            val jsonObject =
-                                Json.Default.decodeFromString<LoginResponse>(responseText)
+                            val jsonObject = Json.Default.decodeFromString<LoginResponse>(responseText)
                             sessionStorage.saveAuthData(jsonObject)
 
                             BearerTokens(
-                                accessToken = jsonObject.accessToken ?: "",
+                                accessToken = jsonObject.accessToken,
                                 refreshToken = jsonObject.refreshToken
                             )
                             // test expiration:

@@ -7,6 +7,7 @@
     * See notes on creating the splash image [here](https://github.com/joshayoung/android-kotlin-app-training/blob/main/README.md)
 * **If you want the top bar of the app to display correctly, `enableEdgeToEdge()` needs to be called below the splash screen code in your `MainActivity`!**
 * If you have a domain layer, then never directly reference your data source (local or remote) in our viewmodels. Any call to either of these data sources should go through either a repository or a use-case.
+* If a `Serializable` class has a nullable field, it has to have a default value of `null` or the serialization will throw an exception (i.e. `var username: String? = null`).
 
 ### Add Test
 * Select class name and press `ALT` + `ENTER`.

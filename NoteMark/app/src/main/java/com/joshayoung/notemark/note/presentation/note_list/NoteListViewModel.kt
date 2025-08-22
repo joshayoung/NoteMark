@@ -11,6 +11,7 @@ import com.joshayoung.notemark.core.navigation.Destination.*
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
+import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import com.joshayoung.notemark.note.presentation.mappers.toNoteUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,6 +28,7 @@ class NoteListViewModel(
     private val dataStorage: DataStorage,
     private val connectivityObserver: ConnectivityObserver,
     private val localDataSource: LocalDataSource,
+    private val syncNotesUseCase: SyncNotesUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -89,6 +91,7 @@ class NoteListViewModel(
 
             is NoteListAction.GoToDetail -> {
                 viewModelScope.launch {
+                    syncNotesUseCase.execute()
                     navigator.navigate(
                         NoteDetail(id = action.id)
                     )
@@ -97,7 +100,7 @@ class NoteListViewModel(
 
             NoteListAction.OnSettingsClick -> {
                 viewModelScope.launch {
-                    navigator.navigate(Destination.Settings)
+                    navigator.navigate(Settings)
                 }
             }
         }

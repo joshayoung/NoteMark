@@ -61,7 +61,9 @@ class DataStorageImpl(
         dataStore.edit { preferences ->
             preferences[AuthPreferenceValues.ACCESS_TOKEN] = settings.accessToken
             preferences[AuthPreferenceValues.REFRESH_TOKEN] = settings.refreshToken
-            preferences[AuthPreferenceValues.USERNAME] = settings.username
+            settings.username?.let { user ->
+                preferences[AuthPreferenceValues.USERNAME] = user
+            }
         }
     }
 
