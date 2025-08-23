@@ -1,12 +1,15 @@
 # NoteMark app
 
 ## Screenshots
-* ![Start](./screenshots/start.png)
-* ![Login](./screenshots/login.png)
-* ![Register](./screenshots/register.png)
-* ![Notes](./screenshots/notes.png)
-* ![Settings](./screenshots/settings.png)
-* ![Sync](./screenshots/Syn.png)
+
+<p style='padding: 20px;' float="left">
+    <img alt="NoteMark" src="./screenshots/start.png" width="200" />
+    <img alt="NoteMark" src="./screenshots/login.png" width="200" />
+    <img alt="NoteMark" src="./screenshots/register.png" width="200" />
+    <img alt="NoteMark" src="./screenshots/notes.png" width="200" />
+    <img alt="NoteMark" src="./screenshots/settings.png" width="200" />
+    <img alt="NoteMark" src="./screenshots/sync.png" width="200" />
+</p>
 
 ### Notes
 * You have to add `INTERNET` permissions in order to make API calls.
