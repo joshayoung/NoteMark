@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
@@ -33,7 +34,9 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val navigator = koinInject<Navigator>()
 
-                Surface(modifier = Modifier.fillMaxSize()) {
+                Surface(
+                        color = Color(0xFFdfeafe),
+                    modifier = Modifier.fillMaxSize()) {
                     // NOTE: There is a flash without this:
                     if (!viewModel.state.isCheckingSession) {
                         NoteMarkNavigation(
