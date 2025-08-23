@@ -36,7 +36,9 @@ class MainActivity : ComponentActivity() {
 
                 Surface(
                         color = Color(0xFFdfeafe),
-                    modifier = Modifier.fillMaxSize()) {
+                    modifier = Modifier.fillMaxSize()
+                        .windowInsetsPadding(WindowInsets.safeDrawing)
+                ) {
                     // NOTE: There is a flash without this:
                     if (!viewModel.state.isCheckingSession) {
                         NoteMarkNavigation(
@@ -44,8 +46,7 @@ class MainActivity : ComponentActivity() {
                             viewModel = viewModel,
                             modifier =
                                 Modifier
-                                    .fillMaxSize()
-                                    .windowInsetsPadding(WindowInsets.safeDrawing),
+                                    .fillMaxSize(),
                             navController = navController,
                             isAuthenticated = viewModel.state.isAuthenticated,
                         )
