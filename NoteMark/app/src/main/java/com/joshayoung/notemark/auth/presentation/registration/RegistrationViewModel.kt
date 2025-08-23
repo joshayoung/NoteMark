@@ -46,7 +46,7 @@ class RegistrationViewModel(
                 val usernameResult = validateUsername(state.username.text.toString())
                 state =
                     state.copy(
-                        usernameError = if (usernameResult.invalidUsername) "Username must be at least 3 characters" else "",
+                        usernameError = if (usernameResult.invalidUsername) "Username must be between 3 and 20 characters" else "",
                         invalidUsername = usernameResult.invalidUsername,
                     )
 

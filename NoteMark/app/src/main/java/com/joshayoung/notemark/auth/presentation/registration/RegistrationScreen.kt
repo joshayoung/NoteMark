@@ -184,6 +184,7 @@ private fun Form(
             label = "Username",
             hint = "John.doe",
             helperText = "Use between 3 and 20 characters for your username",
+            inErrorState = state.usernameError != ""
         )
         if (state.usernameError != "") {
             Text(text = state.usernameError, color = MaterialTheme.colorScheme.error)
@@ -199,6 +200,7 @@ private fun Form(
             hint = "Password",
             helperText = "Use 8+ characters with a number or symbol for better security",
             type = TextFieldType.Password,
+            inErrorState = state.passwordError != ""
         )
         if (state.passwordError != "") {
             Text(text = state.passwordError, color = MaterialTheme.colorScheme.error)
@@ -209,6 +211,7 @@ private fun Form(
             icon = EyeIcon,
             hint = "Repeat Password",
             type = TextFieldType.Password,
+            inErrorState = state.passwordEqualityError != ""
         )
         if (state.passwordEqualityError != "") {
             Text(text = state.passwordEqualityError, color = MaterialTheme.colorScheme.error)

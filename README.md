@@ -20,11 +20,6 @@
 * Change to OutlinedTextField
 * Test Work Manager
 * Not logging out automatically after the logout prompt sync.
-* Responsive Layout for getting started page needs work.
-* Update LoginScreen cursor field focus color.
-* Outline registration fields in red when in error state.
-  * Cursor is red
-  * Check username length for 20 characters
 * Disable create button in registration page until form is value
 
 ### Ktlint
