@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 
 interface Navigator {
     val startDestination: Destination
-    val navigationAction: Flow<NavigationAction>
+    val navigationActions: Flow<NavigationAction>
 
     suspend fun navigate(
         destination: Destination,
@@ -26,8 +26,7 @@ class DefaultNavigator(
     override val startDestination: Destination,
 ) : Navigator {
     private val _navigationActions = Channel<NavigationAction>()
-
-    override val navigationAction = _navigationActions.receiveAsFlow()
+    override val navigationActions = _navigationActions.receiveAsFlow()
 
     override suspend fun navigate(
         destination: Destination,

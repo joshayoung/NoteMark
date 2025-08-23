@@ -30,7 +30,7 @@ fun NoteMarkNavigation(
     navController: NavHostController,
     isAuthenticated: Boolean,
 ) {
-    ObserveAsEvents(flow = navigator.navigationAction) { action ->
+    ObserveAsEvents(flow = navigator.navigationActions) { action ->
         when (action) {
             is NavigationAction.Navigate ->
                 navController.navigate(

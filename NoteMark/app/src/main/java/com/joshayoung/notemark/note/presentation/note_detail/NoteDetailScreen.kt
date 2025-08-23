@@ -222,7 +222,7 @@ fun NoteDetailScreenPreview() {
                     title = "Note Title",
                     dataCreated = "26 Sep 2024, 18:54",
                     lastEdited = "Just now",
-                    body = "Lorem ipsum dolor sit olor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur s",
+                    body = "Lorem ipsum dolor sit olor in reprehenderit in voluExcepteur s",
                     viewMode = NoteViewMode.DISPLAY,
                 ),
             onAction = {},

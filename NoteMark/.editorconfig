@@ -8,3 +8,4 @@ ktlint_code_style = ktlint_official
 ktlint_standard_package-name = disabled
 ktlint_standard_final-newline = disabled
 ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_function-naming = disabled
