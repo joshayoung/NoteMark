@@ -13,13 +13,20 @@
 * Select class name and press `ALT` + `ENTER`.
 
 ### To Do
-* Add linting
 * Rename remoteId to something more generic because this value is use locally as well.
 * Do not directly use data sources in VM if you have a repository.
 * Add use-cases for some of the logic I have in my vms.
 * Change the status bar color and icons color for the login page only.
 * Change to OutlinedTextField
 * Test Work Manager
+* Not logging out automatically after the logout prompt sync.
+* Responsive Layout for getting started page needs work.
+* Update LoginScreen cursor field focus color.
+* Outline registration fields in red when in error state.
+  * Cursor is red
+  * Check username length for 20 characters
+* Disable create button in registration page until form is value
+* Registration screens needs rounded white border and blue background.
 
 ### Ktlint
 * `./gradlew ktlintCheck` - generate reports

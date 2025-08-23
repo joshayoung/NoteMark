@@ -238,9 +238,12 @@ fun LoginContent(
         }
         Text(
             "Don't have an account?",
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primary,
             modifier =
                 Modifier
                     .fillMaxWidth()
+                    .padding(top = 20.dp)
                     .clickable {
                         onAction(LoginAction.DontHaveAccount)
                     },

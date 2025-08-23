@@ -162,6 +162,7 @@ private fun Form(
         }
         Text(
             stringResource(R.string.have_account),
+            style = MaterialTheme.typography.titleSmall,
             modifier =
                 Modifier
                     .clickable {

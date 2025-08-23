@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -135,13 +136,14 @@ private fun NoteIntroCard(
             Text(
                 modifier = Modifier,
                 text = "Your Own Collection of Notes",
-                fontSize = 30.sp,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
             Text(
                 modifier =
                     Modifier
                         .padding(bottom = 20.dp),
+                style = MaterialTheme.typography.bodySmall,
                 text = "Capture your thoughts and ideas.",
             )
             NoteMarkButton(
@@ -166,10 +168,17 @@ private fun NoteIntroCard(
     }
 }
 
-// @Preview(widthDp = 640, heightDp = 360)
-// @Preview(widthDp = 840, heightDp = 360)
-@Preview(widthDp = 260, heightDp = 560)
-// @Preview
+@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    widthDp = 840,
+    heightDp = 360,
+)
+@Preview(
+    showBackground = true,
+    widthDp = 800,
+    heightDp = 1280,
+)
 @Composable
 private fun GettingStartedScreenPreview() {
     NoteMarkTheme {
