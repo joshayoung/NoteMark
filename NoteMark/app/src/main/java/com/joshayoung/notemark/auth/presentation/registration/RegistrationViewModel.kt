@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.navOptions
+import com.joshayoung.notemark.R
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.navigation.Destination
@@ -80,9 +81,12 @@ class RegistrationViewModel(
             }
 
             val passwordResult = validatePassword(password.toString(), repeat.toString())
+
+            // TODO: Is this right?
+            var registrationError = R.string.password_length_and_chars.toString()
             state =
                 state.copy(
-                    passwordError = if (passwordResult.invalidPassword) "Password must be at least 8 characters and include a number or symbol" else "",
+                    passwordError = if (passwordResult.invalidPassword) registrationError else "",
                     invalidUsername = passwordResult.invalidPassword,
                     passwordEqualityError = if (passwordResult.isNotEqual) "Passwords do not match" else "",
                 )
