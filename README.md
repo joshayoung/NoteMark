@@ -32,6 +32,21 @@
 ### Add Test
 * Select class name and press `ALT` + `ENTER`.
 
+### Pre-Commit Hook for Linting
+* `.git/hooks/pre-commit`
+* ```bash
+    #!/bin/bash
+
+    ./gradlew ktlintFormat
+
+    if [ $? -ne 0 ]; then
+    echo "Fix the linting issues first!"
+    exit 1
+    fi
+
+    echo "Ktlint check passed!"
+     ```
+
 ### To Do
 * Rename remoteId to something more generic because this value is use locally as well.
 * Do not directly use data sources in VM if you have a repository.
