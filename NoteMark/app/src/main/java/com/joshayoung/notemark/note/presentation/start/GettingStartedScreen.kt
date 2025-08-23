@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,10 +29,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.joshayoung.notemark.R
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.presentation.components.NoteMarkButton
+import com.joshayoung.notemark.core.utils.DeviceConfiguration
+import org.intellij.lang.annotations.JdkConstants
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -44,82 +47,109 @@ fun GettingStartedScreenRoot(viewModel: GettingStartedViewModel = koinViewModel(
 
 @Composable
 fun GettingStartedScreen(onAction: (StartAction) -> Unit) {
-    val configuration = LocalConfiguration.current
-    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-    if (isPortrait) {
-        PortraitOrientation(
-            onAction = onAction,
-        )
-    } else {
-        LandscapeOrientation(
-            onAction = onAction,
-        )
-    }
-}
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val deviceConfiguration = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
 
-@Composable
-fun LandscapeOrientation(onAction: (StartAction) -> Unit) {
-    Row(
-        modifier =
-            Modifier
-                .background(Color(0xFFE0EAFF))
-                .fillMaxSize(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Image(
-            painterResource(id = R.drawable.greeting),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier =
-                Modifier
-                    .fillMaxHeight(),
-        )
-        NoteIntroCard(
-            onAction = onAction,
-            modifier =
-                Modifier
-                    .width(400.dp)
-                    .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp)),
-        )
-    }
-}
-
-@Composable
-private fun PortraitOrientation(onAction: (StartAction) -> Unit) {
-    Column(
-        modifier =
-            Modifier
-                .background(Color(0xFFE0EAFF)),
-        verticalArrangement = Arrangement.Bottom,
-    ) {
-        Box(
-            modifier =
-                Modifier
-                    .weight(1f),
-        ) {
-            Image(
-                painterResource(id = R.drawable.greeting),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+    when (deviceConfiguration) {
+        DeviceConfiguration.MOBILE_PORTRAIT -> {
+            Column(
                 modifier =
                     Modifier
-                        .fillMaxWidth(),
-            )
+                        .background(Color(0xFFE0EAFF)),
+                verticalArrangement = Arrangement.Bottom,
+            ) {
+                Box(
+                    modifier =
+                        Modifier
+                            .weight(1f),
+                ) {
+                    Image(
+                        painterResource(id = R.drawable.greeting),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
+                    )
+                }
+                NoteIntroCard(
+                    modifier =
+                        Modifier
+                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+                    onAction = onAction,
+                )
+            }
         }
-        NoteIntroCard(
-            modifier =
-                Modifier
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
-            onAction = onAction,
-        )
+        DeviceConfiguration.MOBILE_LANDSCAPE -> {
+            Row(
+                modifier =
+                    Modifier
+                        .background(Color(0xFFE0EAFF))
+                        .fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Image(
+                    painterResource(id = R.drawable.greeting),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier =
+                        Modifier
+                            .fillMaxHeight(),
+                )
+                NoteIntroCard(
+                    onAction = onAction,
+                    modifier =
+                        Modifier
+                            .width(400.dp)
+                            .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp)),
+                )
+            }
+        }
+        DeviceConfiguration.TABLET_PORTRAIT,
+        DeviceConfiguration.TABLET_LANDSCAPE,
+        DeviceConfiguration.DESKTOP -> {
+            Column(
+                modifier =
+                    Modifier
+                        .background(Color(0xFFE0EAFF)),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier =
+                        Modifier
+                            .weight(1f),
+                ) {
+                    Image(
+                        painterResource(id = R.drawable.greeting),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
+                    )
+                }
+                NoteIntroCard(
+                    modifier =
+                        Modifier
+                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                            .widthIn(max = 700.dp)
+
+                    ,onAction = onAction,
+                    alignment = Alignment.CenterHorizontally
+                )
+            }
+        }
     }
+
 }
 
 @Composable
 private fun NoteIntroCard(
     modifier: Modifier = Modifier,
     onAction: (StartAction) -> Unit,
+    alignment: Alignment.Horizontal = Alignment.Start
 ) {
     Box(
         modifier =
@@ -130,8 +160,9 @@ private fun NoteIntroCard(
             modifier =
                 modifier
                     .background(Color.White)
-                    .padding(vertical = 20.dp, horizontal = 20.dp)
+                    .padding(vertical = 40.dp, horizontal = 20.dp)
                     .fillMaxWidth(),
+            horizontalAlignment = alignment
         ) {
             Text(
                 modifier = Modifier,
