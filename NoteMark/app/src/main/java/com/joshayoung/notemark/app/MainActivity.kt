@@ -1,4 +1,4 @@
-package com.joshayoung.notemark
+package com.joshayoung.notemark.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -37,9 +37,9 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     color = Color(0xFFdfeafe),
                     modifier =
-                        Modifier
+                        Modifier.Companion
                             .fillMaxSize()
-                            .windowInsetsPadding(WindowInsets.safeDrawing),
+                            .windowInsetsPadding(WindowInsets.Companion.safeDrawing),
                 ) {
                     // NOTE: There is a flash without this:
                     if (!viewModel.state.isCheckingSession) {
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                             navigator = navigator,
                             viewModel = viewModel,
                             modifier =
-                                Modifier
+                                Modifier.Companion
                                     .fillMaxSize(),
                             navController = navController,
                             isAuthenticated = viewModel.state.isAuthenticated,

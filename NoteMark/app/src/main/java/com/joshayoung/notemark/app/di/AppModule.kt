@@ -1,10 +1,12 @@
-package com.joshayoung.notemark
+package com.joshayoung.notemark.app.di
 import android.content.Context
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.joshayoung.notemark.app.MainViewModel
+import com.joshayoung.notemark.app.NoteMarkApp
 import com.joshayoung.notemark.auth.data.repository.AuthRepositoryImpl
 import com.joshayoung.notemark.auth.data.use_cases.EmailValidator
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
@@ -54,7 +56,6 @@ import org.koin.dsl.module
 
 var appModule =
     module {
-
         single<Navigator> {
             DefaultNavigator(startDestination = Destination.AuthGraph)
         }

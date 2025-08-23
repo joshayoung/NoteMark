@@ -19,6 +19,7 @@
 * Change the status bar color and icons color for the login page only.
 * Test Work Manager
 * Disable create button in registration page until form is value
+* Switch to encrypted Data Store
 
 ### Ktlint
 * `./gradlew ktlintCheck` - generate reports

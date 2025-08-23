@@ -1,4 +1,4 @@
-package com.joshayoung.notemark
+package com.joshayoung.notemark.app
 
 data class MainState(
     val isCheckingSession: Boolean = false,

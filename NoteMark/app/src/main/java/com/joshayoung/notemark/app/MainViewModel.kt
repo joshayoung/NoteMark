@@ -1,4 +1,4 @@
-package com.joshayoung.notemark
+package com.joshayoung.notemark.app
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

@@ -1,4 +1,4 @@
-package com.joshayoung.notemark
+package com.joshayoung.notemark.app
 
 import com.joshayoung.notemark.core.navigation.Destination
 import java.time.Instant
