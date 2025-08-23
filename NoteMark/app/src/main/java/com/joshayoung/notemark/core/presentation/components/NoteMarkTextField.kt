@@ -7,7 +7,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import com.joshayoung.notemark.core.design.theme.EyeClosedIcon
 import com.joshayoung.notemark.core.design.theme.EyeIcon
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
-import java.nio.file.WatchEvent
 
 @Composable
 fun NoteMarkTextField(
@@ -53,7 +51,7 @@ fun NoteMarkTextField(
     helperText: String = "",
     label: String,
     type: TextFieldType = TextFieldType.Regular,
-    inErrorState: Boolean = false
+    inErrorState: Boolean = false,
 ) {
     Column(modifier = modifier) {
         Text(
@@ -76,7 +74,7 @@ fun NoteMarkTextField(
                         helperText = helperText,
                         icon = icon,
                         hint = hint,
-                        inErrorState = inErrorState
+                        inErrorState = inErrorState,
                     )
                 }
                 TextFieldType.Password -> {
@@ -85,7 +83,7 @@ fun NoteMarkTextField(
                         helperText = helperText,
                         keyboardType = keyboardType,
                         hint = hint,
-                        inErrorState = inErrorState
+                        inErrorState = inErrorState,
                     )
                 }
             }
@@ -99,7 +97,7 @@ private fun PasswordTextField(
     keyboardType: KeyboardType,
     hint: String,
     helperText: String = "",
-    inErrorState: Boolean
+    inErrorState: Boolean,
 ) {
     var isFocused by remember {
         mutableStateOf(false)
@@ -110,15 +108,16 @@ private fun PasswordTextField(
     }
     Column {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    if (inErrorState) {
-                        BorderStroke(1.dp, Color.Red)
-                    } else {
-                        BorderStroke(1.dp, Color.Transparent)
-                    }
-                )
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .border(
+                        if (inErrorState) {
+                            BorderStroke(1.dp, Color.Red)
+                        } else {
+                            BorderStroke(1.dp, Color.Transparent)
+                        },
+                    ),
         ) {
             BasicSecureTextField(
                 state = state,
@@ -201,22 +200,23 @@ private fun RegularTextField(
     icon: ImageVector? = null,
     helperText: String = "",
     hint: String,
-    inErrorState: Boolean
+    inErrorState: Boolean,
 ) {
     var isFocused by remember {
         mutableStateOf(false)
     }
     Column {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    if (inErrorState) {
-                        BorderStroke(1.dp, Color.Red)
-                    } else {
-                        BorderStroke(1.dp, Color.Transparent)
-                    }
-                )
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .border(
+                        if (inErrorState) {
+                            BorderStroke(1.dp, Color.Red)
+                        } else {
+                            BorderStroke(1.dp, Color.Transparent)
+                        },
+                    ),
         ) {
             BasicTextField(
                 state = state,
@@ -299,7 +299,7 @@ fun NoteMarkTextFieldPreview() {
                 label = "Username Error",
                 helperText = "Enter a valid username",
                 hint = "Enter Username",
-                inErrorState = true
+                inErrorState = true,
             )
             NoteMarkTextField(
                 modifier = Modifier,

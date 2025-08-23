@@ -1,6 +1,5 @@
 package com.joshayoung.notemark.note.presentation.start
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,7 +31,6 @@ import com.joshayoung.notemark.R
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.presentation.components.NoteMarkButton
 import com.joshayoung.notemark.core.utils.DeviceConfiguration
-import org.intellij.lang.annotations.JdkConstants
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -108,13 +105,14 @@ fun GettingStartedScreen(onAction: (StartAction) -> Unit) {
         }
         DeviceConfiguration.TABLET_PORTRAIT,
         DeviceConfiguration.TABLET_LANDSCAPE,
-        DeviceConfiguration.DESKTOP -> {
+        DeviceConfiguration.DESKTOP,
+        -> {
             Column(
                 modifier =
                     Modifier
                         .background(Color(0xFFE0EAFF)),
                 verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
                     modifier =
@@ -134,22 +132,20 @@ fun GettingStartedScreen(onAction: (StartAction) -> Unit) {
                     modifier =
                         Modifier
                             .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                            .widthIn(max = 700.dp)
-
-                    ,onAction = onAction,
-                    alignment = Alignment.CenterHorizontally
+                            .widthIn(max = 700.dp),
+                    onAction = onAction,
+                    alignment = Alignment.CenterHorizontally,
                 )
             }
         }
     }
-
 }
 
 @Composable
 private fun NoteIntroCard(
     modifier: Modifier = Modifier,
     onAction: (StartAction) -> Unit,
-    alignment: Alignment.Horizontal = Alignment.Start
+    alignment: Alignment.Horizontal = Alignment.Start,
 ) {
     Box(
         modifier =
@@ -162,7 +158,7 @@ private fun NoteIntroCard(
                     .background(Color.White)
                     .padding(vertical = 40.dp, horizontal = 20.dp)
                     .fillMaxWidth(),
-            horizontalAlignment = alignment
+            horizontalAlignment = alignment,
         ) {
             Text(
                 modifier = Modifier,

@@ -35,9 +35,11 @@ class MainActivity : ComponentActivity() {
                 val navigator = koinInject<Navigator>()
 
                 Surface(
-                        color = Color(0xFFdfeafe),
-                    modifier = Modifier.fillMaxSize()
-                        .windowInsetsPadding(WindowInsets.safeDrawing)
+                    color = Color(0xFFdfeafe),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .windowInsetsPadding(WindowInsets.safeDrawing),
                 ) {
                     // NOTE: There is a flash without this:
                     if (!viewModel.state.isCheckingSession) {

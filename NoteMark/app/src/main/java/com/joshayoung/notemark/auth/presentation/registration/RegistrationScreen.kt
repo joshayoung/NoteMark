@@ -1,6 +1,5 @@
 package com.joshayoung.notemark.auth.presentation.registration
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,11 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -84,16 +80,19 @@ fun RegistrationScreen(
 
     when (deviceConfiguration) {
         DeviceConfiguration.MOBILE_PORTRAIT -> {
-            Column(modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.background)
-                .padding(top = 30.dp)
+            Column(
+                modifier =
+                    Modifier
+                        .background(color = MaterialTheme.colorScheme.background)
+                        .padding(top = 30.dp),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                        .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
-                        .padding(horizontal = 20.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxHeight()
+                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                            .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
+                            .padding(horizontal = 20.dp),
                 ) {
                     Header()
                     Form(
@@ -106,8 +105,9 @@ fun RegistrationScreen(
         }
         DeviceConfiguration.MOBILE_LANDSCAPE -> {
             Row(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.background)
+                modifier =
+                    Modifier
+                        .background(color = MaterialTheme.colorScheme.background),
             ) {
                 Row(
                     modifier =
@@ -122,35 +122,44 @@ fun RegistrationScreen(
                         errorMessage,
                         state,
                         onnAction,
-                        modifier = Modifier.weight(1f)
-                        .padding(bottom = 30.dp, end = 10.dp)
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .padding(bottom = 30.dp, end = 10.dp),
                     )
                 }
             }
         }
         DeviceConfiguration.TABLET_PORTRAIT,
         DeviceConfiguration.TABLET_LANDSCAPE,
-        DeviceConfiguration.DESKTOP, -> {
-            Column(modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.background)
-                .padding(top = 30.dp)
+        DeviceConfiguration.DESKTOP,
+        -> {
+            Column(
+                modifier =
+                    Modifier
+                        .background(color = MaterialTheme.colorScheme.background)
+                        .padding(top = 30.dp),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                        .background(color = MaterialTheme.colorScheme.surfaceContainerLowest),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                            .background(color = MaterialTheme.colorScheme.surfaceContainerLowest),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Header(modifier = Modifier
-                        .widthIn(max = 540.dp)
+                    Header(
+                        modifier =
+                            Modifier
+                                .widthIn(max = 540.dp),
                     )
                     Form(
                         errorMessage,
                         state,
                         onnAction,
-                        modifier = Modifier
-                            .widthIn(max = 540.dp),
+                        modifier =
+                            Modifier
+                                .widthIn(max = 540.dp),
                     )
                 }
             }
@@ -170,7 +179,7 @@ private fun Form(
             .padding(top = 20.dp)
             .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         DisplayErrorList(
             modifier =
@@ -184,7 +193,7 @@ private fun Form(
             label = "Username",
             hint = "John.doe",
             helperText = "Use between 3 and 20 characters for your username",
-            inErrorState = state.usernameError != ""
+            inErrorState = state.usernameError != "",
         )
         if (state.usernameError != "") {
             Text(text = state.usernameError, color = MaterialTheme.colorScheme.error)
@@ -200,7 +209,7 @@ private fun Form(
             hint = "Password",
             helperText = "Use 8+ characters with a number or symbol for better security",
             type = TextFieldType.Password,
-            inErrorState = state.passwordError != ""
+            inErrorState = state.passwordError != "",
         )
         if (state.passwordError != "") {
             Text(text = state.passwordError, color = MaterialTheme.colorScheme.error)
@@ -211,7 +220,7 @@ private fun Form(
             icon = EyeIcon,
             hint = "Repeat Password",
             type = TextFieldType.Password,
-            inErrorState = state.passwordEqualityError != ""
+            inErrorState = state.passwordEqualityError != "",
         )
         if (state.passwordEqualityError != "") {
             Text(text = state.passwordEqualityError, color = MaterialTheme.colorScheme.error)
@@ -239,8 +248,9 @@ private fun Form(
 @Composable
 private fun Header(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier
-            .padding(top = 40.dp),
+        modifier =
+            modifier
+                .padding(top = 40.dp),
     ) {
         Text(
             "Create Account",
