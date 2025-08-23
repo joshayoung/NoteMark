@@ -2,6 +2,9 @@ package com.joshayoung.notemark.app
 
 import android.app.Application
 import com.joshayoung.notemark.app.di.appModule
+import com.joshayoung.notemark.auth.data.di.authModule
+import com.joshayoung.notemark.core.data.di.coreModule
+import com.joshayoung.notemark.note.data.di.noteModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidContext
@@ -19,6 +22,9 @@ class NoteMarkApp : Application() {
             workManagerFactory()
             modules(
                 appModule,
+                authModule,
+                coreModule,
+                noteModule,
             )
         }
     }
