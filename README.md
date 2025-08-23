@@ -1,5 +1,14 @@
 # NoteMark app
 
+## Features
+* Login and Registration using OAuth
+* Local Database
+* Responsive Design (supports portrait and landscape)
+* Supports both phone and tablet layouts
+* Manual Remote Sync
+* WorkManager Syncs
+* Clean Architecture
+
 ## Screenshots
 
 <p style='padding: 20px;' float="left">
