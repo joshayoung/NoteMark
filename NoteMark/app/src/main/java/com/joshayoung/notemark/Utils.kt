@@ -13,9 +13,9 @@ class AuthHelper {
             val authRoutes =
                 listOf(
                     null,
-                    Destination.Login.toString(),
+                    Destination.LoginScreen.toString(),
                     Destination.StartScreen.toString(),
-                    Destination.Registration.toString(),
+                    Destination.RegistrationScreen.toString(),
                 )
 
             return !authRoutes.contains(route)

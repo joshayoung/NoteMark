@@ -13,24 +13,24 @@ sealed interface Destination {
     data object StartScreen : Destination
 
     @Serializable
-    data object Registration : Destination
+    data object RegistrationScreen : Destination
 
     @Serializable
-    data object Login : Destination
+    data object LoginScreen : Destination
 
     @Serializable
-    data object NoteList : Destination
+    data object NoteListScreen : Destination
 
     @Serializable
-    data class AddNote(
+    data class AddNoteScreen(
         val id: Long?,
     ) : Destination
 
     @Serializable
-    data object Settings : Destination
+    data object SettingsScreen : Destination
 
     @Serializable
-    data class NoteDetail(
+    data class NoteDetailScreen(
         val id: Long,
     ) : Destination
 }

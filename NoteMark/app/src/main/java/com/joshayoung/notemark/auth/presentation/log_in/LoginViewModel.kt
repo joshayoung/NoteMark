@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.navOptions
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.navigation.Destination
@@ -73,7 +72,7 @@ class LoginViewModel(
             LoginAction.DontHaveAccount -> {
                 viewModelScope.launch {
                     navigator.navigate(
-                        destination = Destination.Registration,
+                        destination = Destination.RegistrationScreen,
                         navOptions = {
                             popUpTo(Destination.StartScreen)
                         },
@@ -84,7 +83,7 @@ class LoginViewModel(
             LoginAction.LoginSuccess -> {
                 viewModelScope.launch {
                     navigator.navigate(
-                        destination = Destination.NoteList,
+                        destination = Destination.NoteListScreen,
                         navOptions = {
                             popUpTo(Destination.AuthGraph) {
                                 inclusive = true

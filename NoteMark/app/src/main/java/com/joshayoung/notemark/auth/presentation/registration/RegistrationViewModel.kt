@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.navOptions
 import com.joshayoung.notemark.R
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.core.domain.util.Result
@@ -111,7 +110,7 @@ class RegistrationViewModel(
             RegistrationAction.AlreadyAccount -> {
                 viewModelScope.launch {
                     navigator.navigate(
-                        destination = Destination.Login,
+                        destination = Destination.LoginScreen,
                         navOptions = {
                             popUpTo(Destination.StartScreen)
                         },
@@ -121,7 +120,7 @@ class RegistrationViewModel(
 
             RegistrationAction.RegisterSuccess -> {
                 viewModelScope.launch {
-                    navigator.navigate(Destination.Login)
+                    navigator.navigate(Destination.LoginScreen)
                 }
             }
         }

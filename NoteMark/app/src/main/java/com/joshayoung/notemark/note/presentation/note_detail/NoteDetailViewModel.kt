@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.joshayoung.notemark.core.navigation.Destination
-import com.joshayoung.notemark.core.navigation.Destination.AddNote
+import com.joshayoung.notemark.core.navigation.Destination.AddNoteScreen
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.presentation.mappers.toNoteUi
@@ -33,7 +33,7 @@ class NoteDetailViewModel(
             )
 
     fun loadData() {
-        val noteId = savedStateHandle.toRoute<Destination.NoteDetail>().id
+        val noteId = savedStateHandle.toRoute<Destination.NoteDetailScreen>().id
 //        var t = savedStateHandle.get<String>("noteId")
 //        var tt = savedStateHandle.get<String>("changedNote")
 //        var ttt = savedStateHandle.get<String>("bla")
@@ -65,7 +65,7 @@ class NoteDetailViewModel(
             is NoteDetailAction.GoToEdit -> {
                 viewModelScope.launch {
                     navigator.navigate(
-                        AddNote(id = action.id),
+                        AddNoteScreen(id = action.id),
                     )
                 }
             }

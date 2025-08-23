@@ -18,7 +18,6 @@ import com.joshayoung.notemark.note.domain.use_cases.PullRemoteNotesUseCase
 import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.hours
@@ -71,7 +70,10 @@ class SettingsViewModel(
                     }
 
                     if (!hasNoPendingSyncs) {
-                        logout()
+                        viewModelScope.launch {
+                            noteRepository.logout()
+                        }
+                        clearLocalData()
                         return@launch
                     } else {
                         state = state.copy(displayLogoutPrompt = true)
@@ -81,7 +83,10 @@ class SettingsViewModel(
 
             SettingsAction.LogOutWithoutSyncing -> {
                 state = state.copy(displayLogoutPrompt = false)
-                logout()
+                viewModelScope.launch {
+                    noteRepository.logout()
+                }
+                clearLocalData()
             }
 
             SettingsAction.NavigateBack -> {
@@ -128,12 +133,11 @@ class SettingsViewModel(
     }
 
     // Add Use Case:
-    private fun logout() {
+    private fun clearLocalData() {
         applicationScope.launch {
             syncNoteWorkerScheduler.cancelSyncs()
             localSyncDataSource.clearSyncQueue()
             localDataSource.removeAllNotes()
-            noteRepository.logout()
         }
     }
 }

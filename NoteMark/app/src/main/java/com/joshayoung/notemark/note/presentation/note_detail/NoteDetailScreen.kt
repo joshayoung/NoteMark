@@ -158,6 +158,7 @@ fun NoteDetailScreen(
         Column(
             modifier =
                 Modifier
+                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                     .clickable(onClick = {
                         if (inReaderMode) {
                             inReaderMode = false

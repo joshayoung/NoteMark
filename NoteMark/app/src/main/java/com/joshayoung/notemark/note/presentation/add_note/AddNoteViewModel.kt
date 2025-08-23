@@ -37,7 +37,7 @@ class AddNoteViewModel(
 
     init {
         viewModelScope.launch {
-            val n = savedStateHandle.toRoute<Destination.AddNote>()
+            val n = savedStateHandle.toRoute<Destination.AddNoteScreen>()
             n.id?.let { theId ->
                 currentNote = noteRepository.getNote(theId)
                 initialTitle = currentNote?.title ?: ""

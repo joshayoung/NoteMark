@@ -13,13 +13,13 @@ class GettingStartedViewModel(
         when (action) {
             StartAction.CreateAccount -> {
                 viewModelScope.launch {
-                    navigator.navigate(Destination.Registration)
+                    navigator.navigate(Destination.RegistrationScreen)
                 }
             }
 
             StartAction.Login -> {
                 viewModelScope.launch {
-                    navigator.navigate(Destination.Login)
+                    navigator.navigate(Destination.LoginScreen)
                 }
             }
         }

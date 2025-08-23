@@ -9,7 +9,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
-import androidx.navigation.navOptions
 import com.joshayoung.notemark.auth.presentation.log_in.LoginScreenRoot
 import com.joshayoung.notemark.auth.presentation.registration.RegistrationScreenRoot
 import com.joshayoung.notemark.core.navigation.Destination
@@ -95,21 +94,21 @@ fun SetNavigationGraph(
 
 private fun NavGraphBuilder.noteGraph() {
     navigation<Destination.NoteGraph>(
-        startDestination = Destination.NoteList,
+        startDestination = Destination.NoteListScreen,
     ) {
-        composable<Destination.NoteList> {
+        composable<Destination.NoteListScreen> {
             NoteListScreenRoot()
         }
 
-        composable<Destination.AddNote> {
+        composable<Destination.AddNoteScreen> {
             AddNoteScreenRoot()
         }
 
-        composable<Destination.Settings> {
+        composable<Destination.SettingsScreen> {
             SettingsScreenRoot()
         }
 
-        composable<Destination.NoteDetail> {
+        composable<Destination.NoteDetailScreen> {
             NoteDetailScreenRoot()
         }
     }
@@ -123,11 +122,11 @@ private fun NavGraphBuilder.authGraph() {
             GettingStartedScreenRoot()
         }
 
-        composable<Destination.Registration> {
+        composable<Destination.RegistrationScreen> {
             RegistrationScreenRoot()
         }
 
-        composable<Destination.Login> {
+        composable<Destination.LoginScreen> {
             LoginScreenRoot()
         }
     }

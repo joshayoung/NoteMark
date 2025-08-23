@@ -13,7 +13,6 @@ import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import com.joshayoung.notemark.note.presentation.mappers.toNoteUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -83,7 +82,7 @@ class NoteListViewModel(
 
             is NoteListAction.AddNoteClick -> {
                 viewModelScope.launch {
-                    navigator.navigate(AddNote(null))
+                    navigator.navigate(AddNoteScreen(null))
                 }
             }
 
@@ -91,14 +90,14 @@ class NoteListViewModel(
                 viewModelScope.launch {
                     syncNotesUseCase.execute()
                     navigator.navigate(
-                        NoteDetail(id = action.id),
+                        NoteDetailScreen(id = action.id),
                     )
                 }
             }
 
             NoteListAction.OnSettingsClick -> {
                 viewModelScope.launch {
-                    navigator.navigate(Settings)
+                    navigator.navigate(SettingsScreen)
                 }
             }
         }

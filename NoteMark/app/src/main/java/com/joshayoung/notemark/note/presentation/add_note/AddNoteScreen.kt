@@ -85,6 +85,7 @@ fun AddNoteScreen(
         Column(
             modifier =
                 Modifier
+                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                     .padding(innerPadding)
                     .fillMaxSize(),
         ) {

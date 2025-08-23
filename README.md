@@ -17,9 +17,7 @@
 * Do not directly use data sources in VM if you have a repository.
 * Add use-cases for some of the logic I have in my vms.
 * Change the status bar color and icons color for the login page only.
-* Change to OutlinedTextField
 * Test Work Manager
-* Not logging out automatically after the logout prompt sync.
 * Disable create button in registration page until form is value
 
 ### Ktlint
