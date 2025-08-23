@@ -26,7 +26,6 @@
   * Cursor is red
   * Check username length for 20 characters
 * Disable create button in registration page until form is value
-* Registration screens needs rounded white border and blue background.
 
 ### Ktlint
 * `./gradlew ktlintCheck` - generate reports
