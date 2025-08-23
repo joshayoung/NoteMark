@@ -1,5 +1,13 @@
 # NoteMark app
 
+## Screenshots
+* ![Start](./screenshots/start.png)
+* ![Login](./screenshots/login.png)
+* ![Register](./screenshots/register.png)
+* ![Notes](./screenshots/notes.png)
+* ![Settings](./screenshots/settings.png)
+* ![Sync](./screenshots/Syn.png)
+
 ### Notes
 * You have to add `INTERNET` permissions in order to make API calls.
 * You can use 'Image Asset Studio' inside of Android Studio to create all of the app icons you need.
