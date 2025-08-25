@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.note.domain.use_cases
+package com.joshayoung.notemark.auth.data.use_cases
 
 import com.joshayoung.notemark.core.domain.ValidationState
 

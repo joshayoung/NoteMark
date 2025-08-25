@@ -7,9 +7,9 @@ import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.Destination.*
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.mappers.toNote
+import com.joshayoung.notemark.note.data.use_cases.SyncNotesUseCase
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
-import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import com.joshayoung.notemark.note.presentation.mappers.toNoteUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

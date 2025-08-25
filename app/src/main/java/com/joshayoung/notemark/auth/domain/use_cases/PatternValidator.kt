@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.note.domain.use_cases
+package com.joshayoung.notemark.auth.domain.use_cases
 
 interface PatternValidator {
     fun matches(value: String): Boolean

@@ -3,8 +3,8 @@ package com.joshayoung.notemark.note.data.workers
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.joshayoung.notemark.note.domain.use_cases.PullRemoteNotesUseCase
-import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
+import com.joshayoung.notemark.note.data.use_cases.PullRemoteNotesUseCase
+import com.joshayoung.notemark.note.data.use_cases.SyncNotesUseCase
 import java.lang.Exception
 
 class DataSyncWorker(

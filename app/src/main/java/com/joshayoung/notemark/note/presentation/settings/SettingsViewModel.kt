@@ -10,12 +10,12 @@ import com.joshayoung.notemark.core.ConnectivityObserver
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.SyncNoteWorkerScheduler
+import com.joshayoung.notemark.note.data.use_cases.PullRemoteNotesUseCase
+import com.joshayoung.notemark.note.data.use_cases.SyncNotesUseCase
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.models.SyncInterval
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
-import com.joshayoung.notemark.note.domain.use_cases.PullRemoteNotesUseCase
-import com.joshayoung.notemark.note.domain.use_cases.SyncNotesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

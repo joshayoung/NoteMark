@@ -6,14 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.R
+import com.joshayoung.notemark.auth.data.use_cases.ValidateEmail
+import com.joshayoung.notemark.auth.data.use_cases.ValidatePassword
+import com.joshayoung.notemark.auth.data.use_cases.ValidateUsername
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.core.utils.textAsFlow
-import com.joshayoung.notemark.note.domain.use_cases.ValidateEmail
-import com.joshayoung.notemark.note.domain.use_cases.ValidatePassword
-import com.joshayoung.notemark.note.domain.use_cases.ValidateUsername
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
