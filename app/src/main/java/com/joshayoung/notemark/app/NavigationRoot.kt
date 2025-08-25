@@ -15,7 +15,7 @@ import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.NavigationAction
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
-import com.joshayoung.notemark.note.presentation.add_note.AddNoteScreenRoot
+import com.joshayoung.notemark.note.presentation.add_note.AddEditNoteScreenRoot
 import com.joshayoung.notemark.note.presentation.note_detail.NoteDetailScreenRoot
 import com.joshayoung.notemark.note.presentation.note_list.NoteListScreenRoot
 import com.joshayoung.notemark.note.presentation.settings.SettingsScreenRoot
@@ -101,7 +101,7 @@ private fun NavGraphBuilder.noteGraph() {
         }
 
         composable<Destination.AddNoteScreen> {
-            AddNoteScreenRoot()
+            AddEditNoteScreenRoot()
         }
 
         composable<Destination.SettingsScreen> {

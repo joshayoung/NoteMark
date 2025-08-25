@@ -43,8 +43,8 @@ import com.joshayoung.notemark.note.presentation.components.NoteMarkScaffold
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AddNoteScreenRoot(viewModel: AddNoteViewModel = koinViewModel()) {
-    AddNoteScreen(
+fun AddEditNoteScreenRoot(viewModel: AddEditNoteViewModel = koinViewModel()) {
+    AddEditNoteScreen(
         state = viewModel.state,
         onAction = { action ->
             viewModel.onAction(action)
@@ -53,9 +53,9 @@ fun AddNoteScreenRoot(viewModel: AddNoteViewModel = koinViewModel()) {
 }
 
 @Composable
-fun AddNoteScreen(
-    state: AddNoteState,
-    onAction: (AddNoteAction) -> Unit,
+fun AddEditNoteScreen(
+    state: AddEditNoteState,
+    onAction: (AddEditNoteAction) -> Unit,
 ) {
     NoteMarkScaffold(
         topAppBar = {
@@ -75,7 +75,7 @@ fun AddNoteScreen(
                         Modifier
                             .size(26.dp)
                             .clickable {
-                                onAction(AddNoteAction.NavigateBack)
+                                onAction(AddEditNoteAction.NavigateBack)
                             },
                     tint = MaterialTheme.colorScheme.primary,
                 )
@@ -189,8 +189,8 @@ fun NoteTextFieldMultiline(state: TextFieldState) {
 @Preview(showBackground = true)
 fun AddNoteScreenPreview() {
     NoteMarkTheme {
-        AddNoteScreen(
-            state = AddNoteState(),
+        AddEditNoteScreen(
+            state = AddEditNoteState(),
             onAction = {},
         )
     }

@@ -20,13 +20,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 
-class AddNoteViewModel(
+class AddEditNoteViewModel(
     val noteRepository: NoteRepository,
     private val navigator: Navigator,
     savedStateHandle: SavedStateHandle,
     private val noteMarkUseCases: NoteMarkUseCases,
 ) : ViewModel() {
-    var state by mutableStateOf(AddNoteState())
+    var state by mutableStateOf(AddEditNoteState())
         private set
 
     private var currentNote: Note? = null
@@ -83,9 +83,9 @@ class AddNoteViewModel(
             }
         }
 
-    fun onAction(action: AddNoteAction) {
+    fun onAction(action: AddEditNoteAction) {
         when (action) {
-            AddNoteAction.NavigateBack -> {
+            AddEditNoteAction.NavigateBack -> {
                 viewModelScope.launch {
                     noteMarkUseCases.deleteEmptyNoteUseCase(currentNote)
                     navigator.navigateUp()

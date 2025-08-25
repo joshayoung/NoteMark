@@ -24,7 +24,7 @@ import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.repository.SyncRepository
 import com.joshayoung.notemark.note.network.RemoteDataSource
-import com.joshayoung.notemark.note.presentation.add_note.AddNoteViewModel
+import com.joshayoung.notemark.note.presentation.add_note.AddEditNoteViewModel
 import com.joshayoung.notemark.note.presentation.note_detail.NoteDetailViewModel
 import com.joshayoung.notemark.note.presentation.note_list.NoteListViewModel
 import com.joshayoung.notemark.note.presentation.settings.SettingsViewModel
@@ -40,7 +40,7 @@ var noteModule =
         singleOf(::NoteRepositoryImpl).bind<NoteRepository>()
         singleOf(::SyncRepositoryImpl).bind<SyncRepository>()
         viewModelOf(::NoteListViewModel)
-        viewModelOf(::AddNoteViewModel)
+        viewModelOf(::AddEditNoteViewModel)
         viewModelOf(::SettingsViewModel)
         viewModelOf(::NoteDetailViewModel)
 
