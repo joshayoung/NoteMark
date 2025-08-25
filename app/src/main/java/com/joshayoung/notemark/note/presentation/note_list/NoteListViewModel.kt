@@ -7,7 +7,6 @@ import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.Destination.*
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.mappers.toNote
-import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.presentation.mappers.toNoteUi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +21,6 @@ import kotlinx.coroutines.launch
 class NoteListViewModel(
     private val noteRepository: NoteRepository,
     connectivityObserver: ConnectivityObserver,
-    private val localDataSource: LocalDataSource,
     private val noteMarkUseCases: NoteMarkUseCases,
     private val navigator: Navigator,
 ) : ViewModel() {
@@ -91,7 +89,7 @@ class NoteListViewModel(
     }
 
     private fun loadData() {
-        localDataSource
+        noteRepository
             .getNotes()
             .map { notes ->
                 val noteUi = notes.map { it.toNoteUi() }

@@ -8,6 +8,7 @@ import com.joshayoung.notemark.note.data.database.RoomSyncLocalDataSource
 import com.joshayoung.notemark.note.data.database.SyncDatabase
 import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
 import com.joshayoung.notemark.note.data.repository.NoteRepositoryImpl
+import com.joshayoung.notemark.note.data.repository.SyncRepositoryImpl
 import com.joshayoung.notemark.note.data.use_cases.LoggedInUserAbbreviation
 import com.joshayoung.notemark.note.data.use_cases.PullRemoteNotesUseCase
 import com.joshayoung.notemark.note.data.use_cases.SyncNotesUseCase
@@ -16,6 +17,7 @@ import com.joshayoung.notemark.note.domain.SyncNotesScheduler
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
+import com.joshayoung.notemark.note.domain.repository.SyncRepository
 import com.joshayoung.notemark.note.network.RemoteDataSource
 import com.joshayoung.notemark.note.presentation.add_note.AddNoteViewModel
 import com.joshayoung.notemark.note.presentation.note_detail.NoteDetailViewModel
@@ -31,6 +33,7 @@ import org.koin.dsl.module
 var noteModule =
     module {
         singleOf(::NoteRepositoryImpl).bind<NoteRepository>()
+        singleOf(::SyncRepositoryImpl).bind<SyncRepository>()
         viewModelOf(::NoteListViewModel)
         viewModelOf(::AddNoteViewModel)
         viewModelOf(::SettingsViewModel)

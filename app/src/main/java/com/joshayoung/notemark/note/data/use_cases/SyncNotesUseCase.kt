@@ -4,15 +4,16 @@ import com.joshayoung.notemark.app.DateHelper
 import com.joshayoung.notemark.core.data.networking.Result
 import com.joshayoung.notemark.note.data.database.entity.SyncOperation
 import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
-import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.models.Note
+import com.joshayoung.notemark.note.domain.repository.SyncRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import java.time.format.DateTimeFormatter
 
 class SyncNotesUseCase(
+    // TODO: Should this be a repository?
     private val remoteDataSource: KtorRemoteDataSource,
-    private val localSyncDataSource: LocalSyncDataSource,
+    private val syncRepository: SyncRepository,
 ) {
     suspend operator fun invoke() {
         // listen to the getNotes flow instead of having to call this 3 times:
@@ -22,7 +23,7 @@ class SyncNotesUseCase(
             // Add this a different way:
             serverNotes = remoteNotes.data
         }
-        val syncs = localSyncDataSource.getAllSyncs()
+        val syncs = syncRepository.getAllSyncs()
         val syncList = syncs.first()
 
         val createSyncs =
@@ -64,7 +65,7 @@ class SyncNotesUseCase(
             }
 
             // if after just delete the local sync
-            localSyncDataSource.deleteSync(sync.id)
+            syncRepository.deleteSync(sync.id)
         }
 
         // listen to the remote flow instead of having to call this multiple times:
@@ -93,7 +94,7 @@ class SyncNotesUseCase(
                     remoteDataSource.deleteNote(remoteVersion.remoteId!!)
                 }
             }
-            localSyncDataSource.deleteSync(sync.id)
+            syncRepository.deleteSync(sync.id)
         }
 
         // listen to the remote flow instead of having to call this multiple times:
@@ -138,8 +139,8 @@ class SyncNotesUseCase(
                     remoteDataSource.updateNote(note)
                 }
             }
-            localSyncDataSource.deleteSync(sync.id)
+            syncRepository.deleteSync(sync.id)
         }
-        localSyncDataSource.clearSyncQueue()
+        syncRepository.clearSyncQueue()
     }
 }

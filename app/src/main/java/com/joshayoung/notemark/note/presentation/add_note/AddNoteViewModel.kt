@@ -14,9 +14,9 @@ import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.core.presentation.DebounceNoteSave
 import com.joshayoung.notemark.core.utils.textAsFlow
 import com.joshayoung.notemark.note.data.database.entity.SyncOperation
-import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
+import com.joshayoung.notemark.note.domain.repository.SyncRepository
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ class AddNoteViewModel(
     val noteRepository: NoteRepository,
     private val navigator: Navigator,
     savedStateHandle: SavedStateHandle,
-    private val localSyncDataSource: LocalSyncDataSource,
+    private val syncRepository: SyncRepository,
 ) : ViewModel() {
     var state by mutableStateOf(AddNoteState())
         private set
@@ -100,12 +100,12 @@ class AddNoteViewModel(
         viewModelScope.launch {
             currentNote?.let { note ->
                 if (state.inEditMode) {
-                    localSyncDataSource.addOrUpdateQueue(note, SyncOperation.UPDATE)
+                    syncRepository.addOrUpdateQueue(note, SyncOperation.UPDATE)
 
                     return@launch
                 }
 
-                localSyncDataSource.addOrUpdateQueue(note, SyncOperation.CREATE)
+                syncRepository.addOrUpdateQueue(note, SyncOperation.CREATE)
             }
         }
     }

@@ -80,9 +80,6 @@ class NoteRepositoryImpl(
         val result = localDataSource.upsertNote(localNoteForUpdate)
 
         if (result is Result.Success) {
-//            val sync = localSyncDataSource.getSync(localNoteForUpdate)
-//            localSyncDataSource.addOrUpdateQueue(localNoteForUpdate, SyncOperation.UPDATE)
-
             return Result.Success(localNoteForUpdate)
         }
 
@@ -90,7 +87,7 @@ class NoteRepositoryImpl(
         return Result.Error(error = DataError.Network.UNKNOWN)
     }
 
-    override suspend fun getNotes(): Flow<List<Note>> = localDataSource.getNotes()
+    override fun getNotes(): Flow<List<Note>> = localDataSource.getNotes()
 
     override suspend fun deleteNote(note: Note): EmptyResult<DataError> {
         if (note.id == null) {
@@ -132,5 +129,9 @@ class NoteRepositoryImpl(
 
             return results.asEmptyDataResult()
         }
+    }
+
+    override suspend fun removeAllNotes() {
+        localDataSource.removeAllNotes()
     }
 }

@@ -19,11 +19,13 @@ interface NoteRepository {
         body: String,
     ): Result<Note, DataError>
 
-    suspend fun getNotes(): Flow<List<Note>>
+    fun getNotes(): Flow<List<Note>>
 
     suspend fun getNote(id: Long): Note?
 
     suspend fun deleteNote(note: Note): EmptyResult<DataError>
 
     suspend fun logout(): EmptyDataResult<DataError.Network>
+
+    suspend fun removeAllNotes()
 }

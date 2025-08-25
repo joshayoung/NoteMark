@@ -10,10 +10,9 @@ import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.SyncNoteWorkerScheduler
-import com.joshayoung.notemark.note.domain.database.LocalDataSource
-import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.models.SyncInterval
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
+import com.joshayoung.notemark.note.domain.repository.SyncRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -25,11 +24,10 @@ class SettingsViewModel(
     val dataStorage: DataStorage,
     val connectivityObserver: ConnectivityObserver,
     val noteMarkUseCases: NoteMarkUseCases,
-    val localDataSource: LocalDataSource,
-    val localSyncDataSource: LocalSyncDataSource,
     val navigator: Navigator,
     private val syncNoteWorkerScheduler: SyncNoteWorkerScheduler,
     val noteRepository: NoteRepository,
+    val syncRepository: SyncRepository,
     val applicationScope: CoroutineScope,
 ) : ViewModel() {
     var state by mutableStateOf(SettingsState())
@@ -43,7 +41,7 @@ class SettingsViewModel(
 
     init {
         viewModelScope.launch {
-            localSyncDataSource.hasPendingSyncs().collect { value ->
+            syncRepository.hasPendingSyncs().collect { value ->
                 hasNoPendingSyncs = value
             }
         }
@@ -132,8 +130,8 @@ class SettingsViewModel(
     private fun clearLocalData() {
         applicationScope.launch {
             syncNoteWorkerScheduler.cancelSyncs()
-            localSyncDataSource.clearSyncQueue()
-            localDataSource.removeAllNotes()
+            syncRepository.clearSyncQueue()
+            noteRepository.removeAllNotes()
         }
     }
 }
