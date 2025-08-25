@@ -38,7 +38,7 @@ class RegistrationViewModel(
                     return@onEach
                 }
 
-                val usernameResult = noteMarkUseCases.validateUsername(state.username.text.toString())
+                val usernameResult = noteMarkUseCases.validateUsernameUseCase(state.username.text.toString())
                 state =
                     state.copy(
                         usernameError = if (usernameResult.invalidUsername) "Username must be between 3 and 20 characters" else "",
@@ -75,7 +75,7 @@ class RegistrationViewModel(
                 return@combine
             }
 
-            val passwordResult = noteMarkUseCases.validatePassword(password.toString(), repeat.toString())
+            val passwordResult = noteMarkUseCases.validatePasswordUseCase(password.toString(), repeat.toString())
 
             // TODO: Is this right?
             var registrationError = R.string.password_length_and_chars.toString()

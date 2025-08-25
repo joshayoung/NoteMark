@@ -3,7 +3,7 @@ package com.joshayoung.notemark.auth.data.use_cases
 import com.joshayoung.notemark.core.domain.ValidationState
 import kotlin.Boolean
 
-class ValidatePassword {
+class ValidatePasswordUseCase {
     operator fun invoke(
         password: String,
         repeatPassword: String,

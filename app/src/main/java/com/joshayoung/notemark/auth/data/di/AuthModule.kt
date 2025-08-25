@@ -2,9 +2,9 @@ package com.joshayoung.notemark.auth.data.di
 
 import com.joshayoung.notemark.auth.data.repository.AuthRepositoryImpl
 import com.joshayoung.notemark.auth.data.use_cases.EmailValidator
-import com.joshayoung.notemark.auth.data.use_cases.ValidateEmail
-import com.joshayoung.notemark.auth.data.use_cases.ValidatePassword
-import com.joshayoung.notemark.auth.data.use_cases.ValidateUsername
+import com.joshayoung.notemark.auth.data.use_cases.ValidateEmailUseCase
+import com.joshayoung.notemark.auth.data.use_cases.ValidatePasswordUseCase
+import com.joshayoung.notemark.auth.data.use_cases.ValidateUsernameUseCase
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.auth.domain.use_cases.PatternValidator
 import com.joshayoung.notemark.auth.presentation.log_in.LoginViewModel
@@ -23,7 +23,7 @@ var authModule =
         singleOf(::AuthRepositoryImpl).bind<AuthRepository>()
 
         singleOf(::EmailValidator).bind<PatternValidator>()
-        singleOf(::ValidateUsername)
-        singleOf(::ValidatePassword)
-        singleOf(::ValidateEmail)
+        singleOf(::ValidateUsernameUseCase)
+        singleOf(::ValidatePasswordUseCase)
+        singleOf(::ValidateEmailUseCase)
     }
