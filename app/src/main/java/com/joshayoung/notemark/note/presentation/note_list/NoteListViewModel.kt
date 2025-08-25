@@ -3,7 +3,6 @@ package com.joshayoung.notemark.note.presentation.note_list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.core.domain.ConnectivityObserver
-import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.Destination.*
 import com.joshayoung.notemark.core.navigation.Navigator
@@ -22,8 +21,7 @@ import kotlinx.coroutines.launch
 
 class NoteListViewModel(
     private val noteRepository: NoteRepository,
-    private val dataStorage: DataStorage,
-    private val connectivityObserver: ConnectivityObserver,
+    connectivityObserver: ConnectivityObserver,
     private val localDataSource: LocalDataSource,
     private val noteMarkUseCases: NoteMarkUseCases,
     private val navigator: Navigator,
@@ -50,24 +48,13 @@ class NoteListViewModel(
 
     init {
         viewModelScope.launch {
-            dataStorage.username.collect { user ->
-                _state.update {
-                    it.copy(
-                        userAbbreviation = formatUser(user),
-                    )
-                }
+            val abbreviation = noteMarkUseCases.LoggedInUserAbbreviation()
+            _state.update {
+                it.copy(
+                    userAbbreviation = abbreviation,
+                )
             }
         }
-    }
-
-    private fun formatUser(user: String): String {
-        if (user.length > 1) {
-            val firstTwo = user.take(2)
-
-            return firstTwo.uppercase()
-        }
-
-        return user.uppercase()
     }
 
     fun onAction(action: NoteListAction) {

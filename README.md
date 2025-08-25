@@ -64,7 +64,6 @@
 * Disable create button in registration page until form is value
 * Switch to encrypted Data Store
 * Work on Nav flash
-* Text as flow function needed?
 
 ### Ktlint
 * `./gradlew ktlintCheck` - generate reports

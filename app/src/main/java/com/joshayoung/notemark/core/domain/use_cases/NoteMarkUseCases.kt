@@ -3,6 +3,7 @@ package com.joshayoung.notemark.core.domain.use_cases
 import com.joshayoung.notemark.auth.data.use_cases.ValidateEmailUseCase
 import com.joshayoung.notemark.auth.data.use_cases.ValidatePasswordUseCase
 import com.joshayoung.notemark.auth.data.use_cases.ValidateUsernameUseCase
+import com.joshayoung.notemark.note.data.use_cases.LoggedInUserAbbreviation
 import com.joshayoung.notemark.note.data.use_cases.PullRemoteNotesUseCase
 import com.joshayoung.notemark.note.data.use_cases.SyncNotesUseCase
 
@@ -12,4 +13,5 @@ data class NoteMarkUseCases(
     val syncNotesUseCase: SyncNotesUseCase,
     val validatePasswordUseCase: ValidatePasswordUseCase,
     val validateUsernameUseCase: ValidateUsernameUseCase,
+    val LoggedInUserAbbreviation: LoggedInUserAbbreviation,
 )
