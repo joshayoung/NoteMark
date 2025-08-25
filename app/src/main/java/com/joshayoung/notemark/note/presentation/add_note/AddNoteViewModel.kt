@@ -9,14 +9,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.joshayoung.notemark.core.data.networking.Result
+import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.core.presentation.DebounceNoteSave
 import com.joshayoung.notemark.core.utils.textAsFlow
-import com.joshayoung.notemark.note.data.database.entity.SyncOperation
 import com.joshayoung.notemark.note.domain.models.Note
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
-import com.joshayoung.notemark.note.domain.repository.SyncRepository
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
@@ -25,7 +24,7 @@ class AddNoteViewModel(
     val noteRepository: NoteRepository,
     private val navigator: Navigator,
     savedStateHandle: SavedStateHandle,
-    private val syncRepository: SyncRepository,
+    private val noteMarkUseCases: NoteMarkUseCases,
 ) : ViewModel() {
     var state by mutableStateOf(AddNoteState())
         private set
@@ -79,7 +78,7 @@ class AddNoteViewModel(
                 val result = noteRepository.updateNote(currentNote, title, body)
                 if (result is Result.Success) {
                     currentNote = result.data
-                    updateSyncQueue()
+                    noteMarkUseCases.updateSyncQueueUseCase(currentNote, state.inEditMode)
                 }
             }
         }
@@ -87,34 +86,9 @@ class AddNoteViewModel(
     fun onAction(action: AddNoteAction) {
         when (action) {
             AddNoteAction.NavigateBack -> {
-                deleteBlankNote()
                 viewModelScope.launch {
+                    noteMarkUseCases.deleteEmptyNoteUseCase(currentNote)
                     navigator.navigateUp()
-                }
-            }
-        }
-    }
-
-    // TODO: Use case:
-    private fun updateSyncQueue() {
-        viewModelScope.launch {
-            currentNote?.let { note ->
-                if (state.inEditMode) {
-                    syncRepository.addOrUpdateQueue(note, SyncOperation.UPDATE)
-
-                    return@launch
-                }
-
-                syncRepository.addOrUpdateQueue(note, SyncOperation.CREATE)
-            }
-        }
-    }
-
-    private fun deleteBlankNote() {
-        if (currentNote?.title == "" && currentNote?.content == "") {
-            viewModelScope.launch {
-                currentNote?.let { note ->
-                    noteRepository.deleteNote(note)
                 }
             }
         }

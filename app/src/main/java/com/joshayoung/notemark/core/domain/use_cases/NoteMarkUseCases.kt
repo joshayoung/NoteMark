@@ -5,10 +5,13 @@ import com.joshayoung.notemark.auth.data.use_cases.ValidateEmailUseCase
 import com.joshayoung.notemark.auth.data.use_cases.ValidatePasswordUseCase
 import com.joshayoung.notemark.auth.data.use_cases.ValidateUsernameUseCase
 import com.joshayoung.notemark.note.data.use_cases.ClearLocalDataUseCase
+import com.joshayoung.notemark.note.data.use_cases.DeleteEmptyNoteUseCase
 import com.joshayoung.notemark.note.data.use_cases.LoggedInUserAbbreviationUseCase
 import com.joshayoung.notemark.note.data.use_cases.PullRemoteNotesUseCase
+import com.joshayoung.notemark.note.data.use_cases.SetSyncIntervalUseCase
 import com.joshayoung.notemark.note.data.use_cases.SetUserIdUseCase
 import com.joshayoung.notemark.note.data.use_cases.SyncNotesUseCase
+import com.joshayoung.notemark.note.data.use_cases.UpdateSyncQueueUseCase
 
 data class NoteMarkUseCases(
     val pullRemoteNotesUseCase: PullRemoteNotesUseCase,
@@ -20,4 +23,7 @@ data class NoteMarkUseCases(
     val clearLocalDataUseCase: ClearLocalDataUseCase,
     val setUserIdUseCase: SetUserIdUseCase,
     val saveAuthDataUseCase: SaveAuthDataUseCase,
+    val updateSyncQueueUseCase: UpdateSyncQueueUseCase,
+    val deleteEmptyNoteUseCase: DeleteEmptyNoteUseCase,
+    val setSyncIntervalUseCase: SetSyncIntervalUseCase,
 )

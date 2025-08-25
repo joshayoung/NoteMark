@@ -6,25 +6,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.core.domain.ConnectivityObserver
-import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.Navigator
-import com.joshayoung.notemark.note.data.SyncNoteWorkerScheduler
-import com.joshayoung.notemark.note.domain.models.SyncInterval
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.repository.SyncRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
 
 class SettingsViewModel(
-    val dataStorage: DataStorage,
     val connectivityObserver: ConnectivityObserver,
     val noteMarkUseCases: NoteMarkUseCases,
     val navigator: Navigator,
-    private val syncNoteWorkerScheduler: SyncNoteWorkerScheduler,
     val noteRepository: NoteRepository,
     val syncRepository: SyncRepository,
 ) : ViewModel() {
@@ -65,7 +58,7 @@ class SettingsViewModel(
                         viewModelScope.launch {
                             noteRepository.logout()
                         }
-                        clearLocalData()
+                        noteMarkUseCases.clearLocalDataUseCase()
                         return@launch
                     } else {
                         state = state.copy(displayLogoutPrompt = true)
@@ -78,7 +71,7 @@ class SettingsViewModel(
                 viewModelScope.launch {
                     noteRepository.logout()
                 }
-                clearLocalData()
+                noteMarkUseCases.clearLocalDataUseCase()
             }
 
             SettingsAction.NavigateBack -> {
@@ -90,26 +83,8 @@ class SettingsViewModel(
             is SettingsAction.SetSyncInterval -> {
                 action
                 viewModelScope.launch {
-                    dataStorage.saveSyncInterval(action.interval)
-                    state =
-                        state.copy(
-                            interval = action.interval,
-                        )
-
-                    // TODO: Temporary:
-                    val interval =
-                        when (state.interval) {
-                            SyncInterval.FIFTEEN -> 15.minutes
-                            SyncInterval.THIRTY -> 30.minutes
-                            SyncInterval.HOUR -> 1.hours
-                            else -> 30.minutes
-                        }
-
-                    viewModelScope.launch {
-                        syncNoteWorkerScheduler.scheduleSync(
-                            interval = interval,
-                        )
-                    }
+                    noteMarkUseCases.setSyncIntervalUseCase(action.interval)
+                    state = state.copy(interval = action.interval)
                 }
             }
 
@@ -122,9 +97,5 @@ class SettingsViewModel(
                 }
             }
         }
-    }
-
-    private fun clearLocalData() {
-        noteMarkUseCases.clearLocalDataUseCase()
     }
 }

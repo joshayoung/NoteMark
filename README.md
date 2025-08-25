@@ -57,8 +57,6 @@
 
 ### To Do
 * Rename remoteId to something more generic because this value is use locally as well.
-* Do not directly use data sources in VM if you have a repository.
-* Add use-cases for some of the logic I have in my vms.
 * Change the status bar color and icons color for the login page only.
 * Test Work Manager
 * Disable create button in registration page until form is valid
