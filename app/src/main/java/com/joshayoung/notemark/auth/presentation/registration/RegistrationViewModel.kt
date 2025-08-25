@@ -11,6 +11,7 @@ import com.joshayoung.notemark.core.data.networking.Result
 import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
+import com.joshayoung.notemark.core.presentation.UiText
 import com.joshayoung.notemark.core.utils.textAsFlow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
@@ -77,11 +78,10 @@ class RegistrationViewModel(
 
             val passwordResult = noteMarkUseCases.validatePasswordUseCase(password.toString(), repeat.toString())
 
-            // TODO: Is this right?
-            var registrationError = R.string.password_length_and_chars.toString()
+            var registrationError = UiText.StringResource(R.string.password_length_and_chars)
             state =
                 state.copy(
-                    passwordError = if (passwordResult.invalidPassword) registrationError else "",
+                    passwordError = if (passwordResult.invalidPassword) registrationError else null,
                     invalidPassword = passwordResult.invalidPassword,
                     passwordEqualityError = if (passwordResult.isNotEqual) "Passwords do not match" else "",
                 )

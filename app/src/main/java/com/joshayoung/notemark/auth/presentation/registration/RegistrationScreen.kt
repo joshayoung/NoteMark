@@ -209,10 +209,10 @@ private fun Form(
             hint = "Password",
             helperText = "Use 8+ characters with a number or symbol for better security",
             type = TextFieldType.Password,
-            inErrorState = state.passwordError != "",
+            inErrorState = state.passwordError != null,
         )
-        if (state.passwordError != "") {
-            Text(text = state.passwordError, color = MaterialTheme.colorScheme.error)
+        if (state.passwordError != null) {
+            Text(text = state.passwordError.asString(), color = MaterialTheme.colorScheme.error)
         }
         NoteMarkTextField(
             state = state.repeatedPassword,

@@ -61,6 +61,7 @@
 * Test Work Manager
 * Switch to encrypted Data Store
 * Work on Nav flash
+* Use UiText Properly for Errors
 
 ### Ktlint
 * `./gradlew ktlintCheck` - generate reports
@@ -98,3 +99,4 @@
 * [The Full Jetpack Compose Responsive UI Crash Course](https://www.youtube.com/watch?v=jU_BAQI4DiM)
 * [Theming](https://www.youtube.com/watch?v=SH7HzLUjyBs)
 * [Setup WorkManager with Koin](https://insert-koin.io/docs/reference/koin-android/workmanager/)
+* [Use String Resources in VM](https://www.youtube.com/watch?v=mB1Lej0aDus)

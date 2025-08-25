@@ -1,6 +1,7 @@
 package com.joshayoung.notemark.auth.presentation.registration
 
 import androidx.compose.foundation.text.input.TextFieldState
+import com.joshayoung.notemark.core.presentation.UiText
 
 data class RegistrationState(
     val username: TextFieldState = TextFieldState(),
@@ -12,7 +13,7 @@ data class RegistrationState(
     val errors: List<String>? = null,
     val usernameError: String = "",
     val emailError: String = "",
-    val passwordError: String = "",
+    val passwordError: UiText? = null,
     val passwordEqualityError: String = "",
     val passwordsNotEqual: Boolean = false,
     val invalidPassword: Boolean = true,
