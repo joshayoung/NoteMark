@@ -2,4 +2,7 @@
     <string name="app_name">NoteMark</string>
     <string name="have_account">Already have an account?</string>
     <string name="password_length_and_chars">Password must be at least 8 characters and include a number or symbol</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="invalid_email_provided">Invalid email provided</string>
+    <string name="username_length_and_char_error">Username must be between 3 and 20 characters</string>
 </resources>

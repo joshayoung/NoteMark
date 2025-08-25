@@ -61,7 +61,6 @@
 * Test Work Manager
 * Switch to encrypted Data Store
 * Work on Nav flash
-* Use UiText Properly for Errors
 
 ### Ktlint
 * `./gradlew ktlintCheck` - generate reports

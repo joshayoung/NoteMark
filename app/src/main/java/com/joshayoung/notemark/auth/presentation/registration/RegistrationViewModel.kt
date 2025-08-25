@@ -42,7 +42,14 @@ class RegistrationViewModel(
                 val usernameResult = noteMarkUseCases.validateUsernameUseCase(state.username.text.toString())
                 state =
                     state.copy(
-                        usernameError = if (usernameResult.invalidUsername) "Username must be between 3 and 20 characters" else "",
+                        usernameError =
+                            if (usernameResult.invalidUsername) {
+                                UiText.StringResource(
+                                    R.string.username_length_and_char_error,
+                                )
+                            } else {
+                                null
+                            },
                         invalidUsername = usernameResult.invalidUsername,
                     )
 
@@ -62,7 +69,7 @@ class RegistrationViewModel(
                 val emailResult = noteMarkUseCases.validateEmail(state.email.text.toString())
                 state =
                     state.copy(
-                        emailError = if (emailResult.inValidEmail) "Invalid email provided" else "",
+                        emailError = if (emailResult.inValidEmail) UiText.StringResource(R.string.invalid_email_provided) else null,
                         invalidEmail = emailResult.inValidEmail,
                     )
 
@@ -83,7 +90,7 @@ class RegistrationViewModel(
                 state.copy(
                     passwordError = if (passwordResult.invalidPassword) registrationError else null,
                     invalidPassword = passwordResult.invalidPassword,
-                    passwordEqualityError = if (passwordResult.isNotEqual) "Passwords do not match" else "",
+                    passwordEqualityError = if (passwordResult.isNotEqual) UiText.StringResource(R.string.passwords_do_not_match) else null,
                 )
 
             state =
