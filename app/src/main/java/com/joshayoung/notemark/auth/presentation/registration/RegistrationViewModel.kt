@@ -82,7 +82,7 @@ class RegistrationViewModel(
             state =
                 state.copy(
                     passwordError = if (passwordResult.invalidPassword) registrationError else "",
-                    invalidUsername = passwordResult.invalidPassword,
+                    invalidPassword = passwordResult.invalidPassword,
                     passwordEqualityError = if (passwordResult.isNotEqual) "Passwords do not match" else "",
                 )
 
