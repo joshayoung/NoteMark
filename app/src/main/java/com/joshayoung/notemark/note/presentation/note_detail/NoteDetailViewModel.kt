@@ -35,9 +35,6 @@ class NoteDetailViewModel(
 
     fun loadData() {
         val noteId = savedStateHandle.toRoute<Destination.NoteDetailScreen>().id
-//        var t = savedStateHandle.get<String>("noteId")
-//        var tt = savedStateHandle.get<String>("changedNote")
-//        var ttt = savedStateHandle.get<String>("bla")
         viewModelScope.launch {
             noteRepository.getNote(noteId)?.let { note ->
                 val noteUi = note.toNoteUi()

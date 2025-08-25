@@ -5,12 +5,12 @@ import com.joshayoung.notemark.auth.domain.models.LoginRequest
 import com.joshayoung.notemark.auth.domain.models.LoginResponse
 import com.joshayoung.notemark.auth.domain.models.RegistrationRequest
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
+import com.joshayoung.notemark.core.data.networking.DataError
+import com.joshayoung.notemark.core.data.networking.EmptyResult
+import com.joshayoung.notemark.core.data.networking.Result
+import com.joshayoung.notemark.core.data.networking.asEmptyDataResult
 import com.joshayoung.notemark.core.data.networking.catchErrors
 import com.joshayoung.notemark.core.domain.DataStorage
-import com.joshayoung.notemark.core.domain.util.DataError
-import com.joshayoung.notemark.core.domain.util.EmptyResult
-import com.joshayoung.notemark.core.domain.util.Result
-import com.joshayoung.notemark.core.domain.util.asEmptyDataResult
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.auth.AuthCircuitBreaker

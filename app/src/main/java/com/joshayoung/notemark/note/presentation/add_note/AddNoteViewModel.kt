@@ -8,7 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.joshayoung.notemark.core.domain.util.Result
+import com.joshayoung.notemark.core.data.networking.Result
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.core.presentation.DebounceNoteSave
@@ -76,10 +76,6 @@ class AddNoteViewModel(
     val autoSaveNote =
         debounceNoteSave.debounce(viewModelScope, 1000) { title: String, body: String ->
             viewModelScope.launch {
-//            if (title == initialTitle && body == initialBody) {
-//                return@launch
-//            }
-
                 val result = noteRepository.updateNote(currentNote, title, body)
                 if (result is Result.Success) {
                     currentNote = result.data

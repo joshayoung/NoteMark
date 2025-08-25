@@ -22,7 +22,7 @@ import com.joshayoung.notemark.note.presentation.settings.SettingsScreenRoot
 import com.joshayoung.notemark.note.presentation.start.GettingStartedScreenRoot
 
 @Composable
-fun NoteMarkNavigation(
+fun NavigationRoot(
     modifier: Modifier,
     viewModel: MainViewModel,
     navigator: Navigator,

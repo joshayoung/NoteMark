@@ -1,8 +1,8 @@
 package com.joshayoung.notemark.note.network
 
-import com.joshayoung.notemark.core.domain.util.DataError
-import com.joshayoung.notemark.core.domain.util.EmptyDataResult
-import com.joshayoung.notemark.core.domain.util.Result
+import com.joshayoung.notemark.core.data.networking.DataError
+import com.joshayoung.notemark.core.data.networking.EmptyDataResult
+import com.joshayoung.notemark.core.data.networking.Result
 import com.joshayoung.notemark.note.domain.models.Note
 
 interface RemoteDataSource {

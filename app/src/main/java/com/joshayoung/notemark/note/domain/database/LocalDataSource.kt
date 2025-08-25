@@ -1,7 +1,7 @@
 package com.joshayoung.notemark.note.domain.database
 
-import com.joshayoung.notemark.core.domain.util.DataError
-import com.joshayoung.notemark.core.domain.util.Result
+import com.joshayoung.notemark.core.data.networking.DataError
+import com.joshayoung.notemark.core.data.networking.Result
 import com.joshayoung.notemark.note.data.database.entity.NoteEntity
 import com.joshayoung.notemark.note.domain.models.Note
 import kotlinx.coroutines.flow.Flow

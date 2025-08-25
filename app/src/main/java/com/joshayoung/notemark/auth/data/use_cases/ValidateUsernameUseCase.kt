@@ -1,6 +1,6 @@
 package com.joshayoung.notemark.auth.data.use_cases
 
-import com.joshayoung.notemark.core.domain.ValidationState
+import com.joshayoung.notemark.core.domain.use_cases.ValidationState
 
 class ValidateUsernameUseCase {
     operator fun invoke(username: String): ValidationState {

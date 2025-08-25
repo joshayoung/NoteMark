@@ -1,7 +1,5 @@
 package com.joshayoung.notemark.core.data.networking
 
-import com.joshayoung.notemark.core.domain.util.DataError
-import com.joshayoung.notemark.core.domain.util.Result
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import kotlinx.coroutines.CancellationException

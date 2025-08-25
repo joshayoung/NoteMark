@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.PlusIcon
-import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
-import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
+import com.joshayoung.notemark.note.presentation.components.NoteMarkScaffold
+import com.joshayoung.notemark.note.presentation.components.NoteMarkToolbar
 import com.joshayoung.notemark.note.presentation.model.NoteUi
 import org.koin.androidx.compose.koinViewModel
 

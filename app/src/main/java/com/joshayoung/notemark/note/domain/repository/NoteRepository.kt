@@ -1,9 +1,9 @@
 package com.joshayoung.notemark.note.domain.repository
 
-import com.joshayoung.notemark.core.domain.util.DataError
-import com.joshayoung.notemark.core.domain.util.EmptyDataResult
-import com.joshayoung.notemark.core.domain.util.EmptyResult
-import com.joshayoung.notemark.core.domain.util.Result
+import com.joshayoung.notemark.core.data.networking.DataError
+import com.joshayoung.notemark.core.data.networking.EmptyDataResult
+import com.joshayoung.notemark.core.data.networking.EmptyResult
+import com.joshayoung.notemark.core.data.networking.Result
 import com.joshayoung.notemark.note.domain.models.Note
 import kotlinx.coroutines.flow.Flow
 

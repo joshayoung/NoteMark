@@ -1,10 +1,11 @@
-package com.joshayoung.notemark.core
+package com.joshayoung.notemark.core.data
+
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
 import android.net.NetworkCapabilities
 import androidx.core.content.getSystemService
+import com.joshayoung.notemark.core.domain.ConnectivityObserver
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -18,7 +19,7 @@ class AndroidConnectivityObserver(
         get() =
             callbackFlow {
                 val callback =
-                    object : NetworkCallback() {
+                    object : ConnectivityManager.NetworkCallback() {
                         override fun onCapabilitiesChanged(
                             network: Network,
                             networkCapabilities: NetworkCapabilities,

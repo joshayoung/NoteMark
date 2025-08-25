@@ -1,11 +1,11 @@
-package com.joshayoung.notemark.core.domain.util
+package com.joshayoung.notemark.core.data.networking
 
 sealed interface Result<out D, out E : Error> {
     data class Success<out D>(
         val data: D,
     ) : Result<D, Nothing>
 
-    data class Error<out E : com.joshayoung.notemark.core.domain.util.Error>(
+    data class Error<out E : com.joshayoung.notemark.core.data.networking.Error>(
         val error: E,
     ) : Result<Nothing, E>
 }

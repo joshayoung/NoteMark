@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.core.domain.util
+package com.joshayoung.notemark.core.data.networking
 
 sealed interface DataError : Error {
     enum class Network : DataError {

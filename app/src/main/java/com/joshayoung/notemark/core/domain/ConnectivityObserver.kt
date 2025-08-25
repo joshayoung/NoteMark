@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.core
+package com.joshayoung.notemark.core.domain
 
 import kotlinx.coroutines.flow.Flow
 

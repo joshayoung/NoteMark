@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.core.domain
+package com.joshayoung.notemark.core.domain.use_cases
 
 data class ValidationState(
     val isNotEqual: Boolean = false,

@@ -25,9 +25,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { viewModel.state.isCheckingSession }
-        enableEdgeToEdge(
-            // statusBarStyle = SystemBarStyle.dark(0)
-        )
+        enableEdgeToEdge()
 
         setContent {
             NoteMarkTheme {
@@ -43,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     // NOTE: There is a flash without this:
                     if (!viewModel.state.isCheckingSession) {
-                        NoteMarkNavigation(
+                        NavigationRoot(
                             navigator = navigator,
                             viewModel = viewModel,
                             modifier =

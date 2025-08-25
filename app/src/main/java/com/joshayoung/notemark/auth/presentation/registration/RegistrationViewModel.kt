@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.R
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
+import com.joshayoung.notemark.core.data.networking.Result
 import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
-import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.core.utils.textAsFlow

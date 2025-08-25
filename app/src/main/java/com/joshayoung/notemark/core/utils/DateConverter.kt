@@ -3,6 +3,7 @@ package com.joshayoung.notemark.core.utils
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
+// TODO: Move to mapper:
 fun getTimeStampForInsert(): String {
     val currentDateTime = ZonedDateTime.now(java.time.ZoneOffset.UTC)
     val formatter = DateTimeFormatter.ISO_INSTANT

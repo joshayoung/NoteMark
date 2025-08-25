@@ -2,7 +2,7 @@ package com.joshayoung.notemark.note.presentation.note_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joshayoung.notemark.core.ConnectivityObserver
+import com.joshayoung.notemark.core.domain.ConnectivityObserver
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.Destination.*

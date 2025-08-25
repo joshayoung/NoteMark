@@ -43,9 +43,9 @@ import com.joshayoung.notemark.core.design.theme.RefreshIcon
 import com.joshayoung.notemark.core.design.theme.RightArrowIcon
 import com.joshayoung.notemark.core.design.theme.TimeIcon
 import com.joshayoung.notemark.core.presentation.ObserveAsEvents
-import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
-import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
 import com.joshayoung.notemark.note.domain.models.SyncInterval
+import com.joshayoung.notemark.note.presentation.components.NoteMarkScaffold
+import com.joshayoung.notemark.note.presentation.components.NoteMarkToolbar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

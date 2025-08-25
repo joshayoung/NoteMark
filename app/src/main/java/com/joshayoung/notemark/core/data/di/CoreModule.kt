@@ -5,10 +5,10 @@ import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.joshayoung.notemark.core.AndroidConnectivityObserver
-import com.joshayoung.notemark.core.ConnectivityObserver
+import com.joshayoung.notemark.core.data.AndroidConnectivityObserver
 import com.joshayoung.notemark.core.data.DataStorageImpl
 import com.joshayoung.notemark.core.data.networking.HttpClientProvider
+import com.joshayoung.notemark.core.domain.ConnectivityObserver
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.DefaultNavigator

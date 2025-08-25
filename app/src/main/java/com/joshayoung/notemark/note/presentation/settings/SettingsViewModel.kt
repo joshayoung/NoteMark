@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joshayoung.notemark.core.ConnectivityObserver
+import com.joshayoung.notemark.core.domain.ConnectivityObserver
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.Navigator
@@ -128,7 +128,7 @@ class SettingsViewModel(
         }
     }
 
-    // Add Use Case:
+    // TODO: Add Use Case:
     private fun clearLocalData() {
         applicationScope.launch {
             syncNoteWorkerScheduler.cancelSyncs()

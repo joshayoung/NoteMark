@@ -1,11 +1,11 @@
 package com.joshayoung.notemark.note.data.database
 
+import com.joshayoung.notemark.core.data.networking.DataError
+import com.joshayoung.notemark.core.data.networking.Result
 import com.joshayoung.notemark.core.domain.DataStorage
-import com.joshayoung.notemark.core.domain.util.DataError
-import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.note.data.database.dao.SyncDao
+import com.joshayoung.notemark.note.data.database.entity.SyncEntity
 import com.joshayoung.notemark.note.data.database.entity.SyncOperation
-import com.joshayoung.notemark.note.data.database.entity.SyncRecord
 import com.joshayoung.notemark.note.data.mappers.toNoteEntity
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.models.Note
@@ -32,8 +32,8 @@ class RoomSyncLocalDataSource(
         }
 
         val noteEntity = note.toNoteEntity()
-        val syncRecord =
-            SyncRecord(
+        val syncEntity =
+            SyncEntity(
                 userId = user,
                 noteId = note.remoteId,
                 operation = operation,
@@ -51,13 +51,13 @@ class RoomSyncLocalDataSource(
             // This should not be the remote id here:
             syncDao.deleteAllSyncsForNoteId(note.remoteId.toString(), SyncOperation.UPDATE.name)
         }
-        syncDao.upsertSync(syncRecord)
+        syncDao.upsertSync(syncEntity)
 
         // TODO: Re-evaluate this return value
         return Result.Success(Unit)
     }
 
-    override fun getAllSyncs(): Flow<List<SyncRecord>> {
+    override fun getAllSyncs(): Flow<List<SyncEntity>> {
         val syncs = syncDao.getAllSyncs()
 
         return syncs
@@ -68,7 +68,7 @@ class RoomSyncLocalDataSource(
             itemList.isNotEmpty()
         }
 
-    override suspend fun getSync(note: Note): SyncRecord? {
+    override suspend fun getSync(note: Note): SyncEntity? {
         val sync = syncDao.getSyncById(note.id)
 
         return sync

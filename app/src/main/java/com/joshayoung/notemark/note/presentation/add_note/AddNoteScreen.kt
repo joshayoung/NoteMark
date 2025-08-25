@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.joshayoung.notemark.core.design.theme.CloseIcon
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
-import com.joshayoung.notemark.core.presentation.components.DashedDivider
-import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
+import com.joshayoung.notemark.note.presentation.components.DashedDivider
+import com.joshayoung.notemark.note.presentation.components.NoteMarkScaffold
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

@@ -46,6 +46,14 @@
 
     echo "Ktlint check passed!"
      ```
+  
+### EdgeToEdge
+* Use this: `statusBarStyle = SystemBarStyle.dark(0)` to set the status bar icons to light.
+* ```kotlin
+          enableEdgeToEdge(
+             statusBarStyle = SystemBarStyle.dark(0)
+        )
+     ```
 
 ### To Do
 * Rename remoteId to something more generic because this value is use locally as well.

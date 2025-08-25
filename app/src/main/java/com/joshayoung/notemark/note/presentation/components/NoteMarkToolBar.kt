@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.core.presentation.components
+package com.joshayoung.notemark.note.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

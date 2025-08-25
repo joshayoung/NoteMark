@@ -1,7 +1,7 @@
 package com.joshayoung.notemark.auth.data.use_cases
 
 import com.joshayoung.notemark.auth.domain.use_cases.PatternValidator
-import com.joshayoung.notemark.core.domain.ValidationState
+import com.joshayoung.notemark.core.domain.use_cases.ValidationState
 
 class ValidateEmailUseCase(
     private val patternValidator: PatternValidator,

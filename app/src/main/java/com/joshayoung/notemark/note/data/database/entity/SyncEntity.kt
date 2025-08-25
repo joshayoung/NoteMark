@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "sync_queue")
-data class SyncRecord(
+data class SyncEntity(
     @PrimaryKey val id: Long? = null,
     val userId: String,
     val noteId: String?,

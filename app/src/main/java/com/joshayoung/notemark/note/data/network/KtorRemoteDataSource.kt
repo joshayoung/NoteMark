@@ -1,12 +1,12 @@
 package com.joshayoung.notemark.note.data.network
 
 import com.joshayoung.notemark.BuildConfig
+import com.joshayoung.notemark.core.data.networking.DataError
+import com.joshayoung.notemark.core.data.networking.EmptyDataResult
+import com.joshayoung.notemark.core.data.networking.Result
+import com.joshayoung.notemark.core.data.networking.asEmptyDataResult
 import com.joshayoung.notemark.core.data.networking.catchErrors
-import com.joshayoung.notemark.core.domain.util.DataError
-import com.joshayoung.notemark.core.domain.util.EmptyDataResult
-import com.joshayoung.notemark.core.domain.util.Result
-import com.joshayoung.notemark.core.domain.util.asEmptyDataResult
-import com.joshayoung.notemark.core.domain.util.map
+import com.joshayoung.notemark.core.data.networking.map
 import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.data.mappers.toNoteDto
 import com.joshayoung.notemark.note.domain.models.Note

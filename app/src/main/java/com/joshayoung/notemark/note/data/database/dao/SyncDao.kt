@@ -3,7 +3,7 @@ package com.joshayoung.notemark.note.data.database.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.joshayoung.notemark.note.data.database.entity.SyncRecord
+import com.joshayoung.notemark.note.data.database.entity.SyncEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -12,16 +12,16 @@ interface SyncDao {
     suspend fun deleteAllSyncs()
 
     @Upsert
-    suspend fun upsertSync(syncRecord: SyncRecord): Long
+    suspend fun upsertSync(syncEntity: SyncEntity): Long
 
     @Query("SELECT * FROM sync_queue")
-    fun getAllSyncs(): Flow<List<SyncRecord>>
+    fun getAllSyncs(): Flow<List<SyncEntity>>
 
     @Query("SELECT * FROM sync_queue WHERE noteId = :id")
-    fun getAllByNoteId(id: String): List<SyncRecord>
+    fun getAllByNoteId(id: String): List<SyncEntity>
 
     @Query("SELECT * FROM sync_queue WHERE id=:id")
-    suspend fun getSyncById(id: Long?): SyncRecord?
+    suspend fun getSyncById(id: Long?): SyncEntity?
 
     @Query("DELETE from sync_queue WHERE id = :id")
     suspend fun deleteSync(id: Long?): Int

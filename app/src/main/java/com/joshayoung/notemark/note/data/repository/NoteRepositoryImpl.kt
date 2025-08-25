@@ -2,13 +2,13 @@ package com.joshayoung.notemark.note.data.repository
 
 import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.auth.domain.models.LogoutRequest
+import com.joshayoung.notemark.core.data.networking.DataError
+import com.joshayoung.notemark.core.data.networking.EmptyDataResult
+import com.joshayoung.notemark.core.data.networking.EmptyResult
+import com.joshayoung.notemark.core.data.networking.Result
+import com.joshayoung.notemark.core.data.networking.asEmptyDataResult
 import com.joshayoung.notemark.core.data.networking.catchErrors
 import com.joshayoung.notemark.core.domain.DataStorage
-import com.joshayoung.notemark.core.domain.util.DataError
-import com.joshayoung.notemark.core.domain.util.EmptyDataResult
-import com.joshayoung.notemark.core.domain.util.EmptyResult
-import com.joshayoung.notemark.core.domain.util.Result
-import com.joshayoung.notemark.core.domain.util.asEmptyDataResult
 import com.joshayoung.notemark.core.utils.getTimeStampForInsert
 import com.joshayoung.notemark.note.data.database.entity.SyncOperation
 import com.joshayoung.notemark.note.data.mappers.toNote
@@ -53,9 +53,6 @@ class NoteRepositoryImpl(
         val localResult = localDataSource.upsertNote(note)
 
         if (localResult is Result.Success) {
-            // Add to Sync Queue
-//            localSyncDataSource.addOrUpdateQueue(note, SyncOperation.CREATE)
-
             return Result.Success(data = localResult.data.toNote())
         } else {
             // NOTE: This might not be correct:
