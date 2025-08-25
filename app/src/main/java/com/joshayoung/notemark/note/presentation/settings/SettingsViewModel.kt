@@ -5,13 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joshayoung.notemark.auth.data.repository.AuthRepositoryImpl
 import com.joshayoung.notemark.core.ConnectivityObserver
 import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.SyncNoteWorkerScheduler
-import com.joshayoung.notemark.note.data.use_cases.PullRemoteNotesUseCase
-import com.joshayoung.notemark.note.data.use_cases.SyncNotesUseCase
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.database.LocalSyncDataSource
 import com.joshayoung.notemark.note.domain.models.SyncInterval
@@ -24,15 +22,13 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 class SettingsViewModel(
-    val authRepositoryImpl: AuthRepositoryImpl,
     val dataStorage: DataStorage,
     val connectivityObserver: ConnectivityObserver,
+    val noteMarkUseCases: NoteMarkUseCases,
     val localDataSource: LocalDataSource,
     val localSyncDataSource: LocalSyncDataSource,
     val navigator: Navigator,
-    val syncNotesUseCase: SyncNotesUseCase,
-    val pullRemoteNotesUseCase: PullRemoteNotesUseCase,
-    val syncNoteWorkerScheduler: SyncNoteWorkerScheduler,
+    private val syncNoteWorkerScheduler: SyncNoteWorkerScheduler,
     val noteRepository: NoteRepository,
     val applicationScope: CoroutineScope,
 ) : ViewModel() {
@@ -124,8 +120,8 @@ class SettingsViewModel(
             SettingsAction.Sync -> {
                 viewModelScope.launch {
                     state = state.copy(isSyncing = true, displayLogoutPrompt = false)
-                    syncNotesUseCase.execute()
-                    pullRemoteNotesUseCase.execute()
+                    noteMarkUseCases.syncNotesUseCase.execute()
+                    noteMarkUseCases.pullRemoteNotesUseCase.execute()
                     state = state.copy(isSyncing = false)
                 }
             }

@@ -10,6 +10,7 @@ import com.joshayoung.notemark.core.ConnectivityObserver
 import com.joshayoung.notemark.core.data.DataStorageImpl
 import com.joshayoung.notemark.core.data.networking.HttpClientProvider
 import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.DefaultNavigator
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
@@ -44,4 +45,6 @@ val coreModule =
         }
 
         singleOf(::DataStorageImpl).bind<DataStorage>()
+
+        singleOf(::NoteMarkUseCases)
     }

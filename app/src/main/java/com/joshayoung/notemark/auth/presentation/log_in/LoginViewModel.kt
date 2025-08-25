@@ -7,12 +7,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joshayoung.notemark.auth.data.use_cases.ValidateEmail
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
+import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
-import com.joshayoung.notemark.note.data.use_cases.PullRemoteNotesUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -22,9 +21,8 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
-    private val validateEmail: ValidateEmail,
     private val navigator: Navigator,
-    private val pullRemoteNotesUseCase: PullRemoteNotesUseCase,
+    private val noteMarkUseCases: NoteMarkUseCases,
 ) : ViewModel() {
     var state by mutableStateOf(LoginState())
         private set
@@ -58,7 +56,7 @@ class LoginViewModel(
 
                         if (result is Result.Success) {
                             state = state.copy(isLoggingIn = false)
-                            pullRemoteNotesUseCase.execute()
+                            noteMarkUseCases.pullRemoteNotesUseCase.execute()
 
                             eventChannel.send(LoginEvent.Success)
                         } else {
@@ -100,7 +98,7 @@ class LoginViewModel(
         password: CharSequence,
     ): Boolean {
         val bothFilled = username != "" && password != ""
-        val validEmail = validateEmail.invoke(username.toString())
+        val validEmail = noteMarkUseCases.validateEmail.invoke(username.toString())
 
         return bothFilled && !validEmail.inValidEmail
     }

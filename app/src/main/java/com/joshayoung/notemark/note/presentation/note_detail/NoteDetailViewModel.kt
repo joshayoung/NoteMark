@@ -9,6 +9,7 @@ import com.joshayoung.notemark.core.navigation.Destination.AddNoteScreen
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.presentation.mappers.toNoteUi
+import com.joshayoung.notemark.note.presentation.model.NoteViewMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart

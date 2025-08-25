@@ -6,10 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.R
-import com.joshayoung.notemark.auth.data.use_cases.ValidateEmail
-import com.joshayoung.notemark.auth.data.use_cases.ValidatePassword
-import com.joshayoung.notemark.auth.data.use_cases.ValidateUsername
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
+import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.domain.util.Result
 import com.joshayoung.notemark.core.navigation.Destination
 import com.joshayoung.notemark.core.navigation.Navigator
@@ -23,9 +21,7 @@ import kotlinx.coroutines.launch
 
 class RegistrationViewModel(
     private val authRepository: AuthRepository,
-    private val validateUsername: ValidateUsername,
-    private val validatePassword: ValidatePassword,
-    private val validateEmail: ValidateEmail,
+    private val noteMarkUseCases: NoteMarkUseCases,
     private val navigator: Navigator,
 ) : ViewModel() {
     var state by mutableStateOf(RegistrationState())
@@ -42,7 +38,7 @@ class RegistrationViewModel(
                     return@onEach
                 }
 
-                val usernameResult = validateUsername(state.username.text.toString())
+                val usernameResult = noteMarkUseCases.validateUsername(state.username.text.toString())
                 state =
                     state.copy(
                         usernameError = if (usernameResult.invalidUsername) "Username must be between 3 and 20 characters" else "",
@@ -62,7 +58,7 @@ class RegistrationViewModel(
                     return@onEach
                 }
 
-                val emailResult = validateEmail(state.email.text.toString())
+                val emailResult = noteMarkUseCases.validateEmail(state.email.text.toString())
                 state =
                     state.copy(
                         emailError = if (emailResult.inValidEmail) "Invalid email provided" else "",
@@ -79,7 +75,7 @@ class RegistrationViewModel(
                 return@combine
             }
 
-            val passwordResult = validatePassword(password.toString(), repeat.toString())
+            val passwordResult = noteMarkUseCases.validatePassword(password.toString(), repeat.toString())
 
             // TODO: Is this right?
             var registrationError = R.string.password_length_and_chars.toString()

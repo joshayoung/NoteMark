@@ -1,4 +1,4 @@
-package com.joshayoung.notemark.note.presentation.note_detail
+package com.joshayoung.notemark.note.presentation.model
 
 enum class NoteViewMode {
     EDIT,

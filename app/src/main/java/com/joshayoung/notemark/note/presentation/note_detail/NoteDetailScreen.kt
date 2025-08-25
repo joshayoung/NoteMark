@@ -41,6 +41,7 @@ import com.joshayoung.notemark.core.design.theme.EditIcon
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.presentation.components.NoteMarkScaffold
 import com.joshayoung.notemark.core.presentation.components.NoteMarkToolbar
+import com.joshayoung.notemark.note.presentation.model.NoteViewMode
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 

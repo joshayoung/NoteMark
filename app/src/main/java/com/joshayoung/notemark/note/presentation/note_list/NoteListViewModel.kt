@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshayoung.notemark.core.ConnectivityObserver
 import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import com.joshayoung.notemark.core.navigation.Destination.*
 import com.joshayoung.notemark.core.navigation.Navigator
 import com.joshayoung.notemark.note.data.mappers.toNote
-import com.joshayoung.notemark.note.data.use_cases.SyncNotesUseCase
 import com.joshayoung.notemark.note.domain.database.LocalDataSource
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.presentation.mappers.toNoteUi
@@ -25,7 +25,7 @@ class NoteListViewModel(
     private val dataStorage: DataStorage,
     private val connectivityObserver: ConnectivityObserver,
     private val localDataSource: LocalDataSource,
-    private val syncNotesUseCase: SyncNotesUseCase,
+    private val noteMarkUseCases: NoteMarkUseCases,
     private val navigator: Navigator,
 ) : ViewModel() {
     private var _state = MutableStateFlow(NoteListState(notes = emptyList()))
@@ -88,7 +88,7 @@ class NoteListViewModel(
 
             is NoteListAction.GoToDetail -> {
                 viewModelScope.launch {
-                    syncNotesUseCase.execute()
+                    noteMarkUseCases.syncNotesUseCase.execute()
                     navigator.navigate(
                         NoteDetailScreen(id = action.id),
                     )
