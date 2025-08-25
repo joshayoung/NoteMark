@@ -13,7 +13,6 @@ import com.joshayoung.notemark.note.data.SyncNoteWorkerScheduler
 import com.joshayoung.notemark.note.domain.models.SyncInterval
 import com.joshayoung.notemark.note.domain.repository.NoteRepository
 import com.joshayoung.notemark.note.domain.repository.SyncRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -28,7 +27,6 @@ class SettingsViewModel(
     private val syncNoteWorkerScheduler: SyncNoteWorkerScheduler,
     val noteRepository: NoteRepository,
     val syncRepository: SyncRepository,
-    val applicationScope: CoroutineScope,
 ) : ViewModel() {
     var state by mutableStateOf(SettingsState())
         private set
@@ -126,12 +124,7 @@ class SettingsViewModel(
         }
     }
 
-    // TODO: Add Use Case:
     private fun clearLocalData() {
-        applicationScope.launch {
-            syncNoteWorkerScheduler.cancelSyncs()
-            syncRepository.clearSyncQueue()
-            noteRepository.removeAllNotes()
-        }
+        noteMarkUseCases.clearLocalDataUseCase()
     }
 }

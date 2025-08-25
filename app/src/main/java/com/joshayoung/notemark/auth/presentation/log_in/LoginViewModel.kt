@@ -56,7 +56,9 @@ class LoginViewModel(
 
                         if (result is Result.Success) {
                             state = state.copy(isLoggingIn = false)
+                            noteMarkUseCases.setUserIdUseCase()
                             noteMarkUseCases.pullRemoteNotesUseCase()
+                            noteMarkUseCases.saveAuthDataUseCase(result.data)
 
                             eventChannel.send(LoginEvent.Success)
                         } else {

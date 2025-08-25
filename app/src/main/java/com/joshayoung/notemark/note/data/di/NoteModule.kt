@@ -9,8 +9,10 @@ import com.joshayoung.notemark.note.data.database.SyncDatabase
 import com.joshayoung.notemark.note.data.network.KtorRemoteDataSource
 import com.joshayoung.notemark.note.data.repository.NoteRepositoryImpl
 import com.joshayoung.notemark.note.data.repository.SyncRepositoryImpl
-import com.joshayoung.notemark.note.data.use_cases.LoggedInUserAbbreviation
+import com.joshayoung.notemark.note.data.use_cases.ClearLocalDataUseCase
+import com.joshayoung.notemark.note.data.use_cases.LoggedInUserAbbreviationUseCase
 import com.joshayoung.notemark.note.data.use_cases.PullRemoteNotesUseCase
+import com.joshayoung.notemark.note.data.use_cases.SetUserIdUseCase
 import com.joshayoung.notemark.note.data.use_cases.SyncNotesUseCase
 import com.joshayoung.notemark.note.data.workers.DataSyncWorker
 import com.joshayoung.notemark.note.domain.SyncNotesScheduler
@@ -64,7 +66,9 @@ var noteModule =
         singleOf(::KtorRemoteDataSource).bind<RemoteDataSource>()
         singleOf(::SyncNotesUseCase)
         singleOf(::PullRemoteNotesUseCase)
-        singleOf(::LoggedInUserAbbreviation)
+        singleOf(::LoggedInUserAbbreviationUseCase)
+        singleOf(::SetUserIdUseCase)
+        singleOf(::ClearLocalDataUseCase)
 
         // worker:
         workerOf(::DataSyncWorker)

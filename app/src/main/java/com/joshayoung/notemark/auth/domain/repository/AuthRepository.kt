@@ -1,8 +1,9 @@
 package com.joshayoung.notemark.auth.domain.repository
 
+import com.joshayoung.notemark.auth.domain.models.LoginResponse
 import com.joshayoung.notemark.core.data.networking.DataError
-import com.joshayoung.notemark.core.data.networking.EmptyDataResult
 import com.joshayoung.notemark.core.data.networking.EmptyResult
+import com.joshayoung.notemark.core.data.networking.Result
 
 interface AuthRepository {
     suspend fun register(
@@ -14,5 +15,5 @@ interface AuthRepository {
     suspend fun login(
         email: String,
         password: String,
-    ): EmptyDataResult<DataError.Network>
+    ): Result<LoginResponse, DataError>
 }

@@ -8,9 +8,9 @@ import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.core.data.networking.DataError
 import com.joshayoung.notemark.core.data.networking.EmptyResult
 import com.joshayoung.notemark.core.data.networking.Result
-import com.joshayoung.notemark.core.data.networking.asEmptyDataResult
 import com.joshayoung.notemark.core.data.networking.catchErrors
 import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.auth.AuthCircuitBreaker
@@ -18,11 +18,11 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
-import java.util.UUID
 
 class AuthRepositoryImpl(
     private val client: HttpClient,
     private val dataStorage: DataStorage,
+    private val noteMarkUseCases: NoteMarkUseCases,
 ) : AuthRepository {
     override suspend fun register(
         username: String,
@@ -36,10 +36,11 @@ class AuthRepositoryImpl(
             }
         }
 
+    // TODO: Update return value to return data on success
     override suspend fun login(
         email: String,
         password: String,
-    ): EmptyResult<DataError.Network> {
+    ): Result<LoginResponse, DataError> {
         val response =
             catchErrors<HttpResponse> {
                 client.post {
@@ -53,22 +54,11 @@ class AuthRepositoryImpl(
             // TODO: Build an extension method to do this for you:
             val data = response.data.body<LoginResponse>()
 
+            return Result.Success(data = data)
             // TODO: Use Case
-            dataStorage.saveAuthData(
-                LoginResponse(
-                    accessToken = data.accessToken,
-                    refreshToken = data.refreshToken,
-                    username = data.username,
-                ),
-            )
-
-            // TODO: Use Case?
-            val user = dataStorage.getUserid()
-            if (user == null) {
-                dataStorage.saveUserId(UUID.randomUUID().toString())
-            }
         }
 
-        return response.asEmptyDataResult()
+        // TODO: Correct this error response:
+        return Result.Error(error = DataError.Network.UNKNOWN)
     }
 }

@@ -46,7 +46,7 @@ class NoteListViewModel(
 
     init {
         viewModelScope.launch {
-            val abbreviation = noteMarkUseCases.LoggedInUserAbbreviation()
+            val abbreviation = noteMarkUseCases.loggedInUserAbbreviationUseCase()
             _state.update {
                 it.copy(
                     userAbbreviation = abbreviation,

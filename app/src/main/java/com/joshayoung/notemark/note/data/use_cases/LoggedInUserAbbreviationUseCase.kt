@@ -3,7 +3,7 @@ package com.joshayoung.notemark.note.data.use_cases
 import com.joshayoung.notemark.core.domain.DataStorage
 import kotlinx.coroutines.flow.first
 
-class LoggedInUserAbbreviation(
+class LoggedInUserAbbreviationUseCase(
     private val dataStorage: DataStorage,
 ) {
     suspend operator fun invoke(): String {
