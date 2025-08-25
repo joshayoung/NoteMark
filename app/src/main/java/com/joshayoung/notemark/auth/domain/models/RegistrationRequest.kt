@@ -3,6 +3,8 @@ package com.joshayoung.notemark.auth.domain.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RefreshToken(
-    val refreshToken: String,
+data class RegistrationRequest(
+    val username: String,
+    val email: String,
+    val password: String,
 )

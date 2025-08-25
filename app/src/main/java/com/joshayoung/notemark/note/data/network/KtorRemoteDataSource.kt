@@ -10,7 +10,7 @@ import com.joshayoung.notemark.core.domain.util.map
 import com.joshayoung.notemark.note.data.mappers.toNote
 import com.joshayoung.notemark.note.data.mappers.toNoteDto
 import com.joshayoung.notemark.note.domain.models.Note
-import com.joshayoung.notemark.note.domain.models.NotesData
+import com.joshayoung.notemark.note.domain.models.NotesResponse
 import com.joshayoung.notemark.note.network.NoteDto
 import com.joshayoung.notemark.note.network.RemoteDataSource
 import io.ktor.client.HttpClient
@@ -41,7 +41,7 @@ class KtorRemoteDataSource(
 
     override suspend fun getNotes(): Result<List<Note>, DataError.Network> {
         val response =
-            catchErrors<NotesData> {
+            catchErrors<NotesResponse> {
                 client.get {
                     url(BuildConfig.BASE_URL + BuildConfig.NOTE_PATH)
                 }

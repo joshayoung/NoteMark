@@ -2,7 +2,7 @@ package com.joshayoung.notemark.core.data.networking
 
 import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.auth.domain.models.LoginResponse
-import com.joshayoung.notemark.auth.domain.models.RefreshToken
+import com.joshayoung.notemark.auth.domain.models.RefreshRequest
 import com.joshayoung.notemark.core.domain.DataStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -58,7 +58,7 @@ class HttpClientProvider(
                         val response =
                             client.post {
                                 url(BuildConfig.BASE_URL + BuildConfig.REFRESH_PATH)
-                                setBody(RefreshToken(refreshToken = tokenPair.refreshToken))
+                                setBody(RefreshRequest(refreshToken = tokenPair.refreshToken))
                                 markAsRefreshTokenRequest()
 
                                 // To invalidate token after 30 seconds:

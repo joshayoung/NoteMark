@@ -1,7 +1,7 @@
 package com.joshayoung.notemark.note.data.repository
 
 import com.joshayoung.notemark.BuildConfig
-import com.joshayoung.notemark.auth.domain.models.Logout
+import com.joshayoung.notemark.auth.domain.models.LogoutRequest
 import com.joshayoung.notemark.core.data.networking.catchErrors
 import com.joshayoung.notemark.core.domain.DataStorage
 import com.joshayoung.notemark.core.domain.util.DataError
@@ -119,7 +119,7 @@ class NoteRepositoryImpl(
                 catchErrors<HttpResponse> {
                     client.post {
                         url(BuildConfig.BASE_URL + BuildConfig.LOGOUT_PATH)
-                        setBody(Logout(refreshToken = refreshToken))
+                        setBody(LogoutRequest(refreshToken = refreshToken))
                     }
                 }
 

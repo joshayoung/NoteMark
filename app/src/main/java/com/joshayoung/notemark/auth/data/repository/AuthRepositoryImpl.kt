@@ -1,9 +1,9 @@
 package com.joshayoung.notemark.auth.data.repository
 
 import com.joshayoung.notemark.BuildConfig
-import com.joshayoung.notemark.auth.domain.models.Login
+import com.joshayoung.notemark.auth.domain.models.LoginRequest
 import com.joshayoung.notemark.auth.domain.models.LoginResponse
-import com.joshayoung.notemark.auth.domain.models.Registration
+import com.joshayoung.notemark.auth.domain.models.RegistrationRequest
 import com.joshayoung.notemark.auth.domain.repository.AuthRepository
 import com.joshayoung.notemark.core.data.networking.catchErrors
 import com.joshayoung.notemark.core.domain.DataStorage
@@ -32,7 +32,7 @@ class AuthRepositoryImpl(
         catchErrors {
             client.post {
                 url(BuildConfig.BASE_URL + BuildConfig.REGISTER_PATH)
-                setBody(Registration(username = username, email = email, password = password))
+                setBody(RegistrationRequest(username = username, email = email, password = password))
             }
         }
 
@@ -44,7 +44,7 @@ class AuthRepositoryImpl(
             catchErrors<HttpResponse> {
                 client.post {
                     url(BuildConfig.BASE_URL + BuildConfig.LOGIN_PATH)
-                    setBody(Login(email = email, password = password))
+                    setBody(LoginRequest(email = email, password = password))
                     attributes.put(AuthCircuitBreaker, Unit)
                 }
             }
