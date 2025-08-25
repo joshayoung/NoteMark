@@ -14,7 +14,7 @@ class SyncNotesUseCase(
     private val remoteDataSource: KtorRemoteDataSource,
     private val localSyncDataSource: LocalSyncDataSource,
 ) {
-    suspend fun execute() {
+    suspend operator fun invoke() {
         // listen to the getNotes flow instead of having to call this 3 times:
         var remoteNotes = remoteDataSource.getNotes()
         var serverNotes = emptyList<Note>()

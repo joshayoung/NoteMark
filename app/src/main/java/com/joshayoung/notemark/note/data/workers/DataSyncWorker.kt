@@ -25,8 +25,8 @@ class DataSyncWorker(
 
         try {
             // TODO: Return a Result for these use cases?
-            syncNotesUseCase.execute()
-            pullRemoteNotesUseCase.execute()
+            syncNotesUseCase()
+            pullRemoteNotesUseCase()
 
             return Result.success()
         } catch (e: Exception) {

@@ -8,7 +8,7 @@ class PullRemoteNotesUseCase(
     private val remoteDataSource: KtorRemoteDataSource,
     private val localDataSource: LocalDataSource,
 ) {
-    suspend fun execute() {
+    suspend operator fun invoke() {
         val remoteNotes = remoteDataSource.getNotes()
         if (remoteNotes is Result.Success) {
             val notes = remoteNotes.data

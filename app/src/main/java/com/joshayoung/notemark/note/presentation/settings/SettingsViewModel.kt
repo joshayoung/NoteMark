@@ -120,8 +120,8 @@ class SettingsViewModel(
             SettingsAction.Sync -> {
                 viewModelScope.launch {
                     state = state.copy(isSyncing = true, displayLogoutPrompt = false)
-                    noteMarkUseCases.syncNotesUseCase.execute()
-                    noteMarkUseCases.pullRemoteNotesUseCase.execute()
+                    noteMarkUseCases.syncNotesUseCase()
+                    noteMarkUseCases.pullRemoteNotesUseCase()
                     state = state.copy(isSyncing = false)
                 }
             }

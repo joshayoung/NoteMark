@@ -88,7 +88,7 @@ class NoteListViewModel(
 
             is NoteListAction.GoToDetail -> {
                 viewModelScope.launch {
-                    noteMarkUseCases.syncNotesUseCase.execute()
+                    noteMarkUseCases.syncNotesUseCase()
                     navigator.navigate(
                         NoteDetailScreen(id = action.id),
                     )
