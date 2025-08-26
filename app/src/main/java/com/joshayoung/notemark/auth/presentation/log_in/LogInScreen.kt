@@ -4,12 +4,16 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -20,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
@@ -86,15 +89,17 @@ fun LoginScreen(
 
     when (deviceConfiguration) {
         DeviceConfiguration.MOBILE_PORTRAIT -> {
-            Column(
+            Box(
                 modifier =
                     Modifier
-                        .background(color = MaterialTheme.colorScheme.background)
-                        .padding(top = 60.dp),
+                        .fillMaxSize()
+                        .background(color = MaterialTheme.colorScheme.background),
             ) {
                 Column(
                     modifier =
                         loginModifier
+                            .padding(top = 60.dp)
+                            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                             .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
                             .padding(horizontal = 16.dp, vertical = 24.dp),
                 ) {
@@ -116,19 +121,20 @@ fun LoginScreen(
             }
         }
         DeviceConfiguration.MOBILE_LANDSCAPE -> {
-            Row(
+            Box(
                 modifier =
                     Modifier
-                        .background(color = MaterialTheme.colorScheme.background)
-                        .padding(top = 20.dp),
+                        .background(color = MaterialTheme.colorScheme.background),
             ) {
                 Row(
                     modifier =
                         Modifier
+                            .padding(top = 60.dp)
                             .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                            .background(Color.White)
-                            .fillMaxSize()
-                            .padding(20.dp),
+                            .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
+                            .padding(40.dp)
+                            .windowInsetsPadding(WindowInsets.safeDrawing)
+                            .fillMaxSize(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     LoginHeader(

@@ -83,24 +83,18 @@ fun RegistrationScreen(
             Column(
                 modifier =
                     Modifier
-                        .background(color = MaterialTheme.colorScheme.background)
-                        .padding(top = 60.dp),
+                        .fillMaxHeight()
+                        .padding(top = 60.dp)
+                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                        .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
+                        .padding(horizontal = 20.dp),
             ) {
-                Column(
-                    modifier =
-                        Modifier
-                            .fillMaxHeight()
-                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                            .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
-                            .padding(horizontal = 20.dp),
-                ) {
-                    Header()
-                    Form(
-                        errorMessage,
-                        state,
-                        onnAction,
-                    )
-                }
+                Header()
+                Form(
+                    errorMessage,
+                    state,
+                    onnAction,
+                )
             }
         }
         DeviceConfiguration.MOBILE_LANDSCAPE -> {
