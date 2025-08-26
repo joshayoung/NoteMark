@@ -97,3 +97,4 @@
 * [Theming](https://www.youtube.com/watch?v=SH7HzLUjyBs)
 * [Setup WorkManager with Koin](https://insert-koin.io/docs/reference/koin-android/workmanager/)
 * [Use String Resources in VM](https://www.youtube.com/watch?v=mB1Lej0aDus)
+ [How to Encrypt DataStore on Android - Full Guide](https://www.youtube.com/watch?v=XMaQNN9YpKk)
