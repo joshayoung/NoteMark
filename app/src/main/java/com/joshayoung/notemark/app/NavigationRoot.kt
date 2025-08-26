@@ -2,7 +2,6 @@ package com.joshayoung.notemark.app
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,7 +22,6 @@ import com.joshayoung.notemark.note.presentation.start.GettingStartedScreenRoot
 
 @Composable
 fun NavigationRoot(
-    modifier: Modifier,
     viewModel: MainViewModel,
     navigator: Navigator,
     navController: NavHostController,
@@ -48,7 +46,6 @@ fun NavigationRoot(
     }
 
     SetNavigationGraph(
-        modifier = modifier,
         viewModel = viewModel,
         navController = navController,
         isAuthenticated = isAuthenticated,
@@ -57,7 +54,6 @@ fun NavigationRoot(
 
 @Composable
 fun SetNavigationGraph(
-    modifier: Modifier,
     viewModel: MainViewModel,
     navController: NavHostController,
     isAuthenticated: Boolean,
@@ -83,7 +79,6 @@ fun SetNavigationGraph(
     }
 
     NavHost(
-        modifier = modifier,
         navController = navController,
         startDestination = if (isAuthenticated) Destination.NoteGraph else Destination.AuthGraph,
     ) {
