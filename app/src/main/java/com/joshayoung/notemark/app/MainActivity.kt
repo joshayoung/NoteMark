@@ -33,9 +33,9 @@ class MainActivity : ComponentActivity() {
                 val navigator = koinInject<Navigator>()
 
                 Surface(
-                    color = Color(0xFFdfeafe),
+                    color = Color.Red,
                     modifier =
-                        Modifier.Companion
+                        Modifier
                             .fillMaxSize()
                             .windowInsetsPadding(WindowInsets.Companion.safeDrawing),
                 ) {
@@ -44,9 +44,7 @@ class MainActivity : ComponentActivity() {
                         NavigationRoot(
                             navigator = navigator,
                             viewModel = viewModel,
-                            modifier =
-                                Modifier.Companion
-                                    .fillMaxSize(),
+                            modifier = Modifier.fillMaxSize(),
                             navController = navController,
                             isAuthenticated = viewModel.state.isAuthenticated,
                         )
