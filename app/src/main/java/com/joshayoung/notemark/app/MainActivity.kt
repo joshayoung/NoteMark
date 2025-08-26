@@ -26,7 +26,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { viewModel.state.isCheckingSession }
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+//            statusBarStyle = SystemBarStyle.dark(0)
+        )
 
         setContent {
             NoteMarkTheme {

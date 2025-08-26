@@ -57,10 +57,8 @@
 
 ### To Do
 * Rename remoteId to something more generic because this value is use locally as well.
-* Change the status bar color and icons color for the login page only.
 * Test Work Manager
 * Switch to encrypted Data Store
-* Work on Nav flash
 
 ### Ktlint
 * `./gradlew ktlintCheck` - generate reports

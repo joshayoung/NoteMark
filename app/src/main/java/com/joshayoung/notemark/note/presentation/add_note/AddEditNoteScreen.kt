@@ -1,20 +1,16 @@
 package com.joshayoung.notemark.note.presentation.add_note
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,16 +26,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.joshayoung.notemark.core.design.theme.CloseIcon
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.note.presentation.components.DashedDivider
 import com.joshayoung.notemark.note.presentation.components.NoteMarkScaffold
+import com.joshayoung.notemark.note.presentation.components.NoteMarkToolbar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -59,27 +54,13 @@ fun AddEditNoteScreen(
 ) {
     NoteMarkScaffold(
         topAppBar = {
-            Row(
-                modifier =
-                    Modifier
-                        .background(Color.White)
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp, vertical = 20.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    imageVector = CloseIcon,
-                    contentDescription = null,
-                    modifier =
-                        Modifier
-                            .size(26.dp)
-                            .clickable {
-                                onAction(AddEditNoteAction.NavigateBack)
-                            },
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
+            NoteMarkToolbar(
+                goBack = {
+                    onAction(AddEditNoteAction.NavigateBack)
+                },
+                title = "",
+                showClose = true,
+            )
         },
     ) { innerPadding ->
         Column(

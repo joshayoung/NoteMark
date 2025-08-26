@@ -1,6 +1,7 @@
 package com.joshayoung.notemark.note.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joshayoung.notemark.core.design.theme.BackIcon
+import com.joshayoung.notemark.core.design.theme.CloseIcon
 import com.joshayoung.notemark.core.design.theme.NoteMarkTheme
 import com.joshayoung.notemark.core.design.theme.OfflineIcon
 import com.joshayoung.notemark.core.design.theme.SettingsIcon
@@ -29,6 +31,7 @@ import com.joshayoung.notemark.core.design.theme.SettingsIcon
 fun NoteMarkToolbar(
     title: String,
     goBack: () -> Unit = {},
+    showClose: Boolean = false,
     isOffline: Boolean = false,
     hasBackButton: Boolean = false,
     hasActions: Boolean = false,
@@ -59,6 +62,19 @@ fun NoteMarkToolbar(
             }
         },
         navigationIcon = {
+            if (showClose) {
+                Icon(
+                    imageVector = CloseIcon,
+                    contentDescription = null,
+                    modifier =
+                        Modifier
+                            .size(26.dp)
+                            .clickable {
+                                goBack()
+                            },
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
             if (hasBackButton) {
                 IconButton(onClick = goBack) {
                     Icon(

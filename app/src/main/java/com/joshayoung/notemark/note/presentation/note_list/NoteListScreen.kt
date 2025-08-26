@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -115,18 +114,8 @@ fun NoteListScreen(
         Column(
             modifier =
                 Modifier
-                    .background(
-                        brush =
-                            Brush.radialGradient(
-                                colors =
-                                    listOf(
-                                        MaterialTheme.colorScheme.surface,
-                                        MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
-                                    ),
-                                center = Offset(0.5f, 0.5f),
-                                radius = 9300f,
-                            ),
-                    ).padding(innerPadding)
+                    .background(color = MaterialTheme.colorScheme.surface)
+                    .padding(innerPadding)
                     .padding(10.dp)
                     .fillMaxSize(),
         ) {

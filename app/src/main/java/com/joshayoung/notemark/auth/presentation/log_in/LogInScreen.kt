@@ -90,7 +90,7 @@ fun LoginScreen(
                 modifier =
                     Modifier
                         .background(color = MaterialTheme.colorScheme.background)
-                        .padding(top = 40.dp),
+                        .padding(top = 60.dp),
             ) {
                 Column(
                     modifier =
