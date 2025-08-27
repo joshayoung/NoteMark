@@ -1,5 +1,5 @@
-package com.joshayoung.notemark.app
 
+import androidx.datastore.core.Serializer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
@@ -10,10 +10,14 @@ import java.util.Base64
 
 @Serializable
 data class UserPreferences(
-    val token: String? = null,
+    val accessToken: String? = null,
+    val refreshToken: String? = null,
+    val username: String? = null,
+    val sync_user: String? = null,
+    val sync_interval: String? = null,
 )
 
-object UserPreferencesSerializer : androidx.datastore.core.Serializer<UserPreferences> {
+object UserPreferencesSerializer : Serializer<UserPreferences> {
     override val defaultValue: UserPreferences
         get() = UserPreferences()
 
@@ -22,12 +26,9 @@ object UserPreferencesSerializer : androidx.datastore.core.Serializer<UserPrefer
             withContext(Dispatchers.IO) {
                 input.use { it.readBytes() }
             }
-
         val encryptedBytesDecoded = Base64.getDecoder().decode(encryptedBytes)
         val decryptedBytes = Crypto.decrypt(encryptedBytesDecoded)
-
         val decodedJsonString = decryptedBytes.decodeToString()
-
         return Json.decodeFromString(decodedJsonString)
     }
 

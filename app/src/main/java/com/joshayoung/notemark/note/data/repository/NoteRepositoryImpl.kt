@@ -8,7 +8,7 @@ import com.joshayoung.notemark.core.data.networking.EmptyResult
 import com.joshayoung.notemark.core.data.networking.Result
 import com.joshayoung.notemark.core.data.networking.asEmptyDataResult
 import com.joshayoung.notemark.core.data.networking.catchErrors
-import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.core.domain.AuthDataStorage
 import com.joshayoung.notemark.core.utils.getTimeStampForInsert
 import com.joshayoung.notemark.note.data.database.entity.SyncOperation
 import com.joshayoung.notemark.note.data.mappers.toNote
@@ -24,7 +24,6 @@ import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -35,7 +34,7 @@ import kotlin.time.ExperimentalTime
 class NoteRepositoryImpl(
     private val localDataSource: LocalDataSource,
     private val localSyncDataSource: LocalSyncDataSource,
-    private val dataStorage: DataStorage,
+    private val authDataStorage: AuthDataStorage,
     private val client: HttpClient,
 ) : NoteRepository {
     override suspend fun createNote(
@@ -106,29 +105,29 @@ class NoteRepositoryImpl(
     override suspend fun getNote(id: Long): Note? = localDataSource.getNote(id)
 
     override suspend fun logout(): EmptyDataResult<DataError.Network> {
-        dataStorage.getAuthData().first().refreshToken.let { refreshToken ->
+//        authDataStorage.getAuthData().first().refreshToken.let { refreshToken ->
 
-            // TODO: Move this call to the remote data source:
-            val results =
-                catchErrors<HttpResponse> {
-                    client.post {
-                        url(BuildConfig.BASE_URL + BuildConfig.LOGOUT_PATH)
-                        setBody(LogoutRequest(refreshToken = refreshToken))
-                    }
+        // TODO: Move this call to the remote data source:
+        val results =
+            catchErrors<HttpResponse> {
+                client.post {
+                    url(BuildConfig.BASE_URL + BuildConfig.LOGOUT_PATH)
+                    setBody(LogoutRequest(refreshToken = "")) // refreshToken))
                 }
-
-            if (results is Result.Success) {
-                dataStorage.saveAuthData(null)
             }
 
-            // Delete ktor tokens:
-            client.authProviders
-                .filterIsInstance<BearerAuthProvider>()
-                .firstOrNull()
-                ?.clearToken()
-
-            return results.asEmptyDataResult()
+        if (results is Result.Success) {
+//                authDataStorage.saveAuthData(null)
         }
+
+        // Delete ktor tokens:
+        client.authProviders
+            .filterIsInstance<BearerAuthProvider>()
+            .firstOrNull()
+            ?.clearToken()
+
+        return results.asEmptyDataResult()
+//        }
     }
 
     override suspend fun removeAllNotes() {

@@ -1,13 +1,13 @@
 package com.joshayoung.notemark.note.data.use_cases
 
-import com.joshayoung.notemark.core.domain.DataStorage
-import kotlinx.coroutines.flow.first
+import com.joshayoung.notemark.core.domain.AuthDataStorage
 
 class LoggedInUserAbbreviationUseCase(
-    private val dataStorage: DataStorage,
+    private val authDataStorage: AuthDataStorage,
 ) {
     suspend operator fun invoke(): String {
-        val user = dataStorage.username.first()
+//        val user = authDataStorage.username.first()
+        val user = ""
 
         return formatUser(user)
     }

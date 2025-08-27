@@ -134,7 +134,6 @@ dependencies {
 
     implementation(libs.androidx.datastore.datastore.preferences)
     implementation(libs.androidx.datastore)
-    implementation(libs.androidx.datastore.datastore.preferences)
 
     implementation(libs.symbol.processing)
 

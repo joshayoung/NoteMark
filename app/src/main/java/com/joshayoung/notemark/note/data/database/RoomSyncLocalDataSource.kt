@@ -2,7 +2,8 @@ package com.joshayoung.notemark.note.data.database
 
 import com.joshayoung.notemark.core.data.networking.DataError
 import com.joshayoung.notemark.core.data.networking.Result
-import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.core.domain.AuthDataStorage
+import com.joshayoung.notemark.core.domain.NoteDataStorage
 import com.joshayoung.notemark.note.data.database.dao.SyncDao
 import com.joshayoung.notemark.note.data.database.entity.SyncEntity
 import com.joshayoung.notemark.note.data.database.entity.SyncOperation
@@ -14,7 +15,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 
 class RoomSyncLocalDataSource(
-    private val dataStorage: DataStorage,
+    private val authDataStorage: AuthDataStorage,
+    private val noteDataStorage: NoteDataStorage,
     private val syncDao: SyncDao,
 ) : LocalSyncDataSource {
     override suspend fun clearSyncQueue() {
@@ -25,7 +27,8 @@ class RoomSyncLocalDataSource(
         note: Note,
         operation: SyncOperation,
     ): Result<Unit, DataError.Local> {
-        val user = dataStorage.getUserid()
+//        val user = noteDataStorage.getUserid()
+        val user = ""
         if (user == null) {
             // TODO: Update this error:
             return Result.Error(error = DataError.Local.DISK_FULL)
