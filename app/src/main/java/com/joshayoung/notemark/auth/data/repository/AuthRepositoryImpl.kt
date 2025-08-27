@@ -9,6 +9,8 @@ import com.joshayoung.notemark.core.data.networking.DataError
 import com.joshayoung.notemark.core.data.networking.EmptyResult
 import com.joshayoung.notemark.core.data.networking.Result
 import com.joshayoung.notemark.core.data.networking.catchErrors
+import com.joshayoung.notemark.core.domain.DataStorage
+import com.joshayoung.notemark.core.domain.use_cases.NoteMarkUseCases
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.auth.AuthCircuitBreaker
@@ -19,6 +21,8 @@ import io.ktor.client.statement.HttpResponse
 
 class AuthRepositoryImpl(
     private val client: HttpClient,
+    private val dataStorage: DataStorage,
+    private val noteMarkUseCases: NoteMarkUseCases,
 ) : AuthRepository {
     override suspend fun register(
         username: String,

@@ -1,3 +1,4 @@
+package com.joshayoung.notemark.app
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -15,19 +16,13 @@ object Crypto {
     private const val TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDING"
 
     private val cipher = Cipher.getInstance(TRANSFORMATION)
+
     private val keyStore =
         KeyStore
             .getInstance("AndroidKeyStore")
             .apply {
                 load(null)
             }
-
-    private fun getKey(): SecretKey {
-        val existingKey =
-            keyStore
-                .getEntry(KEY_ALIAS, null) as? KeyStore.SecretKeyEntry
-        return existingKey?.secretKey ?: createKey()
-    }
 
     private fun createKey(): SecretKey =
         KeyGenerator
@@ -37,8 +32,7 @@ object Crypto {
                     KeyGenParameterSpec
                         .Builder(
                             KEY_ALIAS,
-                            KeyProperties.PURPOSE_ENCRYPT or
-                                KeyProperties.PURPOSE_DECRYPT,
+                            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT,
                         ).setBlockModes(BLOCK_MODE)
                         .setEncryptionPaddings(PADDING)
                         .setRandomizedEncryptionRequired(true)
@@ -47,10 +41,19 @@ object Crypto {
                 )
             }.generateKey()
 
-    fun encrypt(bytes: ByteArray): ByteArray {
+    private fun getKey(): SecretKey {
+        val existingKey =
+            keyStore
+                .getEntry(KEY_ALIAS, null) as? KeyStore.SecretKeyEntry
+
+        return existingKey?.secretKey ?: createKey()
+    }
+
+    fun encrypt(byte: ByteArray): ByteArray {
         cipher.init(Cipher.ENCRYPT_MODE, getKey())
         val iv = cipher.iv
-        val encrypted = cipher.doFinal(bytes)
+        val encrypted = cipher.doFinal(byte)
+
         return iv + encrypted
     }
 
@@ -58,6 +61,7 @@ object Crypto {
         val iv = bytes.copyOfRange(0, cipher.blockSize)
         val data = bytes.copyOfRange(cipher.blockSize, bytes.size)
         cipher.init(Cipher.DECRYPT_MODE, getKey(), IvParameterSpec(iv))
+
         return cipher.doFinal(data)
     }
 }

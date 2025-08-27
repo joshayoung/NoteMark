@@ -5,13 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joshayoung.notemark.core.domain.AuthDataStorage
+import com.joshayoung.notemark.core.domain.DataStorage
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val authDataStorage: AuthDataStorage,
+    private val dataStorage: DataStorage,
 ) : ViewModel() {
     var state by mutableStateOf(MainState())
         private set
@@ -21,10 +22,10 @@ class MainViewModel(
 
     init {
         viewModelScope.launch {
-//            authDataStorage.values
-//                .collect { value ->
-//                    eventChannel.send(value.accessToken)
-//                }
+            dataStorage.values
+                .collect { value ->
+                    eventChannel.send(value)
+                }
         }
 
         viewModelScope.launch {
@@ -35,9 +36,8 @@ class MainViewModel(
     }
 
     private suspend fun checkAccessToken(): Boolean {
-        return false
-//        val token = authDataStorage.getAuthData().first().accessToken
+        val token = dataStorage.getAuthData().first().accessToken
 
-//        return token != ""
+        return token != ""
     }
 }

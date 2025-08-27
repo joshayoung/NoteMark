@@ -3,7 +3,7 @@ package com.joshayoung.notemark.core.data.networking
 import com.joshayoung.notemark.BuildConfig
 import com.joshayoung.notemark.auth.domain.models.LoginResponse
 import com.joshayoung.notemark.auth.domain.models.RefreshRequest
-import com.joshayoung.notemark.core.domain.AuthDataStorage
+import com.joshayoung.notemark.core.domain.DataStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.auth.Auth
@@ -22,10 +22,11 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 
 class HttpClientProvider(
-    private val sessionStorage: AuthDataStorage,
+    private val sessionStorage: DataStorage,
 ) {
     fun provide(): HttpClient =
         HttpClient(CIO) {
@@ -45,19 +46,19 @@ class HttpClientProvider(
             install(Auth) {
                 bearer {
                     loadTokens {
-//                        val tokenPair = sessionStorage.getAuthData().first()
+                        val tokenPair = sessionStorage.getAuthData().first()
                         BearerTokens(
-                            accessToken = "", // tokenPair.accessToken,
-                            refreshToken = "", // tokenPair.refreshToken,
+                            accessToken = tokenPair.accessToken,
+                            refreshToken = tokenPair.refreshToken,
                         )
                     }
 
                     refreshTokens {
-//                        val tokenPair = sessionStorage.getAuthData().first()
+                        val tokenPair = sessionStorage.getAuthData().first()
                         val response =
                             client.post {
                                 url(BuildConfig.BASE_URL + BuildConfig.REFRESH_PATH)
-                                setBody(RefreshRequest(refreshToken = "")) // tokenPair.refreshToken))
+                                setBody(RefreshRequest(refreshToken = tokenPair.refreshToken))
                                 markAsRefreshTokenRequest()
 
                                 // To invalidate token after 30 seconds:
@@ -67,7 +68,7 @@ class HttpClientProvider(
                         if (response.status == HttpStatusCode.Companion.OK) {
                             val responseText = response.bodyAsText()
                             val jsonObject = Json.Default.decodeFromString<LoginResponse>(responseText)
-//                            sessionStorage.saveAuthData(jsonObject)
+                            sessionStorage.saveAuthData(jsonObject)
 
                             BearerTokens(
                                 accessToken = jsonObject.accessToken,
